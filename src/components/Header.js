@@ -32,17 +32,17 @@ const useStyles = makeStyles({
   }
 });
 
-function App() {
+function App(props) {
   const classes = useStyles();
   return (
     <div className={classes.header}>
-      <div className={classes.headerButton}>
+      <div className={classes.headerButton} onClick={props.onJournal}>
         <Typography>Journal</Typography>
       </div>
-      <div className={classes.headerButton}>
+      <div className={classes.headerButton} onClick={props.onHome}>
         <Typography>Einar Persson</Typography>
       </div>
-      <div className={classes.headerButton}>
+      <div className={classes.headerButton} onClick={props.onAbout}>
         <Typography>About</Typography>
       </div>
     </div>

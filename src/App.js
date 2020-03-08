@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // material ui
 import { Typography } from "@material-ui/core/";
@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // custom components
 import Header from "./components/Header";
+import About from "./components/About";
 import ReflectionSketch from "./components/ReflectionSketch";
 
 const useStyles = makeStyles({
@@ -24,9 +25,16 @@ const useStyles = makeStyles({
 
 function App() {
   const classes = useStyles();
+  const [aboutOpen, setAboutOpen] = useState();
+
+  function toggleAbout() {
+    setAboutOpen(!aboutOpen);
+  }
+
   return (
     <div className="App">
-      <Header />
+      <Header onAbout={toggleAbout} />
+      <About open={aboutOpen} onClose={toggleAbout} />
       <Typography className={classes.introText} align="left">
         Lorem Ipsum
       </Typography>
