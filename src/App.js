@@ -1,24 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+
+// material ui
+import { Typography } from "@material-ui/core/";
+import { makeStyles } from "@material-ui/core/styles";
+
+// custom components
+import Header from "./components/Header";
+import ReflectionSketch from "./components/ReflectionSketch";
+
+const useStyles = makeStyles({
+  background: {},
+  introText: {
+    position: "absolute",
+    left: "90px",
+    top: "70px",
+    color: "white",
+    fontFamily: "'Archivo', serif",
+    fontSize: "4rem",
+    pointerEvents: "none"
+  },
+  sketch: { width: "100%", height: "85vh", display: "block" }
+});
 
 function App() {
+  const classes = useStyles();
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Typography className={classes.introText} align="left">
+        Lorem Ipsum
+      </Typography>
+      <ReflectionSketch canvasStyle={classes.sketch} />
     </div>
   );
 }
