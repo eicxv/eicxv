@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     backgroundColor: "black"
   },
   headerButton: {
-    padding: "0.2rem",
+    padding: "0.2rem 1.2rem",
     backgroundColor: "black",
     cursor: "pointer",
     "&": {
@@ -27,6 +27,13 @@ const useStyles = makeStyles({
       backgroundColor: "white",
       "&": {
         color: "black"
+      },
+      "&:active": {
+        backgroundColor: "black",
+        border: "thin solid white",
+        "&": {
+          color: "white"
+        }
       }
     }
   }
