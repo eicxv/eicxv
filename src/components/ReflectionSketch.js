@@ -1,30 +1,21 @@
-import React, { createRef } from "react";
+import React from "react";
 
 // THREE
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-import { makeNoise3D } from "open-simplex-noise";
-
 //shaders
 import reflectMaterial from "../materials/reflectMaterial";
+import { noise3D, noise3Dgrad } from "../materials/simpleNoise";
+
+THREE.ShaderChunk.noise_3D = noise3D;
+THREE.ShaderChunk.noise_3D_grad = noise3Dgrad;
 
 class ThreeSketch extends React.Component {
-  constructor(props) {
-    super(props);
-    this.noiseGen = new makeNoise3D();
-    this.time = 0;
-    this.canvasRef = createRef();
-  }
-
   componentDidMount() {
     this.init();
     this.animate();
   }
-
-  waves = (x, y, time) => {
-    return 0.5 * Math.sin((time + x) * 1) + 0.1 * this.noiseGen(x, y, time);
-  };
 
   init = () => {
     // renderer
@@ -63,7 +54,7 @@ class ThreeSketch extends React.Component {
     let faces = [];
     for (let i = 0; i < WIDTH; i++) {
       for (let j = 0; j < HEIGHT; j++) {
-        vertices.push(i, j, this.waves(i, j, this.time));
+        vertices.push(i, j, 0);
       }
     }
 
@@ -82,8 +73,13 @@ class ThreeSketch extends React.Component {
     this.geometry.setIndex(faces);
 
     // create material
-    this.material = new THREE.ShaderMaterial(reflectMaterial);
-    this.material.flatShading = true;
+    this.uniforms = { u_time: { value: 0.005 } };
+
+    this.material = new THREE.ShaderMaterial({
+      uniforms: this.uniforms,
+      vertexShader: reflectMaterial.vertexShader,
+      fragmentShader: reflectMaterial.fragmentShader
+    });
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.scene.add(this.mesh);
@@ -104,15 +100,7 @@ class ThreeSketch extends React.Component {
 
   // animate
   animate = () => {
-    this.time += 0.01;
-    for (let i = 2; i < this.verticesArr.length; i += 3) {
-      this.verticesArr[i] = this.waves(
-        this.verticesArr[i - 2],
-        this.verticesArr[i - 1],
-        this.time
-      );
-    }
-    this.mesh.geometry.attributes.position.needsUpdate = true;
+    this.uniforms.u_time.value += 0.01;
 
     this.resizeRenderer();
 
