@@ -12,6 +12,7 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "3.4.0",
+    "stats-js": "^1.0.1",
     "three": "^0.114.0",
     "webgl-noise": "0.0.1"
   },

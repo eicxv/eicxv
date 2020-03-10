@@ -4,10 +4,13 @@ import React from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+import Stats from "stats-js";
+
 //shaders
 import reflectMaterial from "../materials/reflectMaterial";
 import { noise3D, noise3Dgrad } from "../materials/simpleNoise";
 
+//add glsl noise to THREE.ShaderChunk so it can be imported by glsl preprocessor
 THREE.ShaderChunk.noise_3D = noise3D;
 THREE.ShaderChunk.noise_3D_grad = noise3Dgrad;
 
@@ -36,44 +39,88 @@ class ThreeSketch extends React.Component {
       10000
     );
     this.camera.up = new THREE.Vector3(0, 0, 1);
-    this.camera.position.set(140, 45, 18);
+    this.camera.position.set(15, -18, 10);
 
     // orbit controls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.target.set(0, 45, 0);
+    this.controls.target.set(15, 30, 0);
     this.controls.update();
+
+    // stats
+    this.showStats = true;
+    if (this.showStats) {
+      this.stats = new Stats();
+      this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+      document.body.appendChild(this.stats.dom);
+    }
 
     // geometry
     this.geometry = new THREE.BufferGeometry();
 
-    // create vertices and faces
-    const WIDTH = 100;
-    const HEIGHT = 90;
+    // create arrributes
+    const WIDTH = 30;
+    const HEIGHT = 100;
+
+    function* makeTranslationIterator() {
+      const [a, b, c] = [0.5, Math.sqrt(3) / 3, Math.sqrt(3) / 6];
+      while (true) {
+        for (let sign of [1, -1]) {
+          yield [-sign * a, -sign * c];
+          yield [sign * a, -sign * c];
+          yield [0, sign * b];
+        }
+      }
+    }
+
+    function* makeTranslationIndexIterator() {
+      let n = 0;
+      while (true) {
+        yield n;
+        n = (n + 1) % 6;
+      }
+    }
+
+    function* makeVertexIterator(totalWidth, totalHeight) {
+      const [a, c, d] = [0.5, Math.sqrt(3) / 6, Math.sqrt(3) / 2];
+      let signX = -1;
+      let offsetX;
+      for (let height = 0; height < totalHeight; height++) {
+        signX = -signX;
+        offsetX = signX === -1 ? a : 0;
+        for (let width = 0; width < totalWidth; width++) {
+          for (let i of [0, 1]) {
+            yield [width + offsetX + signX * i * a, d * height + c * i, 0];
+          }
+        }
+      }
+    }
 
     let vertices = [];
-    let faces = [];
-    for (let i = 0; i < WIDTH; i++) {
-      for (let j = 0; j < HEIGHT; j++) {
-        vertices.push(i, j, 0);
+    let translations = [];
+    const vertexIt = makeVertexIterator(WIDTH, HEIGHT);
+    const translationIt = makeTranslationIterator();
+    const translationIndexIt = makeTranslationIndexIterator();
+
+    for (let vertex of vertexIt) {
+      for (let _ = 0; _ < 3; _++) {
+        vertices.push(...vertex);
+        translations.push(translationIndexIt.next().value);
       }
     }
 
-    for (let i = 0; i < (WIDTH - 1) * HEIGHT; i++) {
-      if (i % HEIGHT === HEIGHT - 1) {
-        continue;
-      }
-      faces.push(i + 1, i, i + HEIGHT);
-      faces.push(i + 1, i + HEIGHT, i + HEIGHT + 1);
-    }
-
-    this.verticesArr = new Float32Array(vertices);
-    const positionAttribute = new THREE.BufferAttribute(this.verticesArr, 3);
-    positionAttribute.setUsage(THREE.DynamicDrawUsage);
+    //bind attributes
+    vertices = new Float32Array(vertices);
+    const positionAttribute = new THREE.BufferAttribute(vertices, 3);
     this.geometry.setAttribute("position", positionAttribute);
-    this.geometry.setIndex(faces);
+
+    translations = new Float32Array(translations);
+    const translationAttribute = new THREE.BufferAttribute(translations, 1);
+    this.geometry.setAttribute("translation", translationAttribute);
 
     // create material
-    this.uniforms = { u_time: { value: 0.005 } };
+    this.uniforms = {
+      u_time: { type: "f", value: 0.005 }
+    };
 
     this.material = new THREE.ShaderMaterial({
       uniforms: this.uniforms,
@@ -98,15 +145,16 @@ class ThreeSketch extends React.Component {
     }
   };
 
-  // animate
   animate = () => {
-    this.uniforms.u_time.value += 0.01;
+    if (this.showStats) this.stats.begin();
 
+    this.uniforms.u_time.value += 0.003;
     this.resizeRenderer();
+    this.renderer.render(this.scene, this.camera);
+
+    if (this.showStats) this.stats.end();
 
     requestAnimationFrame(this.animate);
-
-    this.renderer.render(this.scene, this.camera);
   };
 
   render() {
