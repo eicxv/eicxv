@@ -20,15 +20,16 @@ void getTranslation(int i, float sign, out vec2 translation) {
 }
 
 const float noiseAmplitude = 0.1;
-const float waveAmplitude = .7;
+const float noiseSpeed = .8;
+const float waveAmplitude = .5;
 const float wavePeriod = 1.5;
 const float waveWaveLength = 1. / 3.;
-const float waveSpeed = 4.;
+const float waveSpeed = 8.;
 
 
-float waves(vec3 v) {
-  float val = noiseAmplitude * snoise(v);
-  val += waveAmplitude * sin((waveWaveLength * v.y + waveSpeed * v.z) * wavePeriod);
+float waves(float x, float y, float time) {
+  float val = noiseAmplitude * snoise(vec3(x, y, noiseSpeed * time));
+  val += waveAmplitude * sin((waveWaveLength * y + waveSpeed * time) * wavePeriod);
   return val;
 }
 
@@ -43,17 +44,17 @@ void main() {
   i = int(mod(translation, 3.));
   getTranslation(i, sign, translationVec);
   translatedPos = position.xy + translationVec;
-  vec3 p0 = vec3(translatedPos, waves(vec3(translatedPos, u_time)));
+  vec3 p0 = vec3(translatedPos, waves(translatedPos.x, translatedPos.y, u_time));
 
   i = int(mod(translation + 1., 3.));
   getTranslation(i, sign, translationVec);
   translatedPos = position.xy + translationVec;
-  vec3 p1 = vec3(translatedPos, waves(vec3(translatedPos, u_time)));
+  vec3 p1 = vec3(translatedPos, waves(translatedPos.x, translatedPos.y, u_time));
 
   i = int(mod(translation + 2., 3.));
   getTranslation(i, sign, translationVec);
   translatedPos = position.xy + translationVec;
-  vec3 p2 = vec3(translatedPos, waves(vec3(translatedPos, u_time)));
+  vec3 p2 = vec3(translatedPos, waves(translatedPos.x, translatedPos.y, u_time));
   //end loop
 
   vec3 v1 = p1 - p0;

@@ -39,7 +39,7 @@ class ThreeSketch extends React.Component {
       10000
     );
     this.camera.up = new THREE.Vector3(0, 0, 1);
-    this.camera.position.set(15, -18, 10);
+    this.camera.position.set(15, -24, 12);
 
     // orbit controls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
