@@ -20,11 +20,11 @@ void getTranslation(int i, float sign, out vec2 translation) {
 }
 
 const float noiseAmplitude = 0.1;
-const float noiseSpeed = .8;
+const float noiseSpeed = .5;
 const float waveAmplitude = .5;
 const float wavePeriod = 1.5;
 const float waveWaveLength = 1. / 3.;
-const float waveSpeed = 8.;
+const float waveSpeed = 5.;
 
 
 float waves(float x, float y, float time) {
