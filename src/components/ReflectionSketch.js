@@ -39,12 +39,13 @@ class ThreeSketch extends React.Component {
       10000
     );
     this.camera.up = new THREE.Vector3(0, 0, 1);
-    this.camera.position.set(15, -24, 12);
+    this.camera.position.set(18, -34, 14);
+    this.camera.lookAt(18, 30, 0);
 
     // orbit controls
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.target.set(15, 30, 0);
-    this.controls.update();
+    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    // this.controls.target.set(18, 30, 0);
+    // this.controls.update();
 
     // stats
     this.showStats = true;
@@ -58,8 +59,8 @@ class ThreeSketch extends React.Component {
     this.geometry = new THREE.BufferGeometry();
 
     // create arrributes
-    const WIDTH = 30;
-    const HEIGHT = 100;
+    const WIDTH = 36;
+    const HEIGHT = 124;
 
     function* makeTranslationIterator() {
       const [a, b, c] = [0.5, Math.sqrt(3) / 3, Math.sqrt(3) / 6];

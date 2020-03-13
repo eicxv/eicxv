@@ -4,27 +4,21 @@ import React from "react";
 import { Typography } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 
+// icons
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
 const useStyles = makeStyles({
-  header: {
-    position: "fixed",
-    width: "100%",
-    height: "4rem",
+  button: {
     display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
     alignItems: "center",
-    backgroundColor: "black",
-    zIndex: "200"
-  },
-  headerButton: {
     padding: "0.2rem 1.2rem",
     backgroundColor: "black",
     cursor: "pointer",
     "&": {
       color: "white",
       textTransform: "uppercase",
-      fontFamily: "'Space Mono', serif",
-      fontSize: "1rem"
+      fontFamily: "'Montserrat', serif",
+      fontSize: "5rem"
     },
     "&:hover": {
       backgroundColor: "white",
@@ -39,22 +33,17 @@ const useStyles = makeStyles({
         }
       }
     }
-  }
+  },
+  icon: { position: "relative", top: "-0.1rem" }
 });
 
 function App(props) {
   const classes = useStyles();
   return (
-    <div id="header" className={classes.header}>
-      <div className={classes.headerButton} onClick={props.onJournal}>
-        <Typography>Journal</Typography>
-      </div>
-      <div className={classes.headerButton} onClick={props.onHome}>
-        <Typography>Einar Persson</Typography>
-      </div>
-      <div className={classes.headerButton} onClick={props.onAbout}>
-        <Typography>About</Typography>
-      </div>
+    <div onClick={props.onClick} className={classes.button}>
+      <ExpandMoreIcon className={classes.icon} />
+      <Typography>Latest Posts</Typography>
+      <ExpandMoreIcon className={classes.icon} />
     </div>
   );
 }
