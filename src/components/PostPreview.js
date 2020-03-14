@@ -6,9 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   container: {
-    width: "75vw",
     padding: "2rem",
-    margin: "1rem",
     display: "flex",
     alignItems: "center"
   },

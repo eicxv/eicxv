@@ -8,7 +8,6 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Header from "./Header";
 import About from "./About";
 import DownButton from "./DownButton";
-import Post from "./Post";
 import PostPreview from "./PostPreview";
 
 import ReflectionSketch from "./ReflectionSketch";
@@ -23,8 +22,8 @@ const useStyles = makeStyles(theme => {
     },
     introText: {
       position: "absolute",
-      left: "90px",
-      top: "70px",
+      left: "15vw",
+      top: "6rem",
       color: theme.palette.primary.main,
       fontFamily: "'Archivo', serif",
       fontWeight: "500",
@@ -38,6 +37,10 @@ const useStyles = makeStyles(theme => {
       width: "100%",
       position: "absolute",
       bottom: "50px"
+    },
+    postPreview: {
+      margin: "2rem 15vw",
+      width: "70vw"
     }
   };
 });
@@ -71,8 +74,11 @@ function Home() {
         <DownButton onClick={scrollToLatest} />
       </div>
       {posts.map(post => (
-        <PostPreview post={post} key={post.meta.id} />
+        <div className={classes.postPreview}>
+          <PostPreview post={post} key={post.meta.id} />
+        </div>
       ))}
+      <div style={{ height: "100px" }}></div>
     </div>
   );
 }
