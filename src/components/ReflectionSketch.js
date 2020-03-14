@@ -1,8 +1,11 @@
 import React from "react";
 
+// material ui
+import { withTheme } from "@material-ui/styles";
+
 // THREE
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import Stats from "stats-js";
 
@@ -15,6 +18,10 @@ THREE.ShaderChunk.noise_3D = noise3D;
 THREE.ShaderChunk.noise_3D_grad = noise3Dgrad;
 
 class ThreeSketch extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   componentDidMount() {
     this.init();
     this.animate();
@@ -30,6 +37,9 @@ class ThreeSketch extends React.Component {
 
     // scene
     this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color(
+      this.props.theme.palette.secondary.main
+    );
 
     // camera
     this.camera = new THREE.PerspectiveCamera(
@@ -120,7 +130,11 @@ class ThreeSketch extends React.Component {
 
     // create material
     this.uniforms = {
-      u_time: { type: "f", value: 0.005 }
+      u_time: { type: "f", value: 0.005 },
+      u_color: {
+        type: "fv",
+        value: new THREE.Color(this.props.theme.palette.primary.main)
+      }
     };
 
     this.material = new THREE.ShaderMaterial({
@@ -128,6 +142,7 @@ class ThreeSketch extends React.Component {
       vertexShader: reflectMaterial.vertexShader,
       fragmentShader: reflectMaterial.fragmentShader
     });
+    this.material.transparent = true;
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.scene.add(this.mesh);
@@ -165,4 +180,4 @@ class ThreeSketch extends React.Component {
   }
 }
 
-export default ThreeSketch;
+export default withTheme(ThreeSketch);

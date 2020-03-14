@@ -16,34 +16,34 @@ import ReflectionSketch from "./ReflectionSketch";
 //dummy data
 import posts from "../dummyPosts";
 
-const useStyles = makeStyles({
-  background: {
-    backgroundColor: "black",
-    scrollBehavior: "smooth"
-  },
-  introText: {
-    position: "absolute",
-    left: "90px",
-    top: "70px",
-    color: "white",
-    fontFamily: "'Archivo', serif",
-    fontSize: "4rem",
-    pointerEvents: "none"
-  },
-  sketch: { width: "100%", height: "100vh", display: "block" },
-  downButtonContainer: {
-    display: "flex",
-    justifyContent: "center",
-    width: "100%",
-    position: "absolute",
-    bottom: "50px"
-  }
+const useStyles = makeStyles(theme => {
+  return {
+    background: {
+      backgroundColor: theme.palette.secondary.main
+    },
+    introText: {
+      position: "absolute",
+      left: "90px",
+      top: "70px",
+      color: theme.palette.primary.main,
+      fontFamily: "'Archivo', serif",
+      fontWeight: "500",
+      fontSize: "4rem",
+      pointerEvents: "none"
+    },
+    sketch: { width: "100%", height: "100vh", display: "block" },
+    downButtonContainer: {
+      display: "flex",
+      justifyContent: "center",
+      width: "100%",
+      position: "absolute",
+      bottom: "50px"
+    }
+  };
 });
 
 function Home() {
   const theme = useTheme();
-  console.log(theme);
-
   const classes = useStyles();
   const [aboutOpen, setAboutOpen] = useState();
 

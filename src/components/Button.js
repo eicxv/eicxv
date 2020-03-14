@@ -4,31 +4,32 @@ import React from "react";
 import { Typography } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles({
-  button: {
-    padding: "0.2rem 1.2rem",
-    backgroundColor: "black",
-    cursor: "pointer",
-    "&": {
-      color: "white",
-      textTransform: "uppercase",
-      fontFamily: "'Space Mono', serif",
-      fontSize: "1rem"
-    },
-    "&:hover": {
-      backgroundColor: "white",
+const useStyles = makeStyles(theme => {
+  return {
+    button: {
+      padding: "0.2rem 1.2rem",
+      backgroundColor: theme.palette.secondary.main,
+      cursor: "pointer",
       "&": {
-        color: "black"
+        color: theme.palette.primary.main
       },
-      "&:active": {
-        backgroundColor: "black",
-        border: "thin solid white",
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
         "&": {
-          color: "white"
+          color: theme.palette.secondary.main
+        },
+        "&:active": {
+          backgroundColor: theme.palette.secondary.main,
+          border: "thin solid",
+          borderColor: theme.palette.primary.main,
+          padding: "calc(0.2rem - 1px) calc(1.2rem - 1px)", // offset border width
+          "&": {
+            color: theme.palette.primary.main
+          }
         }
       }
     }
-  }
+  };
 });
 
 function Button(props) {

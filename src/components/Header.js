@@ -6,18 +6,20 @@ import { makeStyles } from "@material-ui/core/styles";
 // custom components
 import Button from "./Button";
 
-const useStyles = makeStyles({
-  header: {
-    position: "fixed",
-    width: "100%",
-    height: "4rem",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    backgroundColor: "black",
-    zIndex: "200"
-  }
+const useStyles = makeStyles(theme => {
+  return {
+    header: {
+      position: "fixed",
+      width: "100%",
+      height: "4rem",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "center",
+      backgroundColor: theme.palette.secondary.main,
+      zIndex: "200"
+    }
+  };
 });
 
 function Header(props) {

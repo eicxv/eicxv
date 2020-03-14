@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   aboutText: {
-    fontFamily: "'Montserrat', serif",
+    fontFamily: "'Montserrat', sans-serif",
     fontSize: "1rem",
     width: "18vw",
     padding: "8vw"

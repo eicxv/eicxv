@@ -9,10 +9,16 @@ import Home from "./components/Home";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#ffffff"
+      main: "#f5f5f5"
+      // main: "#ffdae6"
+      //   main: "#ffcccc"
+      //   main: "#ffbbbb"
     },
     secondary: {
-      main: "#000000"
+      main: "#212121"
+      // main: "#151525"
+      //   main: "#202030"
+      //   main: "#222244"
     }
   },
   typography: {

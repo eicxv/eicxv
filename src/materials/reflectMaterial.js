@@ -4,6 +4,7 @@ const vertexShader = /* glsl */ `
 attribute float translation;
 
 uniform float u_time;
+uniform vec3 u_color;
 
 varying float v_value;
 
@@ -75,11 +76,13 @@ void main() {
 `;
 
 const fragmentShader = /* glsl */ `
+uniform vec3 u_color;
+
 varying float v_value;
 
 void main() {
 
-  gl_FragColor = vec4( v_value, v_value, v_value, 1.);
+  gl_FragColor = vec4( u_color, v_value);
 }
 `;
 
