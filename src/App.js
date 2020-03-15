@@ -10,6 +10,7 @@ import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import Home from "./components/Home";
 import Journal from "./components/Journal";
 import Post from "./components/Post";
+import HeaderSpecialized from "./components/HeaderSpecialized";
 
 const theme = createMuiTheme({
   palette: {
@@ -39,17 +40,21 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/journal">
-            <Journal />
-          </Route>
-          <Route path="/journal/:post">
-            <Post />
-          </Route>
-        </Switch>
+        <div style={{ backgroundColor: theme.palette.secondary.main }}>
+          <HeaderSpecialized />
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route exact path="/journal">
+              <Journal />
+            </Route>
+            <Route path="/journal/:post">
+              <Post />
+            </Route>
+          </Switch>
+          <div style={{ height: "100px" }}></div>
+        </div>
       </BrowserRouter>
     </ThemeProvider>
   );

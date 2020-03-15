@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 
 // material ui
 import { Typography } from "@material-ui/core/";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 // custom components
-import Header from "./Header";
-import About from "./About";
 import DownButton from "./DownButton";
 import PostPreview from "./PostPreview";
 
@@ -47,13 +45,7 @@ const useStyles = makeStyles(theme => {
 });
 
 function Home() {
-  const theme = useTheme();
   const classes = useStyles();
-  const [aboutOpen, setAboutOpen] = useState();
-
-  function toggleAbout() {
-    setAboutOpen(!aboutOpen);
-  }
 
   function scrollToLatest() {
     let headerHeight = document.getElementById("header").offsetHeight;
@@ -64,16 +56,14 @@ function Home() {
   }
 
   return (
-    <div className={classes.background}>
-      <Header onAbout={toggleAbout} />
-      <About open={aboutOpen} onClose={toggleAbout} />
+    <Fragment>
       <div className={classes.introText}>
-        <Typography variant="h1" align="left" gutterBottom>
+        <Typography variant="h2" align="left" gutterBottom>
           Hello, I'm Einar
         </Typography>
-        <Typography variant="h3">
-          I'm interested in Art, architecture and coding. This is a website for
-          my thoughts and projects.
+        <Typography variant="h4">
+          I'm interested in art, architecture and orogramming. This is a website
+          for my thoughts and projects.
         </Typography>
       </div>
       <ReflectionSketch canvasStyle={classes.sketch} />
@@ -85,8 +75,7 @@ function Home() {
           <PostPreview post={post} />
         </div>
       ))}
-      <div style={{ height: "100px" }}></div>
-    </div>
+    </Fragment>
   );
 }
 
