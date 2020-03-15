@@ -1,10 +1,16 @@
 import React from "react";
 
+// react router
+import { useParams } from "react-router-dom";
+
 import ReactMarkdown from "react-markdown";
 
-//material ui
+// material ui
 import { Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+
+//dummy data
+import posts from "../dummyPosts";
 
 const useStyles = makeStyles({
   container: {
@@ -30,17 +36,19 @@ const useStyles = makeStyles({
 
 function PostPreview(props) {
   const classes = useStyles();
+  let { post } = useParams();
+  let currPost = posts[post];
 
   return (
     <Paper className={classes.container}>
-      <Typography className={classes.title}>{props.post.title}</Typography>
+      <Typography className={classes.title}>{currPost.title}</Typography>
       <Typography className={classes.metaData}>
-        {props.post.meta.author}
+        {currPost.meta.author}
       </Typography>
       <Typography className={classes.metaData}>
-        {props.post.meta.firstPublished}
+        {currPost.meta.firstPublished}
       </Typography>
-      <ReactMarkdown source={props.post.content} />
+      <ReactMarkdown source={currPost.content} />
     </Paper>
   );
 }

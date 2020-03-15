@@ -1,10 +1,15 @@
 import React from "react";
 
+// react router
+import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+
 // material ui
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 // custom components
 import Home from "./components/Home";
+import Journal from "./components/Journal";
+import Post from "./components/Post";
 
 const theme = createMuiTheme({
   palette: {
@@ -33,7 +38,19 @@ const theme = createMuiTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Home />
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route exact path="/journal">
+            <Journal />
+          </Route>
+          <Route path="/journal/:post">
+            <Post />
+          </Route>
+        </Switch>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

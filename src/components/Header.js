@@ -9,7 +9,8 @@ import Button from "./Button";
 const useStyles = makeStyles(theme => {
   return {
     header: {
-      position: "fixed",
+      position: "sticky",
+      top: "0",
       width: "100%",
       height: "4rem",
       display: "flex",

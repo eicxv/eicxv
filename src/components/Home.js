@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme => {
       position: "absolute",
       left: "15vw",
       top: "6rem",
+      width: "70vw",
       color: theme.palette.primary.main,
       fontFamily: "'Archivo', serif",
       fontWeight: "500",
@@ -66,16 +67,22 @@ function Home() {
     <div className={classes.background}>
       <Header onAbout={toggleAbout} />
       <About open={aboutOpen} onClose={toggleAbout} />
-      <Typography className={classes.introText} align="left">
-        Lorem Ipsum
-      </Typography>
+      <div className={classes.introText}>
+        <Typography variant="h1" align="left" gutterBottom>
+          Hello, I'm Einar
+        </Typography>
+        <Typography variant="h3">
+          I'm interested in Art, architecture and coding. This is a website for
+          my thoughts and projects.
+        </Typography>
+      </div>
       <ReflectionSketch canvasStyle={classes.sketch} />
       <div className={classes.downButtonContainer}>
         <DownButton onClick={scrollToLatest} />
       </div>
       {posts.map(post => (
-        <div className={classes.postPreview}>
-          <PostPreview post={post} key={post.meta.id} />
+        <div className={classes.postPreview} key={post.meta.id}>
+          <PostPreview post={post} />
         </div>
       ))}
       <div style={{ height: "100px" }}></div>
