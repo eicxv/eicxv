@@ -1,37 +1,40 @@
 import React from "react";
 
 // material ui
-import { Typography } from "@material-ui/core/";
-import { makeStyles } from "@material-ui/core/styles";
+import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 // custom components
-import Header from "./components/Header";
-import ReflectionSketch from "./components/ReflectionSketch";
+import Home from "./components/Home";
 
-const useStyles = makeStyles({
-  background: {},
-  introText: {
-    position: "absolute",
-    left: "90px",
-    top: "70px",
-    color: "white",
-    fontFamily: "'Archivo', serif",
-    fontSize: "4rem",
-    pointerEvents: "none"
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#f5f5f5"
+      // main: "#ffdae6"
+      //   main: "#ffcccc"
+      //   main: "#ffbbbb"
+    },
+    secondary: {
+      main: "#212121"
+      // main: "#151525"
+      //   main: "#202030"
+      //   main: "#222244"
+    }
   },
-  sketch: { width: "100%", height: "85vh", display: "block" }
+  typography: {
+    button: {
+      fontFamily: ["Montserrat", "sans-serif"],
+      fontSize: "1rem",
+      letterSpacing: "normal"
+    }
+  }
 });
 
 function App() {
-  const classes = useStyles();
   return (
-    <div className="App">
-      <Header />
-      <Typography className={classes.introText} align="left">
-        Lorem Ipsum
-      </Typography>
-      <ReflectionSketch canvasStyle={classes.sketch} />
-    </div>
+    <ThemeProvider theme={theme}>
+      <Home />
+    </ThemeProvider>
   );
 }
 
