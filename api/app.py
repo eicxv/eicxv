@@ -1,8 +1,12 @@
+from datetime import datetime
 from flask import Flask, request, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(
+    app, origins=["http://127.0.0.1:3000", "http://localhost:3000"],
+)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///eicxv.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
