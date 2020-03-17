@@ -3,6 +3,7 @@ import React from "react";
 //material ui
 import { Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles({
   container: {
@@ -41,27 +42,25 @@ const useStyles = makeStyles({
 
 function PostPreview(props) {
   const classes = useStyles();
+  const history = useHistory();
+
+  function goToPost() {
+    history.push(`/journal/${props.post.url}`);
+  }
 
   return (
-    <Paper className={classes.container}>
+    <Paper className={classes.container} onClick={goToPost}>
       <div className={classes.text}>
-        <Typography className={classes.title}>{props.post.title}</Typography>
+        <Typography className={classes.title}>
+          {props.post.intro_title}
+        </Typography>
         <Typography className={classes.introText}>
-          {props.post.intro.content}
-          {/* <img src={props.post.intro.image} className={classes.image} /> */}
-        </Typography>
-        <Typography className={classes.metaData}>
-          {props.post.meta.author}
-        </Typography>
-        <Typography className={classes.metaData}>
-          {props.post.meta.firstPublished}
+          {props.post.intro_content}
         </Typography>
       </div>
-      {props.post.intro.image ? (
-        // <div className={classes.image}>
-        <img src={props.post.intro.image} className={classes.image} />
-      ) : // </div>
-      null}
+      {props.post.intro_image ? (
+        <img src={props.post.intro_image} className={classes.image} />
+      ) : null}
     </Paper>
   );
 }

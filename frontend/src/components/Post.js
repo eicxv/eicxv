@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // react router
 import { useParams } from "react-router-dom";
@@ -8,9 +8,6 @@ import ReactMarkdown from "react-markdown";
 // material ui
 import { Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-
-//dummy data
-import posts from "../dummyPosts";
 
 const useStyles = makeStyles({
   container: {
@@ -36,19 +33,20 @@ const useStyles = makeStyles({
 
 function PostPreview(props) {
   const classes = useStyles();
-  let { post } = useParams();
-  let currPost = posts[post];
+  const [post, setPost] = useState([]);
+  let { postId } = useParams();
+
+  useEffect(() => {
+    (async function fetchData() {
+      let response = await fetch(`http://127.0.0.1:5000/read-post/${postId}`);
+      let data = await response.json();
+      setPost(data);
+    })();
+  }, []);
 
   return (
     <Paper className={classes.container}>
-      <Typography className={classes.title}>{currPost.title}</Typography>
-      <Typography className={classes.metaData}>
-        {currPost.meta.author}
-      </Typography>
-      <Typography className={classes.metaData}>
-        {currPost.meta.firstPublished}
-      </Typography>
-      <ReactMarkdown source={currPost.content} />
+      <ReactMarkdown source={post.content} />
     </Paper>
   );
 }

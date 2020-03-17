@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 
 // material ui
 import { Typography } from "@material-ui/core/";
@@ -9,9 +9,6 @@ import DownButton from "./DownButton";
 import PostPreview from "./PostPreview";
 
 import ReflectionSketch from "./ReflectionSketch";
-
-//dummy data
-import posts from "../dummyPosts";
 
 const useStyles = makeStyles(theme => {
   return {
@@ -46,6 +43,16 @@ const useStyles = makeStyles(theme => {
 
 function Home() {
   const classes = useStyles();
+  const [PostPreviews, setPostPreviews] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      let response = await fetch("http://127.0.0.1:5000/read-post-previews");
+      let data = await response.json();
+      setPostPreviews(data);
+    }
+    fetchData();
+  }, []);
 
   function scrollToLatest() {
     let headerHeight = document.getElementById("header").offsetHeight;
@@ -62,7 +69,7 @@ function Home() {
           Hello, I'm Einar
         </Typography>
         <Typography variant="h4">
-          I'm interested in art, architecture and orogramming. This is a website
+          I'm interested in art, architecture and programming. This is a website
           for my thoughts and projects.
         </Typography>
       </div>
@@ -70,8 +77,8 @@ function Home() {
       <div className={classes.downButtonContainer}>
         <DownButton onClick={scrollToLatest} />
       </div>
-      {posts.map(post => (
-        <div className={classes.postPreview} key={post.meta.id}>
+      {PostPreviews.map(post => (
+        <div className={classes.postPreview} key={post.url}>
           <PostPreview post={post} />
         </div>
       ))}

@@ -49,7 +49,7 @@ function App() {
             <Route exact path="/journal">
               <Journal />
             </Route>
-            <Route path="/journal/:post">
+            <Route path="/journal/:postId">
               <Post />
             </Route>
           </Switch>

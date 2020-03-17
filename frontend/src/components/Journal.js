@@ -1,13 +1,10 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 
 // material ui
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 // custom components
 import PostPreview from "./PostPreview";
-
-//dummy data
-import posts from "../dummyPosts";
 
 const useStyles = makeStyles(theme => {
   return {
@@ -23,12 +20,22 @@ const useStyles = makeStyles(theme => {
 
 function Home() {
   const classes = useStyles();
+  const [PostPreviews, setPostPreviews] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      let response = await fetch("http://127.0.0.1:5000/read-post-previews");
+      let data = await response.json();
+      setPostPreviews(data);
+    }
+    fetchData();
+  }, []);
 
   return (
     <Fragment>
-      {posts.map(post => (
-        <div className={classes.postPreview}>
-          <PostPreview post={post} key={post.meta.id} />
+      {PostPreviews.map(post => (
+        <div className={classes.postPreview} key={post.url}>
+          <PostPreview post={post} />
         </div>
       ))}
     </Fragment>
