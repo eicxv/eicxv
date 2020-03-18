@@ -38,7 +38,8 @@ function PostPreview(props) {
 
   useEffect(() => {
     (async function fetchData() {
-      let response = await fetch(`http://127.0.0.1:5000/read-post/${postId}`);
+      const url = new URL(`read-post/${postId}`, process.env.REACT_APP_API_URL);
+      let response = await fetch(url);
       let data = await response.json();
       setPost(data);
     })();

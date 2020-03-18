@@ -24,7 +24,8 @@ function Home() {
 
   useEffect(() => {
     async function fetchData() {
-      let response = await fetch("http://127.0.0.1:5000/read-post-previews");
+      const url = new URL("read-post-previews", process.env.REACT_APP_API_URL);
+      let response = await fetch(url);
       let data = await response.json();
       setPostPreviews(data);
     }
