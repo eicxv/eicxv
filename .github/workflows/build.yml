@@ -9,26 +9,23 @@ on:
   pull_request:
     branches: [master]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+env:
+  NODE_VERSION: "12.x"
 
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.NODE_VERSION }}
       - run: cd frontend
+      - run: ls
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm test
-        env:
-          CI: true
       - name: Deploy to server
         id: deploy
         uses: Pendect/action-rsyncer@v1.1.0
