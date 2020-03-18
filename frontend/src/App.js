@@ -11,6 +11,7 @@ import Home from "./components/Home";
 import Journal from "./components/Journal";
 import Post from "./components/Post";
 import HeaderSpecialized from "./components/HeaderSpecialized";
+import NotFound from "./components/NotFound";
 
 const theme = createMuiTheme({
   palette: {
@@ -51,6 +52,9 @@ function App() {
             </Route>
             <Route path="/journal/:postId">
               <Post />
+            </Route>
+            <Route path="*">
+              <NotFound />
             </Route>
           </Switch>
           <div style={{ height: "100px" }}></div>
