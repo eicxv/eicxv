@@ -22,10 +22,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - run: cd frontend
-      - run: ls
-      - run: npm ci
-      - run: npm run build --if-present
+      - name: install dependencies
+        working-directory: ./frontend
+        run: npm ci
+      - name: build
+        working-directory: ./frontend
+        run: npm run build --if-present
       - name: Deploy to server
         id: deploy
         uses: Pendect/action-rsyncer@v1.1.0
@@ -35,5 +37,5 @@ jobs:
           flags: "-avzr --delete"
           options: ""
           ssh_options: ""
-          src: "build/"
+          src: "frontend/build/"
           dest: "githubAction@${{secrets.SERVER_IP}}:/var/www/eicxv/html"
