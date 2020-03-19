@@ -6,12 +6,13 @@ import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
 // material ui
-import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+
+// custom components
+import Container from "./Container";
 
 const useStyles = makeStyles({
   container: {
-    padding: "2rem",
     margin: "1rem"
   },
   title: {
@@ -45,9 +46,9 @@ function Post(props) {
   }, []);
 
   return (
-    <Paper className={classes.container}>
+    <Container className={classes.container}>
       <ReactMarkdown source={post.content} />
-    </Paper>
+    </Container>
   );
 }
 
