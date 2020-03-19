@@ -28,14 +28,14 @@ jobs:
       - name: build
         working-directory: ./frontend
         run: npm run build --if-present
-      - name: Deploy to server
-        id: deploy
-        uses: Pendect/action-rsyncer@v1.1.0
-        env:
-          DEPLOY_KEY: ${{secrets.DEPLOY_KEY}}
-        with:
-          flags: "-avzr --delete"
-          options: ""
-          ssh_options: ""
-          src: "frontend/build/"
-          dest: "githubAction@${{secrets.SERVER_IP}}:/var/www/eicxv/html"
+      - name: deploy to server
+        working-directory: ./frontend
+        run: |
+          mkdir -p $HOME/.ssh
+          touch "$HOME/.ssh/known_hosts"
+          printf '%b\n' "$DEPLOY_KEY" > "$HOME/.ssh/deploy_key"
+          chmod 700 "$HOME/.ssh"
+          chmod 600 "$HOME/.ssh/known_hosts" "$HOME/.ssh/deploy_key"
+          eval "$(ssh-agent)"
+          ssh-add "$HOME/.ssh/deploy_key"
+          rsync -avz -e 'ssh -i $HOME/.ssh/deploy_key -o StrictHostKeyChecking=no' build/ githubcd@${{secrets.SERVER_IP}}:/var/www/eicxv/html
