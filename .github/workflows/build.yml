@@ -32,10 +32,10 @@ jobs:
         working-directory: ./frontend
         run: |
           mkdir -p ~/.ssh
-          touch "~/.ssh/known_hosts"
-          printf '%b\n' "$DEPLOY_KEY" > "~/.ssh/deploy_key"
-          chmod 700 "~/.ssh"
-          chmod 600 "~/.ssh/known_hosts" "~/.ssh/deploy_key"
+          touch ~/.ssh/known_hosts
+          printf '%b\n' "$DEPLOY_KEY" > ~/.ssh/deploy_key
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/known_hosts ~/.ssh/deploy_key
           eval "$(ssh-agent)"
-          ssh-add "~/.ssh/deploy_key"
+          ssh-add ~/.ssh/deploy_key
           rsync -avz -e 'ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no' build/ githubcd@${{secrets.SERVER_IP}}:/var/www/eicxv/html
