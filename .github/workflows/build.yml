@@ -31,11 +31,11 @@ jobs:
       - name: deploy to server
         working-directory: ./frontend
         run: |
-          mkdir -p $HOME/.ssh
-          touch "$HOME/.ssh/known_hosts"
-          printf '%b\n' "$DEPLOY_KEY" > "$HOME/.ssh/deploy_key"
-          chmod 700 "$HOME/.ssh"
-          chmod 600 "$HOME/.ssh/known_hosts" "$HOME/.ssh/deploy_key"
+          mkdir -p ~/.ssh
+          touch "~/.ssh/known_hosts"
+          printf '%b\n' "$DEPLOY_KEY" > "~/.ssh/deploy_key"
+          chmod 700 "~/.ssh"
+          chmod 600 "~/.ssh/known_hosts" "~/.ssh/deploy_key"
           eval "$(ssh-agent)"
-          ssh-add "$HOME/.ssh/deploy_key"
-          rsync -avz -e 'ssh -i $HOME/.ssh/deploy_key -o StrictHostKeyChecking=no' build/ githubcd@${{secrets.SERVER_IP}}:/var/www/eicxv/html
+          ssh-add "~/.ssh/deploy_key"
+          rsync -avz -e 'ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no' build/ githubcd@${{secrets.SERVER_IP}}:/var/www/eicxv/html
