@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-function Home() {
+function Journal() {
   const classes = useStyles();
   const [PostPreviews, setPostPreviews] = useState([]);
 
@@ -43,4 +43,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Journal;

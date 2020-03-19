@@ -1,7 +1,7 @@
 import React from "react";
 
 // react router
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 // material ui
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
@@ -17,15 +17,9 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       main: "#f5f5f5"
-      // main: "#ffdae6"
-      //   main: "#ffcccc"
-      //   main: "#ffbbbb"
     },
     secondary: {
       main: "#212121"
-      // main: "#151525"
-      //   main: "#202030"
-      //   main: "#222244"
     }
   },
   typography: {

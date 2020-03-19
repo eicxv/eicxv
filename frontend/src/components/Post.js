@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
 // material ui
-import { Paper, Typography } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
   }
 });
 
-function PostPreview(props) {
+function Post(props) {
   const classes = useStyles();
   const [post, setPost] = useState([]);
   let { postId } = useParams();
@@ -52,4 +52,4 @@ function PostPreview(props) {
   );
 }
 
-export default PostPreview;
+export default Post;

@@ -13,7 +13,7 @@ const useStyles = makeStyles({
   icon: { position: "relative", top: "0.3rem" }
 });
 
-function App(props) {
+function DownButton(props) {
   const classes = useStyles();
   return (
     <Button onClick={props.onClick}>
@@ -24,4 +24,4 @@ function App(props) {
   );
 }
 
-export default App;
+export default DownButton;
