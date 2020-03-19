@@ -32,11 +32,8 @@ const useStyles = makeStyles(theme => {
       justifyContent: "center",
       width: "100%",
       position: "absolute",
-      bottom: "50px"
-    },
-    postPreview: {
-      margin: "2rem 15vw",
-      width: "70vw"
+      bottom: "50px",
+      left: "0"
     }
   };
 });
@@ -79,9 +76,7 @@ function Home() {
         <DownButton onClick={scrollToLatest} />
       </div>
       {PostPreviews.map(post => (
-        <div className={classes.postPreview} key={post.url}>
-          <PostPreview post={post} />
-        </div>
+        <PostPreview post={post} key={post.url} />
       ))}
     </Fragment>
   );

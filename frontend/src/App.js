@@ -4,7 +4,11 @@ import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 // material ui
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import {
+  ThemeProvider,
+  createMuiTheme,
+  makeStyles
+} from "@material-ui/core/styles";
 
 // custom components
 import Home from "./components/Home";
@@ -31,12 +35,22 @@ const theme = createMuiTheme({
   }
 });
 
+const useStyles = makeStyles({
+  background: {
+    backgroundColor: theme.palette.secondary.main,
+    height: "100%",
+    padding: "1rem 15%"
+  }
+});
+
 function App() {
+  const classes = useStyles();
+
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <div style={{ backgroundColor: theme.palette.secondary.main }}>
-          <HeaderSpecialized />
+        <HeaderSpecialized />
+        <div className={classes.background}>
           <Switch>
             <Route exact path="/">
               <Home />

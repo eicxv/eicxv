@@ -9,7 +9,8 @@ const useStyles = makeStyles({
   container: {
     padding: "2rem",
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    margin: "2rem 0"
   },
   title: {
     fontFamily: "'Archivo', sans-serif",

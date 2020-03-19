@@ -10,10 +10,6 @@ const useStyles = makeStyles(theme => {
   return {
     background: {
       backgroundColor: theme.palette.secondary.main
-    },
-    postPreview: {
-      margin: "2rem 15vw",
-      width: "70vw"
     }
   };
 });
@@ -35,9 +31,7 @@ function Journal() {
   return (
     <Fragment>
       {PostPreviews.map(post => (
-        <div className={classes.postPreview} key={post.url}>
-          <PostPreview post={post} />
-        </div>
+        <PostPreview post={post} key={post.url} />
       ))}
     </Fragment>
   );
