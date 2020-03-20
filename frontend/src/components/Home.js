@@ -12,28 +12,24 @@ import ReflectionSketch from "./ReflectionSketch";
 
 const useStyles = makeStyles(theme => {
   return {
-    background: {
-      backgroundColor: theme.palette.secondary.main
+    grid: {
+      display: "grid",
+      gridTemplateRows: "2fr 5fr 1fr",
+      height: "calc(100vh - 4rem)"
     },
-    introText: {
-      position: "absolute",
-      left: "15vw",
-      top: "6rem",
-      width: "70vw",
-      color: theme.palette.primary.main,
-      fontFamily: "'Archivo', serif",
-      fontWeight: "500",
-      fontSize: "4rem",
-      pointerEvents: "none"
+    text: {
+      color: theme.palette.primary.main
     },
-    sketch: { width: "100%", height: "100vh", display: "block" },
+    sketch: {
+      width: "100%",
+      height: "100%",
+      display: "block"
+    },
     downButtonContainer: {
       display: "flex",
       justifyContent: "center",
-      width: "100%",
-      position: "absolute",
-      bottom: "50px",
-      left: "0"
+      alignItems: "flex-start",
+      width: "100%"
     },
     postsGrid: {
       display: "grid",
@@ -61,19 +57,24 @@ function Home() {
 
   return (
     <Fragment>
-      <div className={classes.introText}>
-        <Typography variant="h2" align="left" gutterBottom>
-          Hello, I'm Einar
-        </Typography>
-        <Typography variant="h4">
-          I'm interested in art, architecture and programming. This is a website
-          for my thoughts and projects.
-        </Typography>
+      <div className={classes.grid}>
+        <div className={classes.text}>
+          <Typography variant="h2" align="left" gutterBottom>
+            Hello, I'm Einar
+          </Typography>
+          <Typography variant="h4">
+            I'm interested in art, architecture and programming. This is a
+            website for my thoughts and projects.
+          </Typography>
+        </div>
+        <ReflectionSketch canvasStyle={classes.sketch} />
+        <div className={classes.downButtonContainer}>
+          <DownButton onClick={scrollToLatest} />
+        </div>
       </div>
-      <ReflectionSketch canvasStyle={classes.sketch} />
-      <div className={classes.downButtonContainer}>
-        <DownButton onClick={scrollToLatest} />
-      </div>
+      <Typography variant="h4" gutterBottom className={classes.text}>
+        Journal - Latest Posts
+      </Typography>
       <PostPreviewGrid />
     </Fragment>
   );
