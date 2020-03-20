@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 
 // material ui
 import { Typography } from "@material-ui/core/";
@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // custom components
 import DownButton from "./DownButton";
-import PostPreview from "./PostPreview";
+import PostPreviewGrid from "./PostPreviewGrid";
 
 import ReflectionSketch from "./ReflectionSketch";
 
@@ -34,23 +34,22 @@ const useStyles = makeStyles(theme => {
       position: "absolute",
       bottom: "50px",
       left: "0"
+    },
+    postsGrid: {
+      display: "grid",
+      [theme.breakpoints.down("md")]: {
+        gridTemplateColumns: "1fr"
+      },
+      [theme.breakpoints.up("lg")]: {
+        gridTemplateColumns: "1fr 1fr"
+      },
+      gridGap: "50px"
     }
   };
 });
 
 function Home() {
   const classes = useStyles();
-  const [PostPreviews, setPostPreviews] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const url = new URL("read-post-previews", process.env.REACT_APP_API_URL);
-      let response = await fetch(url);
-      let data = await response.json();
-      setPostPreviews(data);
-    }
-    fetchData();
-  }, []);
 
   function scrollToLatest() {
     let headerHeight = document.getElementById("header").offsetHeight;
@@ -75,9 +74,7 @@ function Home() {
       <div className={classes.downButtonContainer}>
         <DownButton onClick={scrollToLatest} />
       </div>
-      {PostPreviews.map(post => (
-        <PostPreview post={post} key={post.url} />
-      ))}
+      <PostPreviewGrid />
     </Fragment>
   );
 }

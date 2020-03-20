@@ -1,10 +1,10 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React from "react";
 
 // material ui
 import { makeStyles } from "@material-ui/core/styles";
 
 // custom components
-import PostPreview from "./PostPreview";
+import PostPreviewGrid from "./PostPreviewGrid";
 
 const useStyles = makeStyles(theme => {
   return {
@@ -16,25 +16,8 @@ const useStyles = makeStyles(theme => {
 
 function Journal() {
   const classes = useStyles();
-  const [PostPreviews, setPostPreviews] = useState([]);
 
-  useEffect(() => {
-    async function fetchData() {
-      const url = new URL("read-post-previews", process.env.REACT_APP_API_URL);
-      let response = await fetch(url);
-      let data = await response.json();
-      setPostPreviews(data);
-    }
-    fetchData();
-  }, []);
-
-  return (
-    <Fragment>
-      {PostPreviews.map(post => (
-        <PostPreview post={post} key={post.url} />
-      ))}
-    </Fragment>
-  );
+  return <PostPreviewGrid />;
 }
 
 export default Journal;

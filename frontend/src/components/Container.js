@@ -10,7 +10,11 @@ const styles = theme => {
       backgroundColor: theme.palette.secondary.main,
       padding: "1.2rem",
       border: "thin solid",
-      borderColor: theme.palette.primary.main
+      borderColor: theme.palette.primary.main,
+      "& img": {
+        border: "15px solid",
+        borderColor: theme.palette.primary.main
+      }
     },
     clickable: {
       cursor: "pointer",

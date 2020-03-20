@@ -13,8 +13,7 @@ import Container from "./Container";
 const useStyles = makeStyles({
   container: {
     display: "flex",
-    alignItems: "center",
-    margin: "2rem 0"
+    alignItems: "center"
   },
   title: {
     fontFamily: "'Archivo', sans-serif",
@@ -45,45 +44,6 @@ const useStyles = makeStyles({
   }
 });
 
-// const styles = theme => {
-//   return {
-//     container: {
-//       padding: "2rem",
-//       display: "flex",
-//       alignItems: "center",
-//       margin: "2rem 0",
-//       backgroundColor: "red"
-//     },
-//     title: {
-//       fontFamily: "'Archivo', sans-serif",
-//       fontSize: "2rem"
-//     },
-//     introText: {
-//       maxHeight: "14rem",
-//       fontFamily: "'Montserrat', sans-serif",
-//       fontSize: "1rem",
-//       textOverflow: "ellipsis"
-//     },
-//     metaData: {
-//       fontFamily: "'Space Mono', sans-serif",
-//       fontSize: "0.625rem"
-//     },
-//     text: {
-//       minWidth: "50%",
-//       flexGrow: "1",
-//       flexBasis: "0"
-//     },
-//     image: {
-//       display: "block",
-//       width: "auto",
-//       height: "auto",
-//       maxWidth: "100%",
-//       maxHeight: "14rem",
-//       marginLeft: "3rem"
-//     }
-//   };
-// };
-
 function PostPreview(props) {
   const classes = useStyles();
   const history = useHistory();
@@ -109,5 +69,4 @@ function PostPreview(props) {
   );
 }
 
-// export default withStyles(styles)(PostPreview);
 export default PostPreview;
