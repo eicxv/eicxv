@@ -17,4 +17,3 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post({self.intro_title}, {self.url}, {self.date_posted})"
-

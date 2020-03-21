@@ -25,5 +25,4 @@ def read_post_preview():
     posts = Post.query.paginate(page=page, per_page=per_page).items
     keys = ["url", "intro_title", "intro_image", "intro_content"]
     output = [{key: getattr(post, key) for key in keys} for post in posts]
-    print(output)
     return jsonify(output)
