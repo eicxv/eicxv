@@ -3,8 +3,14 @@ name: Api Continuous Deployment
 on:
   push:
     branches: [master]
+    paths:
+      - api/**
+      - .github/workflows/api-build-deploy.yml
   pull_request:
     branches: [master]
+    paths:
+      - api/**
+      - .github/workflows/api-build-deploy.yml
 
 env:
   PYTHON_VERSION: 3.8
