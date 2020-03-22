@@ -2,7 +2,6 @@ import os
 
 
 class BaseConfig:
-    DEBUG = False
     TESTING = False
     SQLALCHEMY_DATABASE_URI = "sqlite://"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -10,7 +9,6 @@ class BaseConfig:
 
 
 class DevelopmentConfig(BaseConfig):
-    DEBUG = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///eicxv.db"
     CORS_WHITELIST = ["http://127.0.0.1:3000", "http://localhost:3000"]
 
@@ -30,3 +28,4 @@ config = {
 def configure_app(app):
     config_name = os.getenv("FLASK_ENV", "default")
     app.config.from_object(config[config_name])
+    app.config.from_envvar("CONFIG_FILE", silent=True)
