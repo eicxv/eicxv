@@ -5,12 +5,10 @@ on:
     branches: [master]
     paths:
       - api/**
-      - .github/workflows/api-build-deploy.yml
   pull_request:
     branches: [master]
     paths:
       - api/**
-      - .github/workflows/api-build-deploy.yml
 
 env:
   PYTHON_VERSION: 3.8
@@ -40,3 +38,16 @@ jobs:
       - name: deploy to server
         working-directory: ./api
         run: rsync -avz --delete -e 'ssh -o StrictHostKeyChecking=no' dist/ githubcd@${{secrets.SERVER_IP}}:/var/www/eicxv/api/wheel
+      - name: install package and restart
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: githubcd
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            cd /var/www/eicxv/api/wheel
+            source ../venv/bin/activate
+            pip uninstall -y eicxv_api
+            pip install $(ls)
+            deactivate
+            sudo /usr/local/bin/restart-eicxv-api.sh

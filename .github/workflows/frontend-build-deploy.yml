@@ -5,12 +5,10 @@ on:
     branches: [master]
     paths:
       - frontend/**
-      - .github/workflows/frontend-build-deploy.yml
   pull_request:
     branches: [master]
     paths:
       - frontend/**
-      - .github/workflows/frontend-build-deploy.yml
 
 env:
   NODE_VERSION: "12.x"
