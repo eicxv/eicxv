@@ -1,0 +1,37 @@
+name: Api Continuous Deployment
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  PYTHON_VERSION: 3.8
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    - name: Install dependencies
+      working-directory: ./api
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Build wheel
+      working-directory: ./api
+      run: |
+        python setup.py bdist_wheel
+    - uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+    - name: deploy to server
+      working-directory: ./api
+      run: rsync -avz --delete -e 'ssh -o StrictHostKeyChecking=no' dist/ githubcd@${{secrets.SERVER_IP}}:/var/www/eicxv/api/wheel
