@@ -4,6 +4,7 @@ import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 // material ui
+import { CssBaseline } from "@material-ui/core";
 import {
   ThemeProvider,
   createMuiTheme,
@@ -24,6 +25,9 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: "#212121"
+    },
+    background: {
+      default: "#212121"
     }
   },
   typography: {
@@ -36,9 +40,7 @@ const theme = createMuiTheme({
 });
 
 const useStyles = makeStyles({
-  background: {
-    backgroundColor: theme.palette.secondary.main,
-    height: "100%",
+  margin: {
     padding: "1rem 15%"
   }
 });
@@ -48,9 +50,10 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <BrowserRouter>
         <HeaderSpecialized />
-        <div className={classes.background}>
+        <div className={classes.margin}>
           <Switch>
             <Route exact path="/">
               <Home />
@@ -65,7 +68,6 @@ function App() {
               <NotFound />
             </Route>
           </Switch>
-          <div style={{ height: "100px" }}></div>
         </div>
       </BrowserRouter>
     </ThemeProvider>
