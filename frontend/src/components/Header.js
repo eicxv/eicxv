@@ -22,6 +22,9 @@ const useStyles = makeStyles(theme => {
     },
     content: {
       width: "70%",
+      [theme.breakpoints.down("sm")]: {
+        width: "80%"
+      },
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",

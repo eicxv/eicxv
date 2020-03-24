@@ -8,7 +8,8 @@ import { CssBaseline } from "@material-ui/core";
 import {
   ThemeProvider,
   createMuiTheme,
-  makeStyles
+  makeStyles,
+  responsiveFontSizes
 } from "@material-ui/core/styles";
 
 // custom components
@@ -18,7 +19,7 @@ import Post from "./components/Post";
 import HeaderSpecialized from "./components/HeaderSpecialized";
 import NotFound from "./components/NotFound";
 
-const theme = createMuiTheme({
+let theme = createMuiTheme({
   palette: {
     primary: {
       main: "#f5f5f5"
@@ -39,10 +40,14 @@ const theme = createMuiTheme({
   },
   touchDevice: "ontouchstart" in document.documentElement
 });
+theme = responsiveFontSizes(theme, { factor: 3 });
 
 const useStyles = makeStyles({
   margin: {
-    padding: "1rem 15%"
+    padding: "1rem 15%",
+    [theme.breakpoints.down("sm")]: {
+      padding: "1rem 10%"
+    }
   }
 });
 
