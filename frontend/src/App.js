@@ -36,7 +36,8 @@ const theme = createMuiTheme({
       fontSize: "1rem",
       letterSpacing: "normal"
     }
-  }
+  },
+  touchDevice: "ontouchstart" in document.documentElement
 });
 
 const useStyles = makeStyles({
