@@ -11,9 +11,5 @@ class Post(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     last_edited = db.Column(db.DateTime, default=None)
 
-    def __init__(self, **kwargs):
-        url = kwargs["intro_title"].strip().lower().replace(" ", "-")
-        super().__init__(url=url, **kwargs)
-
     def __repr__(self):
         return f"Post({self.intro_title}, {self.url}, {self.date_posted})"

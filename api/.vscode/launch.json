@@ -23,7 +23,13 @@
       "type": "python",
       "request": "launch",
       "program": "${file}",
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "env": {
+        "FLASK_APP": "run.py",
+        "FLASK_ENV": "development",
+        "FLASK_DEBUG": "1",
+        "CONFIG_FILE": "${workspaceFolder}/config.cfg"
+      }
     }
   ]
 }

@@ -6,6 +6,9 @@ class BaseConfig:
     SQLALCHEMY_DATABASE_URI = "sqlite://"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CORS_WHITELIST = []
+    GITHUB_USER = "eicxv"
+    GITHUB_DB_REPO = "journal"
+    GITHUB_TOKEN = ""
 
 
 class DevelopmentConfig(BaseConfig):

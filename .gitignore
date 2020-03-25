@@ -55,6 +55,7 @@ instance/
 .venv
 env/
 venv/
+config.cfg
 
 # VSCode
 
