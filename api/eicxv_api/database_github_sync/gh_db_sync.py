@@ -86,14 +86,15 @@ class GithubDatabaseSync:
         return format_folder([result["data"]["repository"]])
 
     def drop_and_add_all_content(self, rev="master"):
-        self.db.drop_all()
-        self.db.create_all()
         repo = self._get_repo_data(rev=rev)
+        content = []
         for handler in self.content_handlers.values():
             handler_folder = repo[self.repo]
             for folder in handler.path:
                 handler_folder = handler_folder[folder]
             for folder_name, files in handler_folder.items():
-                content = handler.create(folder_name, files)
-                self.db.session.add(content)
+                content.append(handler.create(folder_name, files))
+        self.db.drop_all()
+        self.db.create_all()
+        self.db.session.add_all(content)
         self.db.session.commit()

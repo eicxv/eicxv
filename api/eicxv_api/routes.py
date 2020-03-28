@@ -1,6 +1,9 @@
 from flask import request, jsonify, abort
 from eicxv_api import app
 from eicxv_api.models import Post
+from eicxv_api.database_github_sync import db_sync
+import hmac
+import hashlib
 
 
 @app.route("/read-post/<url>", methods=["GET"])
@@ -26,3 +29,14 @@ def read_post_preview():
     keys = ["url", "intro_title", "intro_image", "intro_content"]
     output = [{key: getattr(post, key) for key in keys} for post in posts]
     return jsonify(output)
+
+
+@app.route("/update-database", methods=["POST"])
+def update_database():
+    token = app.config["WEBHOOK_TOKEN"].encode("utf-8")
+    digest = hmac.new(token, request.data, hashlib.sha1).hexdigest()
+    signature = request.headers["X-Hub-Signature"].split("=")[1]
+    if not hmac.compare_digest(signature, digest):
+        abort(400, "Invalid signature")
+    db_sync.drop_and_add_all_content()
+    return (jsonify(success=True), 202)
