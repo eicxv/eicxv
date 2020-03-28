@@ -1,5 +1,8 @@
 import React from "react";
 
+// react router
+import { Link } from "react-router-dom";
+
 // material ui
 import { Typography, ButtonBase } from "@material-ui/core/";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -45,13 +48,20 @@ function Button(props) {
   const classes = useStyles();
   const theme = useTheme();
 
+  let buttonOptions = {
+    disableRipple: true,
+    className: theme.touchDevice ? classes.buttonTouch : classes.button,
+    focusVisibleClassName: classes.focusVisble
+  };
+  if (props.variant === "link") {
+    buttonOptions.component = Link;
+    buttonOptions.to = props.to;
+  } else {
+    buttonOptions.onClick = props.onClick;
+  }
+
   return (
-    <ButtonBase
-      disableRipple
-      className={theme.touchDevice ? classes.buttonTouch : classes.button}
-      focusVisibleClassName={classes.focusVisble}
-      onClick={props.onClick}
-    >
+    <ButtonBase {...buttonOptions}>
       <Typography variant="button">{props.children}</Typography>
     </ButtonBase>
   );

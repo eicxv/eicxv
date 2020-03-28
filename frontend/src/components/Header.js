@@ -38,8 +38,12 @@ function Header(props) {
   return (
     <div id="header" className={classes.header}>
       <div className={classes.content}>
-        <Button onClick={props.onJournal}>Journal</Button>
-        <Button onClick={props.onHome}>Einar Persson</Button>
+        <Button variant="link" to="/journal">
+          Journal
+        </Button>
+        <Button variant="link" to="/">
+          Einar Persson
+        </Button>
         <Button onClick={props.onAbout}>About</Button>
       </div>
     </div>
