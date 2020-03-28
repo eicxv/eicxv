@@ -1,9 +1,9 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="eicxv_api",
     version="0.0.1",
-    packages=["eicxv_api",],
+    packages=find_packages(),
     license="GNU GENERAL PUBLIC LICENSE v3",
     python_requires=">=3.7",
     install_requires=[
