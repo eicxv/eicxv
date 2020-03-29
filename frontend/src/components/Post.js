@@ -10,30 +10,20 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // custom components
 import Container from "./Container";
+import Markdown from "./Markdown";
 
-const useStyles = makeStyles({
-  container: {
-    margin: "1rem"
-  },
-  title: {
-    fontFamily: "'Archivo', sans-serif",
-    fontSize: "2rem"
-  },
-  introText: {
-    maxHeight: "14rem",
-    fontFamily: "'Montserrat', sans-serif",
-    fontSize: "1rem",
-    textOverflow: "ellipsis"
-  },
-  metaData: {
-    fontFamily: "'Space Mono', sans-serif",
-    fontSize: "0.625rem"
-  }
+const useStyles = makeStyles(theme => {
+  return {
+    markdown: {
+      maxWidth: "45rem",
+      color: theme.palette.primary.main
+    }
+  };
 });
 
 function Post(props) {
   const classes = useStyles();
-  const [post, setPost] = useState([]);
+  const [post, setPost] = useState();
   let { postId } = useParams();
 
   useEffect(() => {
@@ -45,11 +35,9 @@ function Post(props) {
     })();
   }, []);
 
-  return (
-    <Container className={classes.container}>
-      <ReactMarkdown source={post.content} />
-    </Container>
-  );
+  return post ? (
+    <Markdown className={classes.markdown}>{post.content}</Markdown>
+  ) : null;
 }
 
 export default Post;
