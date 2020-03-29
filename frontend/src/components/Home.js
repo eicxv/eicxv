@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => {
   return {
     grid: {
       display: "grid",
-      gridTemplateRows: "2fr 5fr 1fr",
+      gridTemplateRows: "auto 5fr 1fr",
       height: "calc(100vh - 4rem)"
     },
     text: {
