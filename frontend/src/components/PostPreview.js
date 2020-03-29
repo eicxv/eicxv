@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // material ui
 import { Typography, Hidden, ButtonBase } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => {
   return {
@@ -23,6 +23,23 @@ const useStyles = makeStyles(theme => {
       "&:active": {
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.secondary.main,
+        "& img": {
+          filter: "invert(0.75)"
+        }
+      }
+    },
+    containerTouch: {
+      height: "100%",
+      color: theme.palette.primary.main,
+      backgroundColor: theme.palette.secondary.main,
+      display: "flex",
+      border: "thin solid",
+      borderColor: theme.palette.primary.main,
+      transition: "0.15s step-end",
+      "&:active": {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.secondary.main,
+        transition: "0s",
         "& img": {
           filter: "invert(0.75)"
         }
@@ -64,6 +81,7 @@ const useStyles = makeStyles(theme => {
 
 function PostPreview(props) {
   const classes = useStyles();
+  const theme = useTheme();
 
   return (
     <ButtonBase
@@ -72,7 +90,11 @@ function PostPreview(props) {
       disableRipple
       focusVisibleClassName={classes.focusVisble}
     >
-      <div className={classes.container}>
+      <div
+        className={
+          theme.touchDevice ? classes.containerTouch : classes.container
+        }
+      >
         <div className={classes.detailsContainer}>
           <Typography className={classes.title}>
             {props.post.intro_title}
