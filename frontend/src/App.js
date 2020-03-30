@@ -32,6 +32,7 @@ let theme = createMuiTheme({
     }
   },
   typography: {
+    fontFamily: ["Archivo", '"Helvetica Neue"', "Arial", "sans-serif"],
     button: {
       fontFamily: ["Montserrat", "sans-serif"],
       fontSize: "1rem",
@@ -40,13 +41,16 @@ let theme = createMuiTheme({
   },
   touchDevice: "ontouchstart" in document.documentElement
 });
-theme = responsiveFontSizes(theme, { factor: 3 });
+theme = responsiveFontSizes(theme, { factor: 2.5 });
 
 const useStyles = makeStyles({
   margin: {
     padding: "1rem 15%",
     [theme.breakpoints.down("sm")]: {
       padding: "1rem 10%"
+    },
+    [theme.breakpoints.up("lg")]: {
+      padding: "1rem 20%"
     }
   }
 });

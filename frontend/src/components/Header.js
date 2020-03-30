@@ -21,9 +21,12 @@ const useStyles = makeStyles(theme => {
       zIndex: "200"
     },
     content: {
-      width: "70%",
+      width: "85%",
       [theme.breakpoints.down("sm")]: {
-        width: "80%"
+        width: "90%"
+      },
+      [theme.breakpoints.up("lg")]: {
+        width: "75%"
       },
       display: "flex",
       justifyContent: "space-between",
