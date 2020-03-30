@@ -20,7 +20,14 @@ THREE.ShaderChunk.noise_3D_grad = noise3Dgrad;
 class ThreeSketch extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { faceMultiplier: 1 };
   }
+
+  setFaceMultiplier = num => {
+    this.setState({
+      faceMultiplier: num
+    });
+  };
 
   componentDidMount() {
     this.init();
@@ -69,8 +76,9 @@ class ThreeSketch extends React.Component {
     this.geometry = new THREE.BufferGeometry();
 
     // create arrributes
-    const WIDTH = 36;
-    const HEIGHT = 124;
+    this.WIDTH = 36;
+    this.HEIGHT = 124;
+    this.numberOfVertices = this.WIDTH * this.HEIGHT * 2 * 3;
 
     function* makeTranslationIterator() {
       const [a, b, c] = [0.5, Math.sqrt(3) / 3, Math.sqrt(3) / 6];
@@ -106,21 +114,40 @@ class ThreeSketch extends React.Component {
       }
     }
 
+    function shuffleSynchronously(arr1, arr2) {
+      for (let i = arr1.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr1[i], arr1[j]] = [arr1[j], arr1[i]];
+        [arr2[i], arr2[j]] = [arr2[j], arr2[i]];
+      }
+      return [arr1, arr2];
+    }
+
     let vertices = [];
     let translations = [];
-    const vertexIt = makeVertexIterator(WIDTH, HEIGHT);
+    const vertexIt = makeVertexIterator(this.WIDTH, this.HEIGHT);
     const translationIt = makeTranslationIterator();
     const translationIndexIt = makeTranslationIndexIterator();
 
     for (let vertex of vertexIt) {
+      let faceVertices = [];
+      let faceTranslations = [];
       for (let _ = 0; _ < 3; _++) {
-        vertices.push(...vertex);
-        translations.push(translationIndexIt.next().value);
+        faceVertices.push(...vertex);
+        faceTranslations.push(translationIndexIt.next().value);
       }
+      vertices.push(faceVertices);
+      translations.push(faceTranslations);
     }
+
+    // shuffle faces so .setDrawRange removes faces randomly
+    [vertices, translations] = shuffleSynchronously(vertices, translations);
+    vertices = vertices.flat();
+    translations = translations.flat();
 
     //bind attributes
     vertices = new Float32Array(vertices);
+
     const positionAttribute = new THREE.BufferAttribute(vertices, 3);
     this.geometry.setAttribute("position", positionAttribute);
 
@@ -162,6 +189,10 @@ class ThreeSketch extends React.Component {
   };
 
   animate = () => {
+    this.geometry.setDrawRange(
+      0,
+      this.numberOfVertices * this.state.faceMultiplier
+    );
     if (this.showStats) this.stats.begin();
 
     this.uniforms.u_time.value += 0.003;
@@ -175,7 +206,11 @@ class ThreeSketch extends React.Component {
 
   render() {
     return (
-      <canvas id="sketchCanvas" className={this.props.canvasStyle}></canvas>
+      <canvas
+        id="sketchCanvas"
+        className={this.props.canvasClass}
+        style={this.props.canvasStyle}
+      ></canvas>
     );
   }
 }

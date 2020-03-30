@@ -1,13 +1,14 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useRef, useState, useLayoutEffect } from "react";
 
 // material ui
 import { Typography } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { useScrollPosition } from "@n8tb1t/use-scroll-position";
+
 // custom components
 import DownButton from "./DownButton";
 import PostPreviewGrid from "./PostPreviewGrid";
-
 import ReflectionSketch from "./ReflectionSketch";
 
 const useStyles = makeStyles(theme => {
@@ -21,15 +22,22 @@ const useStyles = makeStyles(theme => {
       color: theme.palette.primary.main
     },
     sketch: {
-      width: "100%",
-      height: "100%",
-      display: "block"
+      position: "fixed",
+      width: "100vw",
+      left: "0",
+      zIndex: "-1"
     },
-    downButtonContainer: {
+    downButton: {
+      position: "fixed",
+      top: "90vh",
+      width: "100vw",
+      left: "0",
       display: "flex",
       justifyContent: "center",
-      alignItems: "flex-start",
-      width: "100%"
+      alignItems: "flex-start"
+    },
+    downButtonHide: {
+      display: "none"
     },
     postsGrid: {
       display: "grid",
@@ -55,10 +63,55 @@ function Home() {
     });
   }
 
+  //set size and position of sketch canvas
+  const sketchRef = useRef(null);
+  const sketchPlaceholderRef = useRef(null);
+
+  function useSketchStyle() {
+    const [sketchStyle, setSketchStyle] = useState({});
+    useLayoutEffect(() => {
+      function updateSketchStyle() {
+        let top = sketchPlaceholderRef.current.offsetTop;
+        let height = sketchPlaceholderRef.current.offsetHeight;
+        setSketchStyle({ height: height, top: top });
+      }
+      window.addEventListener("resize", updateSketchStyle);
+      updateSketchStyle();
+      return () => window.removeEventListener("resize", updateSketchStyle);
+    }, []);
+    return sketchStyle;
+  }
+
+  let sketchStyle = useSketchStyle();
+
+  // remove faces from sketch by through multiplier on scroll
+  function updateSketchMultiplier(scrollPosY) {
+    let endSketchHeight = window.innerHeight * 0.5;
+    let multiplier = 1 - Math.min(-scrollPosY / endSketchHeight, 1);
+    multiplier = Math.pow(multiplier, 3);
+    sketchRef.current.setFaceMultiplier(multiplier);
+  }
+
+  // hide downbutton on scroll
+  const [hideDownButton, setHideDownButton] = useState(false);
+  function showHideDownButton(scrollPosY) {
+    setHideDownButton(window.innerHeight * 0.1 < -scrollPosY);
+  }
+
+  useScrollPosition(({ prevPos, currPos }) => {
+    updateSketchMultiplier(currPos.y);
+    showHideDownButton(currPos.y);
+  });
+
   return (
     <Fragment>
+      <ReflectionSketch
+        canvasClass={classes.sketch}
+        canvasStyle={sketchStyle}
+        ref={sketchRef}
+      />
       <div className={classes.grid}>
-        <div className={classes.text}>
+        <div className={classes.text} style={{ marginTop: "3rem" }}>
           <Typography variant="h2" align="left" gutterBottom>
             Hello, I'm Einar
           </Typography>
@@ -67,12 +120,21 @@ function Home() {
             website for my thoughts and projects.
           </Typography>
         </div>
-        <ReflectionSketch canvasStyle={classes.sketch} />
-        <div className={classes.downButtonContainer}>
+        <div ref={sketchPlaceholderRef}></div>
+        <div
+          className={`${classes.downButton} ${
+            hideDownButton ? classes.downButtonHide : ""
+          }`}
+        >
           <DownButton onClick={scrollToLatest} />
         </div>
       </div>
-      <Typography variant="h4" gutterBottom className={classes.text}>
+      <Typography
+        variant="h4"
+        gutterBottom
+        className={classes.text}
+        style={{ marginTop: "10vh" }}
+      >
         Journal - Latest Posts
       </Typography>
       <PostPreviewGrid />
