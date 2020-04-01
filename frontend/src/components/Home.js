@@ -86,7 +86,7 @@ function Home() {
 
   // remove faces from sketch by through multiplier on scroll
   function updateSketchMultiplier(scrollPosY) {
-    let endSketchHeight = window.innerHeight * 0.5;
+    let endSketchHeight = window.innerHeight * 0.6;
     let multiplier = 1 - Math.min(-scrollPosY / endSketchHeight, 1);
     multiplier = Math.pow(multiplier, 3);
     sketchRef.current.setFaceMultiplier(multiplier);
@@ -95,7 +95,7 @@ function Home() {
   // hide downbutton on scroll
   const [hideDownButton, setHideDownButton] = useState(false);
   function showHideDownButton(scrollPosY) {
-    setHideDownButton(window.innerHeight * 0.1 < -scrollPosY);
+    setHideDownButton(window.innerHeight * 0.23 < -scrollPosY);
   }
 
   useScrollPosition(({ prevPos, currPos }) => {
@@ -133,7 +133,7 @@ function Home() {
         variant="h4"
         gutterBottom
         className={classes.text}
-        style={{ marginTop: "10vh" }}
+        style={{ marginTop: "20vh" }}
       >
         Journal - Latest Posts
       </Typography>

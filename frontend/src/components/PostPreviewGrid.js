@@ -10,9 +10,7 @@ const useStyles = makeStyles(theme => {
   return {
     postsGrid: {
       display: "grid",
-      [theme.breakpoints.down("md")]: {
-        gridTemplateColumns: "1fr"
-      },
+      gridTemplateColumns: "1fr",
       [theme.breakpoints.up("lg")]: {
         gridTemplateColumns: "1fr 1fr"
       },
