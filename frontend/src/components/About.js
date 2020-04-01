@@ -4,13 +4,39 @@ import React from "react";
 import { Typography, Drawer } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles({
-  aboutText: {
-    fontFamily: "'Montserrat', sans-serif",
-    fontSize: "1rem",
-    width: "18vw",
-    padding: "8vw"
-  }
+import selfportrait from "../images/selfportrait.jpg";
+
+const useStyles = makeStyles(theme => {
+  return {
+    text: {
+      fontFamily: "'Montserrat', sans-serif"
+    },
+    drawer: {
+      width: "30vw",
+      padding: "4rem 6vw",
+      [theme.breakpoints.down("lg")]: {
+        width: "35vw",
+        padding: "4rem 8vw"
+      },
+      [theme.breakpoints.down("md")]: {
+        width: "60vw",
+        padding: "4rem 12vw"
+      },
+      [theme.breakpoints.down("sm")]: {
+        width: "75vw",
+        padding: "4rem 16vw"
+      },
+      [theme.breakpoints.down("xs")]: {
+        width: "100vw",
+        padding: "4rem 8vw"
+      }
+    },
+    selfportrait: {
+      width: 160,
+      display: "block",
+      margin: "1rem auto"
+    }
+  };
 });
 
 function About(props) {
@@ -23,15 +49,21 @@ function About(props) {
       onClose={props.onClose}
       ModalProps={{ BackdropProps: { invisible: true } }}
     >
-      <Typography className={classes.aboutText}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
-      </Typography>
+      <div className={classes.drawer}>
+        <img src={selfportrait} className={classes.selfportrait} />
+        <Typography className={classes.text}>
+          I'm Einar. I'm currently living in Gothenburg. I love sailing, I can
+          spend all day in a museum and I make a really good pasta carbonara.
+        </Typography>
+        <br />
+        <Typography className={classes.text}>
+          I have studied Architecture and Engineering at Chalmers University of
+          Technology and I am a self-taught programmer. I have an interest in
+          architecture and design informed by computation, formfinding and
+          generative art. I sometimes create traditional art. This site is a
+          journal for all these things.
+        </Typography>
+      </div>
     </Drawer>
   );
 }
