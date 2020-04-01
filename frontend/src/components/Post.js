@@ -3,13 +3,10 @@ import React, { useState, useEffect } from "react";
 // react router
 import { useParams } from "react-router-dom";
 
-import ReactMarkdown from "react-markdown";
-
 // material ui
 import { makeStyles } from "@material-ui/core/styles";
 
 // custom components
-import Container from "./Container";
 import Markdown from "./Markdown";
 
 const useStyles = makeStyles(theme => {
