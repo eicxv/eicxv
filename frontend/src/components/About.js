@@ -2,9 +2,13 @@ import React from "react";
 
 //material ui
 import { Typography, Drawer } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import selfportrait from "../images/selfportrait.jpg";
+// custom components
+import Button from "../components/Button";
+
+// resources
+import selfportrait from "../images/selfportrait.png";
 
 const useStyles = makeStyles(theme => {
   return {
@@ -12,6 +16,9 @@ const useStyles = makeStyles(theme => {
       fontFamily: "'Montserrat', sans-serif"
     },
     drawer: {
+      backgroundColor: theme.palette.primary.main
+    },
+    content: {
       width: "30vw",
       padding: "4rem 6vw",
       [theme.breakpoints.down("lg")]: {
@@ -31,6 +38,11 @@ const useStyles = makeStyles(theme => {
         padding: "4rem 8vw"
       }
     },
+    button: {
+      position: "absolute",
+      top: "1rem",
+      left: "2rem"
+    },
     selfportrait: {
       width: 160,
       display: "block",
@@ -41,6 +53,7 @@ const useStyles = makeStyles(theme => {
 
 function About(props) {
   const classes = useStyles();
+  const theme = useTheme();
 
   return (
     <Drawer
@@ -48,12 +61,23 @@ function About(props) {
       open={props.open}
       onClose={props.onClose}
       ModalProps={{ BackdropProps: { invisible: true } }}
+      classes={{ paper: classes.drawer }}
     >
-      <div className={classes.drawer}>
+      <div className={classes.button}>
+        <Button
+          onClick={props.onClose}
+          colorPrimary={theme.palette.primary.main}
+          colorSecondary={theme.palette.secondary.main}
+        >
+          Close
+        </Button>
+      </div>
+
+      <div className={classes.content}>
         <img src={selfportrait} className={classes.selfportrait} />
         <Typography className={classes.text}>
-          I'm Einar. I'm currently living in Gothenburg. I love sailing, I can
-          spend all day in a museum and I make a really good pasta carbonara.
+          I'm Einar. I love sailing, I can spend all day in a museum and I make
+          a really good pasta carbonara.
         </Typography>
         <br />
         <Typography className={classes.text}>
@@ -61,7 +85,8 @@ function About(props) {
           Technology and I am a self-taught programmer. I have an interest in
           architecture and design informed by computation, formfinding and
           generative art. I sometimes create traditional art. This site is a
-          journal for all these things.
+          journal for my interests, thoughts and projects. I'm currently living
+          in Gothenburg and always on the lookout for new challenges.
         </Typography>
       </div>
     </Drawer>
