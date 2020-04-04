@@ -19,7 +19,9 @@ const useStyles = makeStyles(theme => {
       height: "calc(100vh - 4rem)"
     },
     text: {
-      color: theme.palette.primary.main
+      color: theme.palette.primary.main,
+      fontWeight: 700,
+      fontFamily: "Archivo"
     },
     sketch: {
       position: "fixed",
@@ -86,7 +88,7 @@ function Home() {
 
   // remove faces from sketch by through multiplier on scroll
   function updateSketchMultiplier(scrollPosY) {
-    let endSketchHeight = window.innerHeight * 0.6;
+    let endSketchHeight = window.innerHeight * 0.9;
     let multiplier = 1 - Math.min(-scrollPosY / endSketchHeight, 1);
     multiplier = Math.pow(multiplier, 3);
     sketchRef.current.setFaceMultiplier(multiplier);
@@ -111,11 +113,11 @@ function Home() {
         ref={sketchRef}
       />
       <div className={classes.grid}>
-        <div className={classes.text} style={{ marginTop: "3rem" }}>
-          <Typography variant="h2" align="left" gutterBottom>
+        <div style={{ marginTop: "3rem" }}>
+          <Typography className={classes.text} variant="h2" align="left">
             Hello, I'm Einar
           </Typography>
-          <Typography variant="h4">
+          <Typography className={classes.text} variant="h4">
             I'm interested in art, architecture and programming. This is a
             website for my thoughts and projects.
           </Typography>
