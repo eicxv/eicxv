@@ -1,5 +1,8 @@
 import React from "react";
 
+// react-router
+import { useLocation } from "react-router-dom";
+
 // material ui
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -36,8 +39,10 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-function Header(props) {
+function Header() {
   const classes = useStyles();
+  const location = useLocation();
+
   return (
     <div id="header" className={classes.header}>
       <div className={classes.content}>
@@ -47,7 +52,15 @@ function Header(props) {
         <Button variant="link" to="/">
           Einar Persson
         </Button>
-        <Button onClick={props.onAbout}>About</Button>
+        <Button
+          variant="link"
+          to={{
+            pathname: "/about",
+            state: { background: location }
+          }}
+        >
+          About
+        </Button>
       </div>
     </div>
   );

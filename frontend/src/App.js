@@ -1,7 +1,7 @@
 import React from "react";
 
 // react router
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 // material ui
 import { CssBaseline } from "@material-ui/core";
@@ -13,11 +13,8 @@ import {
 } from "@material-ui/core/styles";
 
 // custom components
-import Home from "./components/Home";
-import Journal from "./components/Journal";
-import Post from "./components/Post";
-import HeaderSpecialized from "./components/HeaderSpecialized";
-import NotFound from "./components/NotFound";
+import Routing from "./components/Routing";
+import Header from "./components/Header";
 
 let theme = createMuiTheme({
   palette: {
@@ -62,22 +59,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <HeaderSpecialized />
+        <Header />
         <div className={classes.margin}>
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route exact path="/journal">
-              <Journal />
-            </Route>
-            <Route path="/journal/:postId">
-              <Post />
-            </Route>
-            <Route path="*">
-              <NotFound />
-            </Route>
-          </Switch>
+          <Routing />
         </div>
       </BrowserRouter>
     </ThemeProvider>

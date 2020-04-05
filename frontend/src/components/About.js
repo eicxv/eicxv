@@ -1,11 +1,14 @@
 import React from "react";
 
+// react router
+import { useHistory, useLocation } from "react-router-dom";
+
 //material ui
 import { Typography, Drawer } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 // custom components
-import Button from "../components/Button";
+import Button from "./Button";
 
 // resources
 import selfportrait from "../images/selfportrait.png";
@@ -54,40 +57,48 @@ const useStyles = makeStyles(theme => {
 function About(props) {
   const classes = useStyles();
   const theme = useTheme();
+  let history = useHistory();
+  let location = useLocation();
+
+  function close(e) {
+    e.stopPropagation();
+    history.push(location.state.background);
+  }
 
   return (
     <Drawer
       anchor="right"
       open={props.open}
-      onClose={props.onClose}
+      onClose={close}
       ModalProps={{ BackdropProps: { invisible: true } }}
       classes={{ paper: classes.drawer }}
     >
-      <div className={classes.button}>
-        <Button
-          onClick={props.onClose}
-          colorPrimary={theme.palette.primary.main}
-          colorSecondary={theme.palette.secondary.main}
-        >
-          Close
-        </Button>
-      </div>
-
-      <div className={classes.content}>
-        <img src={selfportrait} className={classes.selfportrait} />
-        <Typography className={classes.text}>
-          I'm Einar. I love sailing, I can spend all day in a museum and I make
-          a really good pasta carbonara.
-        </Typography>
-        <br />
-        <Typography className={classes.text}>
-          I have studied Architecture and Engineering at Chalmers University of
-          Technology and I am a self-taught programmer. I have an interest in
-          architecture and design informed by computation, formfinding and
-          generative art. I sometimes create traditional art. This site is a
-          journal for my interests, thoughts and projects. I'm currently living
-          in Gothenburg and always on the lookout for new challenges.
-        </Typography>
+      <div className={classes.drawer}>
+        <div className={classes.button}>
+          <Button
+            onClick={close}
+            colorPrimary={theme.palette.primary.main}
+            colorSecondary={theme.palette.secondary.main}
+          >
+            Close
+          </Button>
+        </div>
+        <div className={classes.content}>
+          <img src={selfportrait} className={classes.selfportrait} />
+          <Typography className={classes.text}>
+            I'm Einar. I love sailing, I can spend all day in a museum and I
+            make a really good pasta carbonara.
+          </Typography>
+          <br />
+          <Typography className={classes.text}>
+            I have studied Architecture and Engineering at Chalmers University
+            of Technology and I am a self-taught programmer. I have an interest
+            in architecture and design informed by computation, formfinding and
+            generative art. I sometimes create traditional art. This site is a
+            journal for my interests, thoughts and projects. I'm currently
+            living in Gothenburg and always on the lookout for new challenges.
+          </Typography>
+        </div>
       </div>
     </Drawer>
   );
