@@ -109,7 +109,9 @@ attribute float a_index;
 
 uniform float u_time;
 uniform vec3 u_cameraPosition;
+uniform vec3 u_lightDirection;
 uniform mat4 u_viewProjectionMatrix;
+
 
 varying float v_value;
 
@@ -145,7 +147,7 @@ void main() {
   vec2 translatedPos;
   float i;
   float sign = 1. - 2. * float(a_index > 2.5);
-  float t = u_time / 3000.;
+  float t = u_time / 5000.;
 
   //loop
   i = mod(a_index, 3.);
@@ -171,9 +173,8 @@ void main() {
   vec3 cameraDir = vec3(a_position.x, 0., a_position.y) - u_cameraPosition;
   vec3 reflected = normalize(cameraDir - (2. * dot(cameraDir, surfaceNormal) * surfaceNormal));
   
-  vec3 lightDir = normalize( - vec3(0, -3, -1)); 
-  float align = dot(lightDir, reflected);
-  v_value = step(0.85, align);
+  float align = dot(u_lightDirection, reflected);
+  v_value = step(0.995, align);
 
 	vec4 mvPosition = vec4( p0, 1.0 );
   gl_Position = u_viewProjectionMatrix * mvPosition;

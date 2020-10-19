@@ -1,4 +1,5 @@
 import * as m4 from "./matrix/m4";
+import * as v3 from "./matrix/v3";
 
 //shaders
 import frag from "./shaders/waves.frag";
@@ -6,32 +7,35 @@ import vert from "./shaders/waves.vert";
 
 export default class Waves {
   constructor(canvas) {
-    this.gl = canvas.getContext("webgl");
+    this.gl = canvas.getContext("webgl", { alpha: false });
     this.program = createProgram(this.gl, vert, frag);
     this.attributes = {};
     this.uniforms = {};
     this.WIDTH = 72;
     this.HEIGHT = 124;
+    this.TRIS = this.WIDTH * this.HEIGHT;
     this.SIDE_LENGTH = 1;
-    this.N = this.WIDTH * this.HEIGHT * 3;
+    this.n = this.WIDTH * this.HEIGHT * 3;
     this.lightColor = [0.9, 0.9, 0.9];
     this.shadowColor = [0.2, 0.2, 0.2];
+    this.lightDirection = [0, 1, 3];
+    v3.normalize(this.lightDirection, this.lightDirection);
     this.gl.clearColor(...this.shadowColor, 1);
     this.initCamera();
     this.initAttributes();
     this.initLocations();
     this.render = this.render.bind(this);
-    this.render(performance.now());
+    this.startRender();
   }
 
-  render(time) {
-    let gl = this.gl;
-    this.resizeCanvas();
+  setMultiplier(value) {
+    this.n = Math.round(this.TRIS * value) * 3;
+  }
 
+  startRender() {
+    let gl = this.gl;
     gl.bindBuffer(gl.ARRAY_BUFFER, this.attributeBuffer);
     gl.useProgram(this.program);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
     const attrs = this.attributes;
     gl.vertexAttribPointer(attrs.a_positionLoc, 2, gl.FLOAT, null, 12, 0);
     gl.vertexAttribPointer(attrs.a_indexLoc, 1, gl.FLOAT, null, 12, 8);
@@ -43,11 +47,20 @@ export default class Waves {
       this.viewProjectionMatrix
     );
     gl.uniform3fv(unifs.u_cameraPositionLoc, this.camera.position);
-    gl.uniform1f(unifs.u_timeLoc, time);
+    // gl.uniform1f(unifs.u_timeLoc, time);
+    gl.uniform3fv(unifs.u_lightDirectionLoc, this.lightDirection);
     gl.uniform3fv(unifs.u_lightColorLoc, this.lightColor);
     gl.uniform3fv(unifs.u_shadowColorLoc, this.shadowColor);
+    requestAnimationFrame(this.render);
+  }
 
-    gl.drawArrays(gl.TRIANGLES, 0, this.N);
+  render(time) {
+    let gl = this.gl;
+    this.resizeCanvas();
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform1f(this.uniforms.u_timeLoc, time);
+
+    gl.drawArrays(gl.TRIANGLES, 0, this.n);
     requestAnimationFrame(this.render);
   }
 
@@ -62,6 +75,11 @@ export default class Waves {
       this.gl.viewport(0, 0, width, height);
       this.updateProjectionMatrix();
       this.updateViewProjectionMatrix();
+      this.gl.uniformMatrix4fv(
+        this.uniforms.u_viewProjectionMatrixLoc,
+        false,
+        this.viewProjectionMatrix
+      );
     }
   }
 
@@ -72,7 +90,7 @@ export default class Waves {
       up: [0, 1, 0],
       near: 1,
       far: 2000,
-      fov: (45 * 2 * Math.PI) / 360,
+      fov: (32 * 2 * Math.PI) / 360,
     };
     this.viewMatrix = m4.identity();
     this.projectionMatrix = m4.identity();
@@ -86,7 +104,6 @@ export default class Waves {
     let gl = this.gl;
     let attributes = this.genAttributes();
     // attributes = shuffle(attributes);
-    attributes = new Float32Array(attributes.flat());
     this.attributeBuffer = createAttributeBuffer(gl, attributes);
   }
 
@@ -107,6 +124,8 @@ export default class Waves {
     this.uniforms.u_cameraPositionLoc = loc;
     loc = getUniformLocation(gl, this.program, "u_time");
     this.uniforms.u_timeLoc = loc;
+    loc = getUniformLocation(gl, this.program, "u_lightDirection");
+    this.uniforms.u_lightDirectionLoc = loc;
     loc = getUniformLocation(gl, this.program, "u_lightColor");
     this.uniforms.u_lightColorLoc = loc;
     loc = getUniformLocation(gl, this.program, "u_shadowColor");
@@ -145,20 +164,32 @@ export default class Waves {
     const dxCol = Math.cos(Math.PI / 6) * 2 * apothem;
     const dzCol = Math.sin(Math.PI / 6) * 2 * apothem;
     const dzRow = 4 * apothem;
-    const attributes = [];
+    const attributes = new Float32Array(this.TRIS * 3 * 3);
     let rowOrigin = [0, 0];
-    let position;
+    let position = new Array(2);
     let flippedRow = false;
     let flippedCol = false;
+    let index = 0;
+
+    function addTriangle(position, flipped) {
+      const offset = flipped ? 3 : 0;
+      for (let i = 0; i < 3; i++) {
+        attributes[index] = position[0];
+        attributes[index + 1] = position[1];
+        attributes[index + 2] = i + offset;
+        index += 3;
+      }
+    }
 
     for (let i = 0; i < this.HEIGHT; i++) {
-      position = rowOrigin.slice();
-      this.addTriangle(position, flippedCol, attributes);
+      position[0] = rowOrigin[0];
+      position[1] = rowOrigin[1];
+      addTriangle(position, flippedCol);
       for (let j = 0; j < this.WIDTH - 1; j++) {
         position[0] += dxCol;
         position[1] += dzCol * (flippedCol ? -1 : 1);
         flippedCol = !flippedCol;
-        this.addTriangle(position, flippedCol, attributes);
+        addTriangle(position, flippedCol);
       }
       rowOrigin[1] += flippedRow ? dzRow / 2 : dzRow;
       flippedRow = !flippedRow;
@@ -166,28 +197,27 @@ export default class Waves {
     }
     return attributes;
   }
-
-  addTriangle(position, flipped, positions) {
-    const offset = flipped ? 3 : 0;
-    for (let i = 0; i < 3; i++) {
-      positions.push([position[0], position[1], i + offset]);
-    }
-  }
 }
 
-function shuffle(array) {
-  var currentIndex = array.length,
-    temporaryValue,
-    randomIndex;
+function shuffleAttributes(array) {
+  let currentIndex = array.length / 3;
+  let temp = new Float32Array(3);
+  let randomIndex;
   while (0 !== currentIndex) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
+    copySlice3(array, currentIndex, temp, 0);
+    copySlice3(array, randomIndex, array, currentIndex);
+    copySlice3(temp, 0, array, randomIndex);
   }
 
   return array;
+}
+
+function copySlice3(source, sourceIndex, target, targetIndex) {
+  target[targetIndex] = source[sourceIndex];
+  target[targetIndex + 1] = source[sourceIndex + 1];
+  target[targetIndex + 2] = source[sourceIndex + 2];
 }
 
 function createAttributeBuffer(gl, data) {
@@ -205,7 +235,7 @@ function createShader(gl, type, source) {
   if (success) {
     return shader;
   } else {
-    throw `shader creation failed: ${gl.getShaderInfoLog(shader)}`;
+    throw new Error(`shader creation failed: ${gl.getShaderInfoLog(shader)}`);
   }
 }
 
@@ -228,14 +258,16 @@ function createProgram(gl, vertexShaderSource, fragmentShaderSource) {
     gl.deleteShader(fragmentShader);
     return program;
   } else {
-    throw `program creation failed: ${gl.getProgramInfoLog(program)}`;
+    throw new Error(
+      `program creation failed: ${gl.getProgramInfoLog(program)}`
+    );
   }
 }
 
 function getAttribLocation(gl, program, name) {
   let attributeLocation = gl.getAttribLocation(program, name);
   if (attributeLocation === -1) {
-    throw `Failed to find attribute: ${name}`;
+    throw new Error(`Failed to find attribute: ${name}`);
   }
 
   return attributeLocation;
@@ -244,7 +276,7 @@ function getAttribLocation(gl, program, name) {
 function getUniformLocation(gl, program, name) {
   let uniformLocation = gl.getUniformLocation(program, name);
   if (uniformLocation === -1) {
-    throw `Failed to find uniform: ${name}`;
+    throw new Error(`Failed to find uniform: ${name}`);
   }
   return uniformLocation;
 }
