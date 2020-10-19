@@ -1,0 +1,25 @@
+{
+  "name": "eicxv-journal",
+  "private": true,
+  "description": "A personal website",
+  "version": "0.1.0",
+  "author": "Einar Persson",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+  },
+  "dependencies": {
+    "gatsby": "^2.24.80",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "prettier": "2.1.2"
+  }
+}
