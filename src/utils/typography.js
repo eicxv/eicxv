@@ -1,7 +1,7 @@
 import Typography from "typography";
-import elkGlenTheme from "typography-theme-elk-glen";
+import deYoungTheme from "typography-theme-de-young";
 
-const typography = new Typography(elkGlenTheme);
+const typography = new Typography(deYoungTheme);
 
 export default typography;
 export const rhythm = typography.rhythm;
