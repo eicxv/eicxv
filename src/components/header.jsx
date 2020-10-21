@@ -3,6 +3,7 @@ import { css } from "@emotion/core";
 
 import { rhythm } from "../utils/typography";
 import { mediaQuery as mq } from "../utils/emotion";
+import { theme } from "../utils/theme";
 
 import Button from "./button";
 
@@ -15,7 +16,7 @@ const headerCss = css({
   flexDirection: "row",
   justifyContent: "center",
   alignItems: "center",
-  backgroundColor: "#222222",
+  backgroundColor: theme.color.secondary,
   zIndex: "200",
 });
 

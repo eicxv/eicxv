@@ -3,30 +3,27 @@ import { Link } from "gatsby";
 
 import { css } from "@emotion/core";
 import { rhythm } from "../utils/typography";
+import { theme } from "../utils/theme";
 
-const color = {
-  secondary: "#aaaaaa",
-  primary: "#222222",
-};
 const defaultCss = css({
   textTransform: "uppercase",
-  boxShadow: "none",
+  boxShadow: "none !important",
   padding: `${rhythm(0.15)} ${rhythm(0.8)}`,
-  backgroundColor: color.primary,
-  color: color.secondary,
+  backgroundColor: theme.color.secondary,
+  color: theme.color.primary,
 });
 const hoverCss = css({
   "&:hover": {
-    backgroundColor: color.secondary,
-    color: color.primary,
+    color: theme.color.secondary,
+    backgroundColor: theme.color.primary,
   },
 });
 const activeCss = css({
   "&:active": {
-    backgroundColor: color.primary,
-    color: color.secondary,
+    backgroundColor: theme.color.secondary,
+    color: theme.color.primary,
     border: "thin solid",
-    borderColor: color.secondary,
+    borderColor: theme.color.primary,
     padding: `calc(${rhythm(0.12)} - 1px) calc(${rhythm(0.8)} - 1px)`, // offset border width
   },
 });
