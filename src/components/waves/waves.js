@@ -6,7 +6,7 @@ import frag from "./shaders/waves.frag";
 import vert from "./shaders/waves.vert";
 
 export default class Waves {
-  constructor(canvas) {
+  constructor(canvas, params) {
     this.gl = canvas.getContext("webgl", { alpha: false });
     this.program = createProgram(this.gl, vert, frag);
     this.attributes = {};
@@ -16,9 +16,10 @@ export default class Waves {
     this.TRIS = this.WIDTH * this.HEIGHT;
     this.SIDE_LENGTH = 1;
     this.n = this.WIDTH * this.HEIGHT * 3;
-    this.lightColor = [0.9, 0.9, 0.9];
-    this.shadowColor = [0.2, 0.2, 0.2];
-    this.lightDirection = [0, 1, 3];
+    params = !params ? {} : params;
+    this.lightColor = hexToRGB(params.lightColor) || [0.9, 0.9, 0.9];
+    this.shadowColor = hexToRGB(params.shadowColor) || [0.2, 0.2, 0.2];
+    this.lightDirection = params.lightDirection || [0, 1, 3];
     v3.normalize(this.lightDirection, this.lightDirection);
     this.gl.clearColor(...this.shadowColor, 1);
     this.initCamera();
@@ -279,4 +280,26 @@ function getUniformLocation(gl, program, name) {
     throw new Error(`Failed to find uniform: ${name}`);
   }
   return uniformLocation;
+}
+
+function hexToRGB(hex) {
+  let r = 0,
+    g = 0,
+    b = 0;
+
+  if (hex.length == 4) {
+    r = "0x" + hex[1] + hex[1];
+    g = "0x" + hex[2] + hex[2];
+    b = "0x" + hex[3] + hex[3];
+  } else if (hex.length == 7) {
+    r = "0x" + hex[1] + hex[2];
+    g = "0x" + hex[3] + hex[4];
+    b = "0x" + hex[5] + hex[6];
+  }
+
+  r = r / 255;
+  g = g / 255;
+  b = b / 255;
+
+  return [r, g, b];
 }
