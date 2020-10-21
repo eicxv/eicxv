@@ -36,7 +36,7 @@ export default function About({ data }) {
 }
 
 export const query = graphql`
-  query MyQuery {
+  query {
     file(relativePath: { eq: "images/self-portrait.png" }) {
       childImageSharp {
         fixed(width: 160, quality: 90) {

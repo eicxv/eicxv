@@ -9,6 +9,16 @@ const textCss = css({
   color: theme.color.primary,
 });
 
+const introBackgroundCss = css({
+  top: 0,
+  left: 0,
+  position: "absolute",
+  backgroundColor: theme.color.secondary,
+  width: "100%",
+  height: "100vh",
+  zIndex: -50,
+});
+
 export default function Home() {
   return (
     <Layout>
@@ -18,6 +28,7 @@ export default function Home() {
         for my thoughts and projects.
       </h2>
       <Waves />
+      <div css={introBackgroundCss}></div>
     </Layout>
   );
 }

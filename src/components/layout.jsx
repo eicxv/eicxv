@@ -7,7 +7,7 @@ import Header from "./header";
 
 const globalCss = css({
   body: {
-    backgroundColor: theme.color.secondary,
+    backgroundColor: theme.color.primary,
   },
 });
 
