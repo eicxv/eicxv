@@ -1,10 +1,8 @@
 import React from "react";
-import { css } from "@emotion/core";
 
 import Layout from "../components/layout";
-import { theme } from "../utils/theme";
 
-const textCss = css({
+const textCss = (theme) => ({
   color: theme.color.primary,
 });
 

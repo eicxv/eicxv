@@ -1,36 +1,35 @@
 import React from "react";
 import { Link } from "gatsby";
 
-import { css } from "@emotion/core";
-import { rhythm } from "../utils/typography";
-import { theme } from "../utils/theme";
+import { compose } from "../utils/emotion";
 
-const defaultCss = css({
+const defaultCss = (theme) => ({
+  fontFamily: "Montserrat",
   textTransform: "uppercase",
   boxShadow: "none !important",
-  padding: `${rhythm(0.15)} ${rhythm(0.8)}`,
+  padding: "0.2rem 1.2rem",
   backgroundColor: theme.color.secondary,
   color: theme.color.primary,
 });
-const hoverCss = css({
+const hoverCss = (theme) => ({
   "&:hover": {
     color: theme.color.secondary,
     backgroundColor: theme.color.primary,
   },
 });
-const activeCss = css({
+const activeCss = (theme) => ({
   "&:active": {
     backgroundColor: theme.color.secondary,
     color: theme.color.primary,
     border: "thin solid",
     borderColor: theme.color.primary,
-    padding: `calc(${rhythm(0.12)} - 1px) calc(${rhythm(0.8)} - 1px)`, // offset border width
+    padding: "calc(0.2rem - 1px) calc(1.2rem - 1px)",
   },
 });
 
 export default function Button(props) {
   return (
-    <Link css={[defaultCss, hoverCss, activeCss]} to={props.to}>
+    <Link css={compose(defaultCss, hoverCss, activeCss)} to={props.to}>
       {props.children}
     </Link>
   );

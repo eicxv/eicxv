@@ -1,17 +1,14 @@
 import React from "react";
 import { css } from "@emotion/core";
 
-import { rhythm } from "../utils/typography";
 import { mediaQuery as mq } from "../utils/emotion";
-import { theme } from "../utils/theme";
 
 import Button from "./button";
 
-const headerCss = css({
-  position: "sticky",
+const headerCss = (theme) => ({
   top: "0",
   width: "100%",
-  height: rhythm(2),
+  height: "3rem",
   display: "flex",
   flexDirection: "row",
   justifyContent: "center",
@@ -38,12 +35,12 @@ const contentCss = css({
 
 export default function Header() {
   return (
-    <div id="header" css={headerCss}>
+    <header css={headerCss}>
       <div css={contentCss}>
         <Button to={"/journal"}>Journal</Button>
         <Button to={"/"}>Einar&nbsp;Persson</Button>
         <Button to={"/about"}>About</Button>
       </div>
-    </div>
+    </header>
   );
 }

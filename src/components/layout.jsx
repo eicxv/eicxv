@@ -1,19 +1,12 @@
 import React, { Fragment } from "react";
 import { css, Global } from "@emotion/core";
-import { rhythm } from "../utils/typography";
-import { theme } from "../utils/theme";
 
 import Header from "./header";
-
-const globalCss = css({
-  body: {
-    backgroundColor: theme.color.primary,
-  },
-});
+import { globalCss } from "../utils/emotion";
 
 const wrapperCss = css({
-  padding: rhythm(2),
-  maxWidth: rhythm(22),
+  padding: "2rem 4rem",
+  maxWidth: "30rem",
   margin: "0 auto",
 });
 

@@ -1,13 +1,10 @@
 import React from "react";
 import { graphql } from "gatsby";
-import { css } from "@emotion/core";
 
 import Layout from "../components/layout";
-import { theme } from "../utils/theme";
 
-const wrapperCss = css({
-  backgroundColor: theme.color.primary,
-  color: theme.color.secondary,
+const wrapperCss = (theme) => ({
+  color: theme.color.primary,
 });
 
 export default function BlogPost({ data }) {
