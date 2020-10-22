@@ -1,20 +1,32 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 
 import CreateWaves from "./waves/waves";
-import { theme } from "../utils/theme";
+import { useTheme } from "emotion-theming";
 
-export default function Waves() {
+function Waves(props, ref) {
+  const theme = useTheme();
   const canvasRef = useRef(null);
+  const wavesRef = useRef(null);
   const params = {
     lightColor: theme.color.primary,
     shadowColor: theme.color.secondary,
     lightDirection: [0, 1, 3],
   };
   useEffect(() => {
-    new CreateWaves(canvasRef.current, params);
+    wavesRef.current = new CreateWaves(canvasRef.current, params);
   });
+  useImperativeHandle(ref, () => ({
+    setMultiplier: (value) => {
+      wavesRef.current.setMultiplier(value);
+    },
+  }));
 
-  return (
-    <canvas style={{ width: "100%", height: "400px" }} ref={canvasRef}></canvas>
-  );
+  return <canvas css={props.canvasCss} ref={canvasRef}></canvas>;
 }
+
+export default forwardRef(Waves);
