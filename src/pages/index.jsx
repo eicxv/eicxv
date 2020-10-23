@@ -4,6 +4,7 @@ import { ThemeProvider } from "emotion-theming";
 
 import Layout from "../components/layout";
 import Waves from "../components/waves";
+import SEO from "../components/seo";
 import { theme } from "../utils/emotion";
 
 const homeTheme = {
@@ -26,6 +27,10 @@ export default function Home() {
   return (
     <ThemeProvider theme={homeTheme}>
       <Layout>
+        <SEO
+          title="Einar Persson · eicxv"
+          description="I write about and show my projects in programming, art and architecture. Guides and essays on design, creative coding, generative art and more."
+        />
         <h1 css={textCss}>Hello, I'm Einar</h1>
         <h2 css={textCss}>
           I'm interested in art, architecture and programming. This is a website
