@@ -4,6 +4,7 @@ import Img from "gatsby-image";
 import { css } from "@emotion/core";
 
 import Layout from "../components/layout";
+import SEO from "../components/seo";
 
 const selfPortraitCss = css({
   margin: "0 auto",
@@ -13,6 +14,7 @@ const selfPortraitCss = css({
 export default function About({ data }) {
   return (
     <Layout>
+      <SEO title="Einar Persson · About" />
       <Img
         css={selfPortraitCss}
         fixed={data.file.childImageSharp.fixed}

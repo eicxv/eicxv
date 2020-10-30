@@ -6,7 +6,8 @@
   "author": "Einar Persson",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "build": "gatsby build",
+    "download": "node test.js && node test2.js",
+    "build": "if node fetch-content.js ; then gatsby build fi",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",
@@ -23,13 +24,16 @@
     "gatsby": "^2.24.80",
     "gatsby-image": "^2.4.21",
     "gatsby-plugin-emotion": "^4.3.14",
+    "gatsby-plugin-react-helmet": "^3.3.14",
     "gatsby-plugin-sharp": "^2.6.43",
     "gatsby-source-filesystem": "^2.3.35",
     "gatsby-transformer-remark": "^2.8.45",
     "gatsby-transformer-sharp": "^2.5.19",
-    "graphql-request": "^3.2.0",
+    "node-fetch": "^2.6.1",
+    "query-string": "^6.13.6",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "react-helmet": "^6.1.0"
   },
   "devDependencies": {
     "prettier": "2.1.2"
