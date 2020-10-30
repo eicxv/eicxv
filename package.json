@@ -6,8 +6,7 @@
   "author": "Einar Persson",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "download": "node test.js && node test2.js",
-    "build": "if node fetch-content.js ; then gatsby build fi",
+    "build": "node fetch-content.js && gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",
