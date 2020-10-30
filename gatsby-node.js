@@ -6,7 +6,6 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   if (node.internal.type === `MarkdownRemark`) {
     const name = getNode(node.parent).name;
     const slug = path.posix.join(`/journal`, name);
-    console.log(slug);
     createNodeField({
       node,
       name: `slug`,

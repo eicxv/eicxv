@@ -10,14 +10,15 @@ const wrapperCss = (theme) => ({
 
 export default function BlogPost({ data }) {
   const post = data.markdownRemark;
-  const image = post.frontmatter.image
-    ? post.frontmatter.image.childImageSharp.resize
-    : null;
+  // const image = post.frontmatter.image
+  //   ? post.frontmatter.image.childImageSharp.resize
+  //   : null;
+  const image = null;
   return (
     <Layout>
       <SEO
         title={post.frontmatter.title}
-        description={post.frontmatter.description || post.excerpt}
+        description={post.excerpt}
         image={image}
       />
       <div css={wrapperCss}>
@@ -34,18 +35,18 @@ export const query = graphql`
       excerpt(pruneLength: 160)
       frontmatter {
         title
-        description
-        author
-        image: featured {
-          childImageSharp {
-            resize(width: 1200) {
-              src
-              height
-              width
-            }
-          }
-        }
       }
     }
   }
 `;
+// description
+// author
+// image: featured {
+//   childImageSharp {
+//     resize(width: 1200) {
+//       src
+//       height
+//       width
+//     }
+//   }
+// }
