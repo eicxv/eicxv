@@ -5,6 +5,14 @@ const fetch = require("node-fetch");
 const queryString = require("query-string");
 require("dotenv").config();
 
+async function main() {
+  const basePath = path.join("src", "data", "content");
+  createFolder(path.join(basePath, "posts"));
+  createFolder(path.join(basePath, "images"));
+  getPosts();
+  getImages();
+}
+
 const isOk = (res) => {
   if (!res.ok) {
     console.log("exit");
@@ -12,6 +20,12 @@ const isOk = (res) => {
   }
   return res;
 };
+
+function createFolder(folder) {
+  fs.mkdirSync(folder, { recursive: true }, (err) => {
+    if (err) process.exit(1);
+  });
+}
 
 async function getPosts() {
   const owner = "eicxv";
@@ -82,5 +96,4 @@ async function getImages() {
   getPage(1);
 }
 
-getPosts();
-getImages();
+main();
