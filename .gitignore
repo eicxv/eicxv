@@ -75,3 +75,6 @@ yarn-error.log
 
 # Local History for Visual Studio Code
 .history/
+
+# Website Content
+src/data/content/*
