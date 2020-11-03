@@ -1,46 +1,56 @@
 import React from "react";
-import { css } from "@emotion/core";
+import { Link } from "gatsby";
+// import { styled } from "linaria/react";
+import styled from "@emotion/styled";
 
-import { mediaQuery as mq } from "../utils/emotion";
+import { withTheme, mediaQuery as mq } from "styles/theme";
 
-import Button from "./button";
+const StyledHeader = withTheme(styled.header`
+  top: 0;
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: ${({ theme }) => theme.color.secondary};
+  z-index: 200;
+  ${mq.xs} {
+    padding: 0 5vw;
+  }
+  ${mq.sm} {
+    padding: 0 10vw;
+  }
+  ${mq.lg} {
+    padding: 0 15vw;
+  }
+`);
 
-const headerCss = (theme) => ({
-  top: "0",
-  width: "100%",
-  height: "3rem",
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-  backgroundColor: theme.color.secondary,
-  zIndex: "200",
-});
-
-const contentCss = css({
-  [mq.xs]: {
-    width: "90vw",
-  },
-  [mq.sm]: {
-    width: "80vw",
-  },
-  [mq.lg]: {
-    width: "70vw",
-  },
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  flexDirection: "row",
-});
+const StyledLink = withTheme(styled(Link)`
+  ${"" /* font-family: "Montserrat"; */}
+  text-transform: uppercase;
+  padding: 0.2rem 1.2rem;
+  color: ${({ theme }) => theme.color.primary};
+  background-color: ${({ theme }) => theme.color.secondary};
+  &:hover {
+    color: ${({ theme }) => theme.color.secondary};
+    background-color: ${({ theme }) => theme.color.primary};
+  }
+  &:active {
+    color: ${({ theme }) => theme.color.primary};
+    background-color: ${({ theme }) => theme.color.secondary};
+    border: thin solid;
+    border-color: ${({ theme }) => theme.color.primary};
+    padding: calc(0.2rem - 1px) calc(1.2rem - 1px);
+  }
+`);
 
 export default function Header() {
   return (
-    <header css={headerCss}>
-      <div css={contentCss}>
-        <Button to={"/journal"}>Journal</Button>
-        <Button to={"/"}>Einar&nbsp;Persson</Button>
-        <Button to={"/about"}>About</Button>
-      </div>
-    </header>
+    <StyledHeader>
+      <StyledLink to={"/journal"}>Journal</StyledLink>
+      <StyledLink to={"/"}>Einar&nbsp;Persson</StyledLink>
+      <StyledLink to={"/about"}>About</StyledLink>
+    </StyledHeader>
   );
 }

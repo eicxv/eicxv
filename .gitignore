@@ -58,6 +58,9 @@ public
 # Mac files
 .DS_Store
 
+# Linaria
+.linaria-cache
+
 # Yarn
 yarn-error.log
 .pnp/
@@ -77,4 +80,4 @@ yarn-error.log
 .history/
 
 # Website Content
-src/data/content/*
+content/*

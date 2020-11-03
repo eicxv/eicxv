@@ -1,11 +1,10 @@
 import React from "react";
-import { css } from "@emotion/core";
-import { ThemeProvider } from "emotion-theming";
+import styled from "@emotion/styled";
 
+import { ThemeProvider, theme } from "styles/theme";
 import Layout from "../components/layout";
 import Waves from "../components/waves";
 import SEO from "../components/seo";
-import { theme } from "../utils/emotion";
 
 const homeTheme = {
   color: {
@@ -14,30 +13,63 @@ const homeTheme = {
   },
 };
 
-const textCss = (theme) => ({
-  color: theme.color.primary,
-});
+const HelloHeader = styled.h1`
+  color: ${homeTheme.color.primary};
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0;
+`;
 
-const canvasCss = css({
-  width: "100%",
-  height: "30rem",
-});
+const IntroHeader = styled.h2`
+  color: ${homeTheme.color.primary};
+  margin-top: 0;
+`;
+
+const StyledDiv = styled.div`
+  display: grid;
+  grid-template-columns: 1fr min(55ch, 100%) 1fr;
+  padding: 2rem 0;
+  & > * {
+    grid-column: 2;
+  }
+  height: calc(100vh - 4rem);
+`;
+
+const StyledWaves = styled(Waves)`
+  max-width: 55ch;
+  width: 100%;
+  height: 60vh;
+  grid-column: 1 / -1;
+  justify-self: center;
+`;
+
+const Wrapper = styled.div`
+  background-color: ${homeTheme.color.secondary};
+  width: 100%;
+  height: 100vh;
+`;
 
 export default function Home() {
   return (
-    <ThemeProvider theme={homeTheme}>
-      <Layout>
-        <SEO
-          title="Einar Persson · eicxv"
-          description="I write about and show my projects in programming, art and architecture. Guides and essays on design, creative coding, generative art and more."
-        />
-        <h1 css={textCss}>Hello, I'm Einar</h1>
-        <h2 css={textCss}>
-          I'm interested in art, architecture and programming. This is a website
-          for my thoughts and projects.
-        </h2>
-        <Waves canvasCss={canvasCss} />
-      </Layout>
+    <ThemeProvider value={homeTheme}>
+      <Wrapper>
+        <Layout>
+          <StyledDiv>
+            <SEO title="Einar Persson · eicxv" />
+            <HelloHeader>Hello, I&rsquo;m Einar</HelloHeader>
+            <IntroHeader>
+              I&rsquo;m interested in art, architecture and programming. This is
+              a website for my thoughts and projects.
+            </IntroHeader>
+            <StyledWaves
+              config={{
+                lightColor: homeTheme.color.primary,
+                shadowColor: homeTheme.color.secondary,
+              }}
+            />
+          </StyledDiv>
+        </Layout>
+      </Wrapper>
     </ThemeProvider>
   );
 }

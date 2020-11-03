@@ -1,51 +1,44 @@
 import React from "react";
 import { graphql } from "gatsby";
+import MDXRenderer from "gatsby-plugin-mdx/mdx-renderer";
+import styled from "@emotion/styled";
+import Provider from "../components/mdx/Provider";
+import Layout from "components/layout";
 
-import Layout from "../components/layout";
-import SEO from "../components/seo";
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr min(65ch, 100%) 1fr;
+  padding: 0 4rem;
+  & > * {
+    grid-column: 2;
+  }
+  & > .full-bleed {
+    grid-column: 1 / -1;
+  }
+`;
 
-const wrapperCss = (theme) => ({
-  color: theme.color.primary,
-});
-
-export default function BlogPost({ data }) {
-  const post = data.markdownRemark;
-  const image = post.frontmatter.image
-    ? post.frontmatter.image.childImageSharp.resize
-    : null;
+export default function Post({ data: { mdx } }) {
   return (
     <Layout>
-      <SEO
-        title={post.frontmatter.title}
-        description={post.frontmatter.description || post.excerpt}
-        image={image}
-      />
-      <div css={wrapperCss}>
-        <h1>{post.frontmatter.title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: post.html }} />
-      </div>
+      <Wrapper>
+        <h1>{mdx.frontmatter.title}</h1>
+        <h2>{mdx.frontmatter.date}</h2>
+        <Provider>
+          <MDXRenderer>{mdx.body}</MDXRenderer>
+        </Provider>
+      </Wrapper>
     </Layout>
   );
 }
-export const query = graphql`
+
+export const pageQuery = graphql`
   query($slug: String!) {
-    markdownRemark(fields: { slug: { eq: $slug } }) {
-      html
-      excerpt(pruneLength: 160)
+    mdx(fields: { slug: { eq: $slug } }) {
       frontmatter {
         title
-        description
-        author
-        image: featured {
-          childImageSharp {
-            resize(width: 1200) {
-              src
-              height
-              width
-            }
-          }
-        }
+        date(formatString: "MMMM DD, YYYY")
       }
+      body
     }
   }
 `;
