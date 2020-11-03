@@ -6,9 +6,8 @@ const queryString = require("query-string");
 require("dotenv").config();
 
 async function main() {
-  const basePath = path.join("src", "data", "content");
-  createFolder(path.join(basePath, "posts"));
-  createFolder(path.join(basePath, "images"));
+  createFolder(path.join("content", "posts"));
+  createFolder(path.join("content", "images"));
   getPosts();
   getImages();
 }
@@ -40,7 +39,7 @@ async function getPosts() {
       accept: "application/vnd.github.v3.raw+json",
     },
   };
-  const basePath = path.join("src", "data", "content", "posts");
+  const basePath = path.join("content", "posts");
   let response = await fetch(url, options).then(isOk);
   response = await response.json();
   for (let file of response) {
@@ -64,7 +63,7 @@ async function getImages() {
     });
   }
 
-  const basePath = path.join("src", "data", "content", "images");
+  const basePath = path.join("content", "images");
   const params = {
     method: "flickr.photos.search",
     api_key: process.env.FLICKR_API_KEY,

@@ -15,6 +15,7 @@ export default class Waves {
     this.HEIGHT = 124;
     this.TRIS = this.WIDTH * this.HEIGHT;
     this.SIDE_LENGTH = 1;
+    // this.ALTITUDE = (this.SIDE_LENGTH * Math.sqrt(3)) / 2;
     this.n = this.WIDTH * this.HEIGHT * 3;
     params = !params ? {} : params;
     this.lightColor = hexToRGB(params.lightColor) || [0.9, 0.9, 0.9];
@@ -22,6 +23,11 @@ export default class Waves {
     this.lightDirection = params.lightDirection || [0, 1, 3];
     v3.normalize(this.lightDirection, this.lightDirection);
     this.gl.clearColor(...this.shadowColor, 1);
+
+    // this.startWidth = 20;
+    // this.endWidth = 50;
+    // this.height = 50;
+    // this.widths = generateWidths(this.startWidth, this.endWidth, this.height);
     this.initCamera();
     this.initAttributes();
     this.initLocations();
@@ -104,7 +110,7 @@ export default class Waves {
   initAttributes() {
     let gl = this.gl;
     let attributes = this.genAttributes();
-    // attributes = shuffle(attributes);
+    // shuffleAttributes(attributes);
     this.attributeBuffer = createAttributeBuffer(gl, attributes);
   }
 
@@ -201,24 +207,51 @@ export default class Waves {
 }
 
 function shuffleAttributes(array) {
-  let currentIndex = array.length / 3;
-  let temp = new Float32Array(3);
+  let currentIndex = array.length / 9;
+  let temp = new Float32Array(9);
   let randomIndex;
   while (0 !== currentIndex) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
-    copySlice3(array, currentIndex, temp, 0);
-    copySlice3(array, randomIndex, array, currentIndex);
-    copySlice3(temp, 0, array, randomIndex);
+    copySlice9(array, currentIndex * 9, temp, 0);
+    copySlice9(array, randomIndex * 9, array, currentIndex * 9);
+    copySlice9(temp, 0, array, randomIndex * 9);
+  }
+}
+
+function copySlice9(source, sourceIndex, target, targetIndex) {
+  for (let offset = 0; offset < 9; offset++) {
+    target[targetIndex + offset] = source[sourceIndex + offset];
+  }
+}
+
+function slowShuffle(array) {
+  let arr = [];
+  for (let i = 0; i < array.length; i += 3) {
+    arr.push([array[i], array[i + 1], array[i + 2]]);
+  }
+  arr = shuffle(arr);
+  return new Float32Array(arr.flat());
+}
+
+function shuffle(array) {
+  var currentIndex = array.length,
+    temporaryValue,
+    randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
   }
 
   return array;
-}
-
-function copySlice3(source, sourceIndex, target, targetIndex) {
-  target[targetIndex] = source[sourceIndex];
-  target[targetIndex + 1] = source[sourceIndex + 1];
-  target[targetIndex + 2] = source[sourceIndex + 2];
 }
 
 function createAttributeBuffer(gl, data) {
@@ -303,3 +336,38 @@ function hexToRGB(hex) {
 
   return [r, g, b];
 }
+
+// function generateWidths(startWidth, endWidth, height) {
+//   const halfAltitude = this.ALTITUDE / 2;
+//   let accWidths = new Array(Math.round(height / altitude));
+//   let currHeight = 0;
+//   let currWidth;
+//   let toOdd = () => 2 * Math.floor(n / 2) + 1;
+//   let toEven = () => 2 * Math.round(n / 2);
+//   let isEven = -0.5;
+//   let i = 0;
+//   let n = 0;
+//   while (currHeight < height) {
+//     currWidth = lerp(startWidth, endWidth, currHeight / height);
+//     n += isEven > 0 ? toEven(currWidth) : toOdd(currWidth);
+//     accWidths[i] = n;
+//     isEven = isEven > 1 ? -1.5 : isEven + 1;
+//     currHeight += halfAltitude;
+//     i++;
+//   }
+//   return accWidths;
+// }
+
+// function lerp(x, y, a) {
+//   return x * (1 - a) + y * a;
+// }
+
+// function addTri(index, accWidths, attributes) {
+//   yIndex = accWidths.find((w) => w > index) - 1;
+//   xIndex = accWidths[yIndex];
+//   let isFlipped = yIndex % 2 === 1;
+//   let isEven = yIndex % 4;
+//   isEven = isEven === 0 || isEven === 3 ? false : true;
+//   let yCoord = Math.floor(yIndex / 2) + this.ALTITUDE / 3 * isFlipped ? 2 : 1;
+//   let xCoord =
+// }

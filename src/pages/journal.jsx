@@ -1,34 +1,41 @@
 import React from "react";
 import { Link, graphql } from "gatsby";
-import { css } from "@emotion/core";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
+import styled from "@emotion/styled";
 
-const linkCss = css({
-  textDecoration: "none",
-  color: "inherit",
-});
+const StyledDiv = styled.div`
+  display: grid;
+  grid-template-columns: 1fr min(55ch, 100%) 1fr;
+  padding: 2rem 4rem;
+  & > * {
+    grid-column: 2;
+  }
+`;
 
 export default function Journal({ data }) {
   return (
     <Layout>
       <SEO title="Einar Persson · Journal" />
-      {data.allMarkdownRemark.edges.map(({ node }) => (
-        <div key={node.id}>
-          <Link to={node.fields.slug} css={linkCss}>
-            <h3>{node.frontmatter.title}</h3>
-            <p>{node.excerpt}</p>
-          </Link>
-        </div>
-      ))}
+      <StyledDiv>
+        <h1>Journal</h1>
+        {data.allMdx.edges.map(({ node }) => (
+          <div key={node.id}>
+            <Link to={node.fields.slug}>
+              <h3>{node.frontmatter.title}</h3>
+              <p>{node.excerpt}</p>
+            </Link>
+          </div>
+        ))}
+      </StyledDiv>
     </Layout>
   );
 }
 
 export const query = graphql`
   query {
-    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
+    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
       edges {
         node {
           id

@@ -1,24 +1,21 @@
-require("dotenv").config();
-const path = require(`path`);
+const path = require("path");
 
-exports.onCreateNode = ({ node, getNode, actions }) => {
-  const { createNodeField } = actions;
-  if (node.internal.type === `MarkdownRemark`) {
-    const name = getNode(node.parent).name;
-    const slug = path.posix.join(`/journal`, name);
-    createNodeField({
-      node,
-      name: `slug`,
-      value: slug,
+const createPosts = (createPage, edges) => {
+  edges.forEach(({ node }) => {
+    createPage({
+      path: node.fields.slug,
+      component: path.resolve(`./src/templates/post.jsx`),
+      context: {
+        slug: node.fields.slug,
+      },
     });
-  }
+  });
 };
 
-exports.createPages = async ({ graphql, actions }) => {
-  const { createPage } = actions;
-  const result = await graphql(`
+exports.createPages = ({ actions, graphql }) =>
+  graphql(`
     query {
-      allMarkdownRemark {
+      allMdx(sort: { order: DESC, fields: [frontmatter___date] }) {
         edges {
           node {
             fields {
@@ -28,15 +25,31 @@ exports.createPages = async ({ graphql, actions }) => {
         }
       }
     }
-  `);
+  `).then(({ data, errors }) => {
+    if (errors) {
+      return Promise.reject(errors);
+    }
 
-  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
-    createPage({
-      path: node.fields.slug,
-      component: path.resolve(`./src/templates/post.jsx`),
-      context: {
-        slug: node.fields.slug,
-      },
+    const { edges } = data.allMdx;
+    createPosts(actions.createPage, edges);
+  });
+
+exports.onCreateNode = ({ node, getNode, actions }) => {
+  if (node.internal.type === `Mdx`) {
+    const parent = getNode(node.parent);
+    const slug = path.posix.join(`/journal`, parent.name);
+    actions.createNodeField({
+      name: "slug",
+      node,
+      value: slug,
     });
+  }
+};
+
+exports.onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+    resolve: {
+      modules: [path.resolve(__dirname, "src"), "node_modules"],
+    },
   });
 };

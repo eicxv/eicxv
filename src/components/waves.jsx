@@ -6,16 +6,15 @@ import React, {
 } from "react";
 
 import CreateWaves from "./waves/waves";
-import { useTheme } from "emotion-theming";
 
-function Waves(props, ref) {
-  const theme = useTheme();
+function Waves({ className, config, other }, ref) {
   const canvasRef = useRef(null);
   const wavesRef = useRef(null);
   const params = {
-    lightColor: theme.color.primary,
-    shadowColor: theme.color.secondary,
+    lightColor: "#f5f5f5",
+    shadowColor: "#212121",
     lightDirection: [0, 1, 3],
+    ...config,
   };
   useEffect(() => {
     wavesRef.current = new CreateWaves(canvasRef.current, params);
@@ -26,7 +25,7 @@ function Waves(props, ref) {
     },
   }));
 
-  return <canvas css={props.canvasCss} ref={canvasRef}></canvas>;
+  return <canvas className={className} {...other} ref={canvasRef}></canvas>;
 }
 
 export default forwardRef(Waves);
