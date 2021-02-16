@@ -48,6 +48,18 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
 
 exports.onCreateWebpackConfig = ({ actions }) => {
   actions.setWebpackConfig({
+    module: {
+      rules: [
+        {
+          test: /\.(glsl|vs|fs|vert|frag)$/,
+          use: ["raw-loader"],
+        },
+        {
+          test: /\.(png|jpe?g|gif|hdr)$/i,
+          use: ["file-loader"],
+        },
+      ],
+    },
     resolve: {
       modules: [path.resolve(__dirname, "src"), "node_modules"],
     },

@@ -1,5 +1,3 @@
-export default /* glsl */ `
-
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
@@ -105,7 +103,7 @@ float snoise(vec3 v)
 }
 
 attribute vec2 a_position;
-attribute float a_index;
+attribute float a_rotation;
 
 uniform float u_time;
 uniform vec3 u_cameraPosition;
@@ -143,6 +141,7 @@ float waves(vec2 coord, float time) {
 }
 
 void main() {
+  float a_index = a_rotation;
   vec2 translationVec;
   vec2 translatedPos;
   float i;
@@ -179,4 +178,3 @@ void main() {
 	vec4 mvPosition = vec4( p0, 1.0 );
   gl_Position = u_viewProjectionMatrix * mvPosition;
 }
-`;

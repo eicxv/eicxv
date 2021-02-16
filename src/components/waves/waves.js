@@ -1,5 +1,4 @@
-import * as m4 from "./matrix/m4";
-import * as v3 from "./matrix/v3";
+import { vec3, mat4 } from "gl-matrix";
 
 //shaders
 import frag from "./shaders/waves.frag";
@@ -11,27 +10,34 @@ export default class Waves {
     this.program = createProgram(this.gl, vert, frag);
     this.attributes = {};
     this.uniforms = {};
-    this.WIDTH = 72;
-    this.HEIGHT = 124;
+    this.WIDTH = 76;
+    this.HEIGHT = 112;
+    this.FILL_SPEED = 6000;
+    this.triRemainder = 0;
+    this.prevTimestamp = 0;
+    // this.WIDTH = 72;
+    // this.HEIGHT = 124;
     this.TRIS = this.WIDTH * this.HEIGHT;
     this.SIDE_LENGTH = 1;
+    this.ALTITUDE = (this.SIDE_LENGTH * Math.sqrt(3)) / 2;
+    this.APOTHEM = this.SIDE_LENGTH / (Math.sqrt(3) * 2);
     // this.ALTITUDE = (this.SIDE_LENGTH * Math.sqrt(3)) / 2;
     this.n = this.WIDTH * this.HEIGHT * 3;
     params = !params ? {} : params;
     this.lightColor = hexToRGB(params.lightColor) || [0.9, 0.9, 0.9];
     this.shadowColor = hexToRGB(params.shadowColor) || [0.2, 0.2, 0.2];
     this.lightDirection = params.lightDirection || [0, 1, 3];
-    v3.normalize(this.lightDirection, this.lightDirection);
+    vec3.normalize(this.lightDirection, this.lightDirection);
     this.gl.clearColor(...this.shadowColor, 1);
 
-    // this.startWidth = 20;
-    // this.endWidth = 50;
-    // this.height = 50;
-    // this.widths = generateWidths(this.startWidth, this.endWidth, this.height);
+    this.currIndex = 0;
+    this.gen = this.makeIndexGenerator(3461, 8513);
+
     this.initCamera();
     this.initAttributes();
     this.initLocations();
     this.render = this.render.bind(this);
+    this.renderAddTriangle = this.renderAddTriangle.bind(this);
     this.startRender();
   }
 
@@ -45,7 +51,7 @@ export default class Waves {
     gl.useProgram(this.program);
     const attrs = this.attributes;
     gl.vertexAttribPointer(attrs.a_positionLoc, 2, gl.FLOAT, null, 12, 0);
-    gl.vertexAttribPointer(attrs.a_indexLoc, 1, gl.FLOAT, null, 12, 8);
+    gl.vertexAttribPointer(attrs.a_rotationLoc, 1, gl.FLOAT, null, 12, 8);
 
     const unifs = this.uniforms;
     gl.uniformMatrix4fv(
@@ -54,11 +60,41 @@ export default class Waves {
       this.viewProjectionMatrix
     );
     gl.uniform3fv(unifs.u_cameraPositionLoc, this.camera.position);
-    // gl.uniform1f(unifs.u_timeLoc, time);
     gl.uniform3fv(unifs.u_lightDirectionLoc, this.lightDirection);
     gl.uniform3fv(unifs.u_lightColorLoc, this.lightColor);
     gl.uniform3fv(unifs.u_shadowColorLoc, this.shadowColor);
-    requestAnimationFrame(this.render);
+    this.prevTimestamp = performance.now();
+    requestAnimationFrame(this.renderAddTriangle);
+  }
+
+  renderAddTriangle(time) {
+    let dt = time - this.prevTimestamp;
+    dt = dt < 0 ? 0 : dt;
+    this.prevTimestamp = time;
+    let trisToAdd = this.FILL_SPEED * (dt * 0.001) + this.triRemainder;
+    this.triRemainder = trisToAdd % 1;
+    trisToAdd = Math.floor(trisToAdd);
+
+    let gl = this.gl;
+    this.resizeCanvas();
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    gl.uniform1f(this.uniforms.u_timeLoc, time);
+    for (let i = 1; i <= trisToAdd; i++) {
+      if (this.currIndex < this.WIDTH * this.HEIGHT) {
+        let data = this.triangleAttributes(this.gen.next().value);
+        gl.bufferSubData(gl.ARRAY_BUFFER, this.currIndex * 9 * 4, data);
+        this.currIndex += 1;
+      } else {
+        break;
+      }
+    }
+    if (this.currIndex < this.WIDTH * this.HEIGHT) {
+      requestAnimationFrame(this.renderAddTriangle);
+    } else {
+      requestAnimationFrame(this.render);
+    }
+    gl.drawArrays(gl.TRIANGLES, 0, this.n);
   }
 
   render(time) {
@@ -99,9 +135,9 @@ export default class Waves {
       far: 2000,
       fov: (32 * 2 * Math.PI) / 360,
     };
-    this.viewMatrix = m4.identity();
-    this.projectionMatrix = m4.identity();
-    this.viewProjectionMatrix = m4.identity();
+    this.viewMatrix = mat4.create();
+    this.projectionMatrix = mat4.create();
+    this.viewProjectionMatrix = mat4.create();
     this.updateViewMatrix();
     this.updateProjectionMatrix();
     this.updateViewProjectionMatrix();
@@ -109,9 +145,8 @@ export default class Waves {
 
   initAttributes() {
     let gl = this.gl;
-    let attributes = this.genAttributes();
-    // shuffleAttributes(attributes);
-    this.attributeBuffer = createAttributeBuffer(gl, attributes);
+    let attributeByteLength = this.WIDTH * this.HEIGHT * 9 * 4;
+    this.attributeBuffer = createAttributeBufferSize(gl, attributeByteLength);
   }
 
   initLocations() {
@@ -121,9 +156,9 @@ export default class Waves {
     loc = getAttribLocation(gl, this.program, "a_position");
     gl.enableVertexAttribArray(loc);
     this.attributes.a_positionLoc = loc;
-    loc = getAttribLocation(gl, this.program, "a_index");
+    loc = getAttribLocation(gl, this.program, "a_rotation");
     gl.enableVertexAttribArray(loc);
-    this.attributes.a_indexLoc = loc;
+    this.attributes.a_rotationLoc = loc;
     // uniforms
     loc = getUniformLocation(gl, this.program, "u_viewProjectionMatrix");
     this.uniforms.u_viewProjectionMatrixLoc = loc;
@@ -141,29 +176,58 @@ export default class Waves {
 
   updateViewMatrix() {
     const camera = this.camera;
-    m4.lookAt(camera.position, camera.target, camera.up, this.viewMatrix);
-    m4.inverse(this.viewMatrix, this.viewMatrix);
+    mat4.lookAt(this.viewMatrix, camera.position, camera.target, camera.up);
   }
 
   updateProjectionMatrix() {
     const canvas = this.gl.canvas;
     const camera = this.camera;
     const aspect = canvas.clientWidth / canvas.clientHeight;
-    m4.perspective(
+    mat4.perspective(
+      this.projectionMatrix,
       camera.fov,
       aspect,
       camera.near,
-      camera.far,
-      this.projectionMatrix
+      camera.far
     );
   }
 
   updateViewProjectionMatrix() {
-    m4.multiply(
+    mat4.multiply(
+      this.viewProjectionMatrix,
       this.projectionMatrix,
-      this.viewMatrix,
-      this.viewProjectionMatrix
+      this.viewMatrix
     );
+  }
+
+  *makeIndexGenerator(a, m) {
+    let seed = 1;
+    for (let _ = 0; _ < m - 1; _++) {
+      seed = (a * seed) % m;
+      yield seed;
+    }
+  }
+
+  triangleAttributes(index) {
+    let data = new Float32Array(9);
+    let iHeight = Math.floor(index / this.WIDTH);
+    let iWidth = index % this.WIDTH;
+    let flipped = (iWidth % 2 === 0) !== (iHeight % 2 === 0);
+    // let rotation = flipped ? Math.PI : 0;
+    let rotation = flipped ? 3 : 0;
+    let posWidth = iWidth / 2;
+    let posHeight = flipped
+      ? iHeight * this.ALTITUDE + this.APOTHEM
+      : iHeight * this.ALTITUDE;
+    let vertexIndex = 0;
+    for (let i = 0; i < 3; i++) {
+      data[vertexIndex] = posWidth;
+      data[vertexIndex + 1] = posHeight;
+      // data[vertexIndex + 2] = (2 * i * Math.PI) / 3 + rotation;
+      data[vertexIndex + 2] = i + rotation;
+      vertexIndex += 3;
+    }
+    return data;
   }
 
   genAttributes() {
@@ -206,58 +270,17 @@ export default class Waves {
   }
 }
 
-function shuffleAttributes(array) {
-  let currentIndex = array.length / 9;
-  let temp = new Float32Array(9);
-  let randomIndex;
-  while (0 !== currentIndex) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-    copySlice9(array, currentIndex * 9, temp, 0);
-    copySlice9(array, randomIndex * 9, array, currentIndex * 9);
-    copySlice9(temp, 0, array, randomIndex * 9);
-  }
-}
-
-function copySlice9(source, sourceIndex, target, targetIndex) {
-  for (let offset = 0; offset < 9; offset++) {
-    target[targetIndex + offset] = source[sourceIndex + offset];
-  }
-}
-
-function slowShuffle(array) {
-  let arr = [];
-  for (let i = 0; i < array.length; i += 3) {
-    arr.push([array[i], array[i + 1], array[i + 2]]);
-  }
-  arr = shuffle(arr);
-  return new Float32Array(arr.flat());
-}
-
-function shuffle(array) {
-  var currentIndex = array.length,
-    temporaryValue,
-    randomIndex;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}
-
 function createAttributeBuffer(gl, data) {
   let buffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+  return buffer;
+}
+
+function createAttributeBufferSize(gl, byteLength) {
+  let buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, byteLength, gl.STATIC_DRAW);
   return buffer;
 }
 
@@ -320,11 +343,11 @@ function hexToRGB(hex) {
     g = 0,
     b = 0;
 
-  if (hex.length == 4) {
+  if (hex.length === 4) {
     r = "0x" + hex[1] + hex[1];
     g = "0x" + hex[2] + hex[2];
     b = "0x" + hex[3] + hex[3];
-  } else if (hex.length == 7) {
+  } else if (hex.length === 7) {
     r = "0x" + hex[1] + hex[2];
     g = "0x" + hex[3] + hex[4];
     b = "0x" + hex[5] + hex[6];
@@ -336,38 +359,3 @@ function hexToRGB(hex) {
 
   return [r, g, b];
 }
-
-// function generateWidths(startWidth, endWidth, height) {
-//   const halfAltitude = this.ALTITUDE / 2;
-//   let accWidths = new Array(Math.round(height / altitude));
-//   let currHeight = 0;
-//   let currWidth;
-//   let toOdd = () => 2 * Math.floor(n / 2) + 1;
-//   let toEven = () => 2 * Math.round(n / 2);
-//   let isEven = -0.5;
-//   let i = 0;
-//   let n = 0;
-//   while (currHeight < height) {
-//     currWidth = lerp(startWidth, endWidth, currHeight / height);
-//     n += isEven > 0 ? toEven(currWidth) : toOdd(currWidth);
-//     accWidths[i] = n;
-//     isEven = isEven > 1 ? -1.5 : isEven + 1;
-//     currHeight += halfAltitude;
-//     i++;
-//   }
-//   return accWidths;
-// }
-
-// function lerp(x, y, a) {
-//   return x * (1 - a) + y * a;
-// }
-
-// function addTri(index, accWidths, attributes) {
-//   yIndex = accWidths.find((w) => w > index) - 1;
-//   xIndex = accWidths[yIndex];
-//   let isFlipped = yIndex % 2 === 1;
-//   let isEven = yIndex % 4;
-//   isEven = isEven === 0 || isEven === 3 ? false : true;
-//   let yCoord = Math.floor(yIndex / 2) + this.ALTITUDE / 3 * isFlipped ? 2 : 1;
-//   let xCoord =
-// }

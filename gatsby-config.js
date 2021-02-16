@@ -22,19 +22,36 @@ module.exports = {
         name: "assets",
       },
     },
-    "gatsby-plugin-linaria",
+    {
+      resolve: `gatsby-remark-images`,
+      options: {
+        maxWidth: 1920,
+        quality: 95,
+        linkImagesToOriginal: false,
+        disableBgImageOnAlpha: true,
+        backgroundColor: "transparent",
+      },
+    },
     {
       resolve: `gatsby-plugin-mdx`,
       options: {
+        extensions: [`.md`, `.mdx`],
         gatsbyRemarkPlugins: [
           {
-            resolve: "gatsby-remark-images",
+            resolve: `gatsby-remark-images`,
             options: {
               maxWidth: 1920,
               quality: 95,
               linkImagesToOriginal: false,
+              disableBgImageOnAlpha: true,
+              backgroundColor: "transparent",
             },
           },
+        ],
+        remarkPlugins: [require("remark-math")],
+        rehypePlugins: [
+          require("rehype-katex"),
+          require("./plugins/rehype-image-attributes"),
         ],
       },
     },

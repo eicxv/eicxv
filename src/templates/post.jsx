@@ -1,8 +1,10 @@
 import React from "react";
 import { graphql } from "gatsby";
-import MDXRenderer from "gatsby-plugin-mdx/mdx-renderer";
 import styled from "@emotion/styled";
-import Provider from "../components/mdx/Provider";
+import { MDXRenderer } from "gatsby-plugin-mdx";
+import { MDXProvider } from "@mdx-js/react";
+
+import * as collection from "components/posts";
 import Layout from "components/layout";
 
 const Wrapper = styled.div`
@@ -12,20 +14,21 @@ const Wrapper = styled.div`
   & > * {
     grid-column: 2;
   }
-  & > .full-bleed {
+  & > div {
     grid-column: 1 / -1;
   }
 `;
 
-export default function Post({ data: { mdx } }) {
+export default function Post({ data }) {
+  const post = data.mdx;
   return (
     <Layout>
       <Wrapper>
-        <h1>{mdx.frontmatter.title}</h1>
-        <h2>{mdx.frontmatter.date}</h2>
-        <Provider>
-          <MDXRenderer>{mdx.body}</MDXRenderer>
-        </Provider>
+        <MDXProvider components={collection}>
+          <h1>{post.frontmatter.title}</h1>
+          <h2>{post.frontmatter.date}</h2>
+          <MDXRenderer>{post.body}</MDXRenderer>
+        </MDXProvider>
       </Wrapper>
     </Layout>
   );
@@ -34,11 +37,11 @@ export default function Post({ data: { mdx } }) {
 export const pageQuery = graphql`
   query($slug: String!) {
     mdx(fields: { slug: { eq: $slug } }) {
+      body
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
       }
-      body
     }
   }
 `;

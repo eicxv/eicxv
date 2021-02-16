@@ -1,4 +1,3 @@
-export default /* glsl */ `
 precision mediump float;
 
 uniform vec3 u_lightColor;
@@ -13,8 +12,5 @@ void main() {
   } else {
     color = vec4(u_shadowColor, 1.);
   }
-  // float blend = smoothstep(0.98, 0.99, v_value);
-  // color = u_lightColor * blend + u_shadowColor * (1. - blend);
   gl_FragColor = color;
 }
-`;
