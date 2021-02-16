@@ -49,7 +49,10 @@ module.exports = {
           },
         ],
         remarkPlugins: [require("remark-math")],
-        rehypePlugins: [require("rehype-katex")],
+        rehypePlugins: [
+          require("rehype-katex"),
+          require("./plugins/rehype-image-attributes"),
+        ],
       },
     },
     "gatsby-plugin-sharp",
