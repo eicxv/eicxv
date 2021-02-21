@@ -3,9 +3,12 @@ import { graphql } from "gatsby";
 import styled from "@emotion/styled";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import { MDXProvider } from "@mdx-js/react";
+import Img from "gatsby-image";
 
 import * as collection from "components/posts";
 import Layout from "components/layout";
+
+const components = { ...collection, Image: Img };
 
 const Wrapper = styled.div`
   display: grid;
@@ -14,7 +17,7 @@ const Wrapper = styled.div`
   & > * {
     grid-column: 2;
   }
-  & > div {
+  & > .full-bleed {
     grid-column: 1 / -1;
   }
 `;
@@ -24,7 +27,7 @@ export default function Post({ data }) {
   return (
     <Layout>
       <Wrapper>
-        <MDXProvider components={collection}>
+        <MDXProvider components={components}>
           <h1>{post.frontmatter.title}</h1>
           <h2>{post.frontmatter.date}</h2>
           <MDXRenderer>{post.body}</MDXRenderer>
