@@ -1,8 +1,6 @@
 const withTM = require('next-transpile-modules')([
-  'ui',
   'utility',
   'plywood-bending',
-  'n-body-galaxy',
   'reaction-diffusion',
 ]);
 
