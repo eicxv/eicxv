@@ -8,6 +8,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@eicxv/utility": "^1.0.0",
+    "@eicxv/plywood-bending": "^1.0.0",
+    "@eicxv/reaction-diffusion": "^1.0.0",
     "@emotion/babel-plugin": "^11.3.0",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
