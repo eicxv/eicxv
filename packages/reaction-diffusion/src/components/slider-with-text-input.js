@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Typography, Slider, TextField, Stack } from '@mui/material';
 
-import { clamp } from 'utility/src/generic';
+import { clamp } from '@eicxv/utility/src/generic';
 
 export default function Control({
   name,

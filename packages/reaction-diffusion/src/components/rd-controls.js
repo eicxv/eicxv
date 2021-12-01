@@ -10,7 +10,7 @@ import {
 
 import Controls from './controls';
 
-import { clamp } from 'utility/src/generic';
+import { clamp } from '@eicxv/utility/src/generic';
 
 const saveBlob = function (blob, fileName) {
   const a = document.createElement('a');

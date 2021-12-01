@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Typography, ToggleButton, ToggleButtonGroup } from '@mui/material';
 
-import { clamp } from 'utility/src/generic';
+import { clamp } from '@eicxv/utility/src/generic';
 
 export default function Toggle({ value, onChange, alternatives, children }) {
   const handleChange = (event, value) => {

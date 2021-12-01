@@ -1,7 +1,7 @@
 const withTM = require('next-transpile-modules')([
-  'utility',
-  'plywood-bending',
-  'reaction-diffusion',
+  '@eicxv/utility',
+  '@eicxv/plywood-bending',
+  '@eicxv/reaction-diffusion',
 ]);
 
 module.exports = withTM({

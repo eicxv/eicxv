@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 import { useDrag } from '@use-gesture/react';
 
-import { sub, divElem } from 'utility/src/v2';
+import { sub, divElem } from '@eicxv/utility/src/v2';
 import ReactionDiffusionSystem from '../simulation/reaction-diffusion';
 import Controls from './rd-controls';
 

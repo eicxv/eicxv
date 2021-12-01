@@ -2,7 +2,7 @@ import React from 'react';
 import { useDrag } from '@use-gesture/react';
 import { useSpring, animated, to } from '@react-spring/web';
 
-import { clamp } from 'utility/src/generic';
+import { clamp } from '@eicxv/utility/src/generic';
 
 export default function DraggableCircle({
   index,

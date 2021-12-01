@@ -1,8 +1,8 @@
 // import { Typography } from '@mui/material';
 export { default as Image } from './markdown-image';
 export { default as NextImage } from 'next/image';
-export { PlywoodBending } from 'plywood-bending';
-export { ReactionDiffusion } from 'reaction-diffusion';
+export { PlywoodBending } from '@eicxv/plywood-bending';
+export { ReactionDiffusion } from '@eicxv/reaction-diffusion';
 
 // export function p({ children, ...other }) {
 //   return (

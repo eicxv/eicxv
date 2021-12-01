@@ -4,7 +4,7 @@ import initializeFrag from './shaders/initialize.frag';
 import defaultComputeVert from './shaders/default-compute.vert';
 import brushFrag from './shaders/brush.frag';
 
-import { clamp } from 'utility/src/generic';
+import { clamp } from '@eicxv/utility/src/generic';
 import {
   getExtension,
   createTexture,
@@ -278,7 +278,6 @@ class Driver {
       locations.u_brushConcentration,
       uniforms.u_brushConcentration
     );
-    console.log(this.width, this.height);
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, uniforms.u_concentrationTexture);

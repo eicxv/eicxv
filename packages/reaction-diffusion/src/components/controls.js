@@ -11,7 +11,7 @@ import {
 import Toggle from './toggle-button-group';
 import SliderWithText from './slider-with-text-input';
 
-import { clamp } from 'utility/src/generic';
+import { clamp } from '@eicxv/utility/src/generic';
 
 export default function Controls({ controls, values }) {
   const renderControl = (control) => {

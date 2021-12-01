@@ -1,5 +1,5 @@
 {
-  "name": "reaction-diffusion",
+  "name": "@eicxv/reaction-diffusion",
   "version": "1.0.0",
   "main": "src/index.js",
   "type": "module",
