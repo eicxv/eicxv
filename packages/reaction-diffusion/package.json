@@ -8,7 +8,6 @@
     "prettier": "^2"
   },
   "peerDependencies": {
-    "@eicxv/utility": "^1.0.0",
     "react": "^17",
     "react-dom": "^17"
   }
