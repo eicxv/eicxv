@@ -30,11 +30,10 @@ const Wrapper = styled.div`
 
 export default function Post({ frontmatter, hast, preview }) {
   const router = useRouter();
-
   return (
     <>
       <Head>
-        <title>{frontmatter.title} · eicxv</title>
+        <title>{frontmatter?.title} · eicxv</title>
         <meta charSet="utf-8" />
       </Head>
       <Header />
@@ -63,8 +62,10 @@ export async function getStaticProps({ params, preview = false }) {
 
 export async function getStaticPaths() {
   const allPosts = await getAllPosts();
+  const paths = allPosts?.map(({ slug }) => `/journal/${slug}`);
+
   return {
-    paths: allPosts?.map(({ slug }) => `/journal/${slug}`) ?? [],
+    paths,
     fallback: true,
   };
 }
