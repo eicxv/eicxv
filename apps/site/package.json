@@ -21,6 +21,7 @@
     "@use-gesture/react": "^10.1.1",
     "babel-core": "^6.26.3",
     "gl-matrix": "^3.4.3",
+    "graphql": "^16.0.1",
     "graphql-request": "^3.5.0",
     "hastscript": "^7.0.2",
     "js-yaml": "^4.1.0",
