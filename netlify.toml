@@ -1,9 +1,0 @@
-[build]
-  command = "next build packages/site"
-  publish = "packages/site/out"
-
-[dev]
-  command = "next dev packages/site"
-  
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
