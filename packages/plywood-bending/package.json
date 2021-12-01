@@ -1,0 +1,15 @@
+{
+  "name": "plywood-bending",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "type": "module",
+  "sideEffects": false,
+  "devDependencies": {
+    "prettier": "^2"
+  },
+  "peerDependencies": {
+    "@react-spring/web": "^9",
+    "react": "^17",
+    "react-dom": "^17"
+  }
+}
