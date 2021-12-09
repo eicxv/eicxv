@@ -4,11 +4,12 @@ import { ThemeProvider } from '@mui/material/styles';
 
 import Header from '../components/header';
 import Waves from '../components/waves/waves';
+import Layout from '../components/layout';
 import { darkTheme } from '../style/theme';
 
-export default function Home() {
+export default function Home({ preview }) {
   return (
-    <>
+    <Layout preview={preview}>
       <Head>
         <title>eicxv · Einar Persson</title>
         <meta
@@ -49,6 +50,12 @@ export default function Home() {
           ></Waves>
         </Box>
       </ThemeProvider>
-    </>
+    </Layout>
   );
+}
+
+export async function getStaticProps({ preview = false }) {
+  return {
+    props: { preview },
+  };
 }

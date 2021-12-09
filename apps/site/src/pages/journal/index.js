@@ -4,11 +4,12 @@ import { extractFrontmatter } from '../../components/render-markdown/parse-markd
 import { Typography, Box, Link, Container } from '@mui/material';
 
 import Header from '../../components/header';
+import Layout from '../../components/layout';
 import PostPreview from './../../components/post-prevew';
 
 export default function Journal({ postsMetadata, preview }) {
   return (
-    <>
+    <Layout preview={preview}>
       <Head>
         <title>Journal · eicxv</title>
         <meta charSet="utf-8" />
@@ -26,7 +27,7 @@ export default function Journal({ postsMetadata, preview }) {
           />
         ))}
       </Box>
-    </>
+    </Layout>
   );
 }
 

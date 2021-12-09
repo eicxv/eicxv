@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 
 import Header from '../../components/header';
+import Layout from '../../components/layout';
 import { markdownToHast } from '../../components/render-markdown/parse-markdown';
 import RenderHast from '../../components/render-markdown/render-hast';
 import { getPost, getAllPosts } from '../../lib/contentful-api';
@@ -26,12 +27,15 @@ const Wrapper = styled.div`
     overflow-x: auto;
     white-space: nowrap;
   }
+  code {
+    font-family: 'jetbrains mono', monospace;
+  }
 `;
 
 export default function Post({ frontmatter, hast, preview }) {
   const router = useRouter();
   return (
-    <>
+    <Layout preview={preview}>
       <Head>
         <title>{frontmatter?.title} · eicxv</title>
         <meta charSet="utf-8" />
@@ -44,7 +48,7 @@ export default function Post({ frontmatter, hast, preview }) {
           <RenderHast hast={hast} />
         </Wrapper>
       )}
-    </>
+    </Layout>
   );
 }
 

@@ -3,12 +3,13 @@ import Image from 'next/image';
 import { Box, Typography, Stack } from '@mui/material';
 
 import Header from '../components/header';
+import Layout from '../components/layout';
 import { getMap } from '../lib/contentful-asset-map';
 
-export default function About({ assets }) {
+export default function About({ assets, preview }) {
   const selfPortrait = assets['self-portrait'];
   return (
-    <>
+    <Layout preview={preview}>
       <Head>
         <title>About · eicxv</title>
         <meta charSet="utf-8" />
@@ -53,11 +54,11 @@ export default function About({ assets }) {
           living in Gothenburg and always on the lookout for new challenges.
         </Typography>
       </Stack>
-    </>
+    </Layout>
   );
 }
 
-export async function getStaticProps({ params, preview = false }) {
+export async function getStaticProps({ preview = false }) {
   const assetMap = await getMap(preview);
   const titles = ['self-portrait'];
 
