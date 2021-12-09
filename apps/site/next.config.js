@@ -3,11 +3,12 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const withTranspileModules = require('next-transpile-modules')([
-  '@eicxv/utility',
-  '@eicxv/ui',
+  '@eicxv/dynamic-relaxation',
+  '@eicxv/n-body-galaxy',
   '@eicxv/plywood-bending',
   '@eicxv/reaction-diffusion',
-  '@eicxv/n-body-galaxy',
+  '@eicxv/ui',
+  '@eicxv/utility',
 ]);
 
 module.exports = withBundleAnalyzer(
