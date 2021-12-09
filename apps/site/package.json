@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@eicxv/dynamic-relaxation": "1.0.0",
+    "@eicxv/n-body-galaxy": "1.0.0",
     "@eicxv/plywood-bending": "1.0.0",
     "@eicxv/reaction-diffusion": "1.0.0",
     "@eicxv/utility": "1.0.0",
@@ -44,6 +46,7 @@
     "webpack": "^5.64.4"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^12.0.7",
     "prettier": "^2.4.1",
     "raw-loader": "^4.0.2"
   }
