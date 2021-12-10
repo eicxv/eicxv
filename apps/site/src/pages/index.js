@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import { Box, Typography, CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 
@@ -10,14 +10,15 @@ import { darkTheme } from '../style/theme';
 export default function Home({ preview }) {
   return (
     <Layout preview={preview}>
-      <Head>
-        <title>eicxv · Einar Persson</title>
-        <meta
-          name="description"
-          content="A journal on my art, architecture and programming projects."
-        />
-        <meta charSet="utf-8" />
-      </Head>
+      <NextSeo
+        title="eicxv"
+        description="A journal on my art, architecture and programming projects."
+        openGraph={{
+          type: 'website',
+          locale: 'en_GB',
+          url: 'https://wwww.eicxv.com/',
+        }}
+      />
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <Header></Header>

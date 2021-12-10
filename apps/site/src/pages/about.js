@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import Image from 'next/image';
 import { Box, Typography, Stack } from '@mui/material';
 
@@ -10,10 +10,10 @@ export default function About({ assets, preview }) {
   const selfPortrait = assets['self-portrait'];
   return (
     <Layout preview={preview}>
-      <Head>
-        <title>About · eicxv</title>
-        <meta charSet="utf-8" />
-      </Head>
+      <NextSeo
+        title="About"
+        description="A journal on my art, architecture and programming projects."
+      />
       <Header />
       <Stack
         sx={{

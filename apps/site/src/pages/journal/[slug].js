@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 
@@ -36,10 +36,10 @@ export default function Post({ frontmatter, hast, preview }) {
   const router = useRouter();
   return (
     <Layout preview={preview}>
-      <Head>
-        <title>{frontmatter?.title} · eicxv</title>
-        <meta charSet="utf-8" />
-      </Head>
+      <NextSeo
+        title={frontmatter?.title}
+        description={frontmatter?.description}
+      />
       <Header />
       {router.isFallback ? (
         <h1>Loading…</h1>

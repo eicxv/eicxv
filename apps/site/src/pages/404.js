@@ -1,15 +1,13 @@
-import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import Link from 'next/link';
-import { css, jsx } from '@emotion/react';
+import { css } from '@emotion/react';
 
 import Layout from '../components/layout';
 
 export default function Header({ preview }) {
   return (
     <Layout preview={preview}>
-      <Head>
-        <title>404 · eicxv</title>
-      </Head>
+      <NextSeo title="404" />
       <div
         css={css`
           margin: 0;

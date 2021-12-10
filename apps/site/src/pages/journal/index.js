@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import { getAllPosts } from '../../lib/contentful-api';
 import { extractFrontmatter } from '../../components/render-markdown/parse-markdown';
 import { Typography, Box, Link, Container } from '@mui/material';
@@ -10,10 +10,10 @@ import PostPreview from './../../components/post-prevew';
 export default function Journal({ postsMetadata, preview }) {
   return (
     <Layout preview={preview}>
-      <Head>
-        <title>Journal · eicxv</title>
-        <meta charSet="utf-8" />
-      </Head>
+      <NextSeo
+        title="Journal"
+        description="A list of blog posts on programming, art and architecture"
+      />
       <Header />
       <Box component="main" sx={{ m: 'auto', maxWidth: '75ch', px: 4 }}>
         <Typography variant="h3" component="h1">
