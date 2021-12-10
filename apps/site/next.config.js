@@ -1,7 +1,3 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
-
 const withTranspileModules = require('next-transpile-modules')([
   '@eicxv/dynamic-relaxation',
   '@eicxv/n-body-galaxy',
@@ -11,18 +7,16 @@ const withTranspileModules = require('next-transpile-modules')([
   '@eicxv/utility',
 ]);
 
-module.exports = withBundleAnalyzer(
-  withTranspileModules({
-    webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-      config.module.rules.push({
-        test: /\.(glsl|vert|frag)$/i,
-        loader: 'raw-loader',
-      });
-      return config;
-    },
-    images: {
-      domains: ['images.ctfassets.net'],
-    },
-    poweredByHeader: false,
-  })
-);
+module.exports = withTranspileModules({
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.module.rules.push({
+      test: /\.(glsl|vert|frag)$/i,
+      loader: 'raw-loader',
+    });
+    return config;
+  },
+  images: {
+    domains: ['images.ctfassets.net'],
+  },
+  poweredByHeader: false,
+});
