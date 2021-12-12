@@ -1,7 +1,10 @@
 import NextLink from 'next/link';
-import { Grid, Link } from '@mui/material';
+import { styled, css } from '../../stitches.config';
+import { Button, Grid, Flex } from '@eicxv/ui';
 
-import Button from './button';
+const Container = styled(Flex, {
+  width: '100%',
+});
 
 export default function Navigation() {
   const links = [
@@ -11,21 +14,18 @@ export default function Navigation() {
   ];
 
   return (
-    <Grid
-      component="header"
-      container
+    <Flex
+      as="header"
       direction="row"
-      justifyContent="space-around"
-      alignItems="center"
-      sx={{ py: 3, mb: 3 }}
+      justify="around"
+      align="center"
+      className={css({ py: '$3', mb: '$4' })()}
     >
       {links.map((link) => (
         <NextLink href={link.href} key={link.href} passHref>
-          <Button component={Link} sx={{ fontSize: 16, fontWeight: 400 }}>
-            {link.label}
-          </Button>
+          <Button as="a">{link.label}</Button>
         </NextLink>
       ))}
-    </Grid>
+    </Flex>
   );
 }

@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import { css, jsx } from '@emotion/react';
 
-// ${theme.palette.colors.warning.main}
-
 export default function PreviewAlert() {
   return (
     <div
