@@ -1,10 +1,5 @@
 import NextLink from 'next/link';
-import { styled, css } from '../../stitches.config';
-import { Button, Grid, Flex } from '@eicxv/ui';
-
-const Container = styled(Flex, {
-  width: '100%',
-});
+import { Button, Flex } from '@eicxv/ui';
 
 export default function Navigation() {
   const links = [
@@ -19,7 +14,10 @@ export default function Navigation() {
       direction="row"
       justify="around"
       align="center"
-      className={css({ py: '$3', mb: '$4' })()}
+      css={(theme) => ({
+        marginBottom: theme.space[4],
+        padding: `${theme.space[3]} 0`,
+      })}
     >
       {links.map((link) => (
         <NextLink href={link.href} key={link.href} passHref>
