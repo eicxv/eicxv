@@ -1,17 +1,26 @@
-import NextLink from 'next/link';
-import { Box, Typography, Link } from '@mui/material';
+import Link from 'next/link';
+import { Box } from '@eicxv/ui';
 
 export default function PostPreview({ slug, title, excerpt }) {
   return (
-    <Box my={2}>
-      <NextLink href={`/journal/${slug}`} passHref>
-        <Link color="inherit" underline="hover">
-          <Typography variant="h5" component="h2">
-            {title}
-          </Typography>
-          {excerpt ? <Typography variant="body1">{excerpt}</Typography> : null}
-        </Link>
-      </NextLink>
+    <Box css={(theme) => ({ margin: `${theme.space[3]} 0` })}>
+      <Link href={`/journal/${slug}`} passHref>
+        <a
+          css={(theme) => ({
+            fontSize: theme.fontSizes[5],
+            color: theme.colors.text,
+            textDecoration: 'none',
+            '&:hover': { textDecoration: 'underline' },
+          })}
+        >
+          <Box>{title}</Box>
+          {excerpt ? (
+            <Box css={(theme) => ({ fontSize: theme.fontSizes[3] })}>
+              {excerpt}
+            </Box>
+          ) : null}
+        </a>
+      </Link>
     </Box>
   );
 }

@@ -2,7 +2,6 @@ import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 
-import Header from '../../components/header';
 import Layout from '../../components/layout';
 import { markdownToHast } from '../../components/render-markdown/parse-markdown';
 import RenderHast from '../../components/render-markdown/render-hast';
@@ -40,7 +39,6 @@ export default function Post({ frontmatter, hast, preview }) {
         title={frontmatter?.title}
         description={frontmatter?.description}
       />
-      <Header />
       {router.isFallback ? (
         <h1>Loading…</h1>
       ) : (
