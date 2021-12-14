@@ -1,16 +1,17 @@
 import { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
-import { Box } from '@mui/material';
+import { Box } from '@eicxv/ui';
+import { useTheme } from '@emotion/react';
 
 import CreateWaves from './wavesProgram';
 
-function Waves({ config, ...other }, ref) {
+function Waves(props, ref) {
+  const theme = useTheme();
   const canvasRef = useRef(null);
   const wavesRef = useRef(null);
   const params = {
-    lightColor: '#f5f5f5',
-    shadowColor: '#212121',
+    lightColor: theme.colors.text,
+    shadowColor: theme.colors.background,
     lightDirection: [0, 1, 3],
-    ...config,
   };
   useEffect(() => {
     wavesRef.current = new CreateWaves(canvasRef.current, params);
@@ -21,7 +22,7 @@ function Waves({ config, ...other }, ref) {
     },
   }));
 
-  return <Box {...other} component="canvas" ref={canvasRef}></Box>;
+  return <Box {...props} as="canvas" ref={canvasRef}></Box>;
 }
 
 export default forwardRef(Waves);
