@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useEffect, useState } from 'react';
 import CutPath from './schematic-cut-path';
 import calcBarWidths from '../calculation/calculate-widths';
-import { Typography, Grid } from '@mui/material';
+import { Box, Flex } from '@eicxv/ui';
 
 export default function Schematic({
   polyline,
@@ -61,16 +61,17 @@ export default function Schematic({
   }, [polyline]);
   if (widths === null) {
     return (
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="center"
-        sx={{ height: '10em' }}
-      >
-        <Typography variant="h2" component="span">
+      <Flex justify="center" align="center" css={{ height: '10em' }}>
+        <Box
+          css={(theme) => ({
+            fontWeight: theme.fontWeights.bold,
+            fontSize: theme.fontSizes[6],
+          })}
+          as="span"
+        >
           No solution
-        </Typography>
-      </Grid>
+        </Box>
+      </Flex>
     );
   }
   return (
