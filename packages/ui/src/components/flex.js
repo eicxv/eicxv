@@ -1,103 +1,51 @@
-import { styled } from '@stitches/react';
+import styled from '@emotion/styled';
 
-export const Flex = styled('div', {
-  boxSizing: 'border-box',
-  display: 'flex',
+const justifyMap = {
+  start: 'flex-start',
+  center: 'center',
+  end: 'flex-end',
+  between: 'space-between',
+  around: 'space-around',
+  evenly: 'space-evenly',
+};
 
-  variants: {
-    direction: {
-      row: {
-        flexDirection: 'row',
-      },
-      column: {
-        flexDirection: 'column',
-      },
-      rowReverse: {
-        flexDirection: 'row-reverse',
-      },
-      columnReverse: {
-        flexDirection: 'column-reverse',
-      },
-    },
-    align: {
-      start: {
-        alignItems: 'flex-start',
-      },
-      center: {
-        alignItems: 'center',
-      },
-      end: {
-        alignItems: 'flex-end',
-      },
-      stretch: {
-        alignItems: 'stretch',
-      },
-      baseline: {
-        alignItems: 'baseline',
-      },
-    },
-    justify: {
-      start: {
-        justifyContent: 'flex-start',
-      },
-      center: {
-        justifyContent: 'center',
-      },
-      end: {
-        justifyContent: 'flex-end',
-      },
-      between: {
-        justifyContent: 'space-between',
-      },
-      around: {
-        justifyContent: 'space-around',
-      },
-    },
-    wrap: {
-      noWrap: {
-        flexWrap: 'nowrap',
-      },
-      wrap: {
-        flexWrap: 'wrap',
-      },
-      wrapReverse: {
-        flexWrap: 'wrap-reverse',
-      },
-    },
-    gap: {
-      0: {
-        gap: '$0',
-      },
-      1: {
-        gap: '$1',
-      },
-      2: {
-        gap: '$2',
-      },
-      3: {
-        gap: '$3',
-      },
-      4: {
-        gap: '$4',
-      },
-      5: {
-        gap: '$5',
-      },
-      6: {
-        gap: '$6',
-      },
-      7: {
-        gap: '$7',
-      },
-      8: {
-        gap: '$8',
-      },
-    },
-  },
-  defaultVariants: {
-    direction: 'row',
-    align: 'stretch',
-    justify: 'start',
-    wrap: 'noWrap',
-  },
+const wrapMap = {
+  noWrap: 'nowrap',
+  wrap: 'wrap',
+  wrapReverse: 'wrap-reverse',
+};
+
+const alignMap = {
+  start: 'flex-start',
+  center: 'center',
+  end: 'flex-end',
+  stretch: 'stretch',
+  baseline: 'baseline',
+};
+
+const directionMap = {
+  row: 'row',
+  column: 'column',
+  rowReverse: 'row-reverse',
+  columnReverse: 'column-reverse',
+};
+
+export const Flex = styled.div((props) => {
+  return {
+    boxSizing: 'border-box',
+    display: 'flex',
+    justifyContent: justifyMap[props.justify],
+    flexWrap: wrapMap[props.wrap],
+    alignItems: alignMap[props.align],
+    flexDirection: directionMap[props.direction],
+    gap: props.theme.space[props.gap],
+  };
 });
+
+Flex.defaultProps = {
+  direction: 'row',
+  align: 'stretch',
+  justify: 'start',
+  wrap: 'noWrap',
+  gap: 0,
+};

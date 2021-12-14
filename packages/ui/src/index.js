@@ -9,4 +9,3 @@ export { TextField } from './components/text-field';
 export { Grid } from './components/grid';
 export { Flex } from './components/flex';
 export { Box } from './components/box';
-export { Typography } from './components/typography';
