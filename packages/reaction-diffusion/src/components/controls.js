@@ -1,33 +1,42 @@
-import React, { useState, useRef } from 'react';
-import {
-  Typography,
-  Button,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Select,
-} from '@mui/material';
+import React from 'react';
 
-import Toggle from './toggle-button-group';
+import {
+  Button,
+  Box,
+  Flex,
+  Switch,
+  Slider,
+  ToggleGroup,
+  ToggleGroupItem,
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '@eicxv/ui';
+
 import SliderWithText from './slider-with-text-input';
 
-import { clamp } from '@eicxv/utility/src/generic';
-
 export default function Controls({ controls, values }) {
-  const renderControl = (control) => {
+  const RenderControl = (control) => {
     switch (control.type) {
-      case 'toggle':
+      case 'toggleGroup':
         return (
-          <>
-            {values[control.id]}
-            <Toggle
+          <div>
+            {control.name}
+            <ToggleGroup
               {...control.props}
               key={control.name}
               name={control.name}
               value={values[control.id]}
-              onChange={control.update}
-            />
-          </>
+              onValueChange={control.update}
+            >
+              {control.items.map((item) => (
+                <ToggleGroupItem {...item.props} key={item.name}>
+                  {item.name}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          </div>
         );
       case 'slider':
         return (
@@ -35,8 +44,8 @@ export default function Controls({ controls, values }) {
             {...control.props}
             key={control.name}
             name={control.name}
-            value={values[control.id]}
-            onValid={control.update}
+            value={[values[control.id]]}
+            onValidValue={control.update}
           />
         );
       case 'button':
@@ -49,20 +58,25 @@ export default function Controls({ controls, values }) {
             {control.name}
           </Button>
         );
-      case 'folder':
+      case 'accordion':
         return (
-          <Accordion key={control.name}>
-            <AccordionSummary>
-              <Typography>{control.name}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {control.content.map(renderControl)}
-            </AccordionDetails>
+          <Accordion key={control.name} type="multiple">
+            {control.items.map((item) => (
+              <AccordionItem key={item.name} value={item.name}>
+                <AccordionTrigger>{item.name}</AccordionTrigger>
+                <AccordionContent>
+                  {item.content.map(RenderControl)}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
           </Accordion>
         );
+      case 'custom':
+        const Component = control.component;
+        return <Component {...control.props} />;
       default:
         return null;
     }
   };
-  return <>{controls.map(renderControl)}</>;
+  return <>{controls.map(RenderControl)}</>;
 }
