@@ -60,14 +60,14 @@ export default class Bezier {
   }
 
   polylineEqualSegments(n, tolerance, maxIterations = 20) {
-    let f = this._equalSegments.bind(this, n);
+    let f = this._parameterOvershoot.bind(this, n);
     let x0 = dist(this.points[0], this.points[3]) / n;
     let x1 = (this.length() * 2) / n;
     let x = falsePositionMethod(f, x0, x1, tolerance, maxIterations);
-    return this._eqSeg(n, x);
+    return this._getEqualSegmentPoints(n, x);
   }
 
-  _equalSegments(n, length) {
+  _parameterOvershoot(n, length) {
     let t = 0;
     for (let i = 0; i < n; i++) {
       let center = this.evaluate(t);
@@ -90,7 +90,7 @@ export default class Bezier {
     throw new Error('no intersection found');
   }
 
-  _eqSeg(n, length) {
+  _getEqualSegmentPoints(n, length) {
     let polyline = [];
     let t = 0;
     for (let i = 0; i < n; i++) {
