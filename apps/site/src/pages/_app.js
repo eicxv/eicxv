@@ -2,7 +2,6 @@ import { DefaultSeo } from 'next-seo';
 import { Global, ThemeProvider } from '@emotion/react';
 import { theme } from '../style/theme';
 import 'katex/dist/katex.min.css';
-import 'highlight.js/styles/github-dark-dimmed.css';
 import '@fontsource/cooper-hewitt/400.css';
 import '@fontsource/cooper-hewitt/500.css';
 import '@fontsource/cooper-hewitt/600.css';

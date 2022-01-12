@@ -15,7 +15,6 @@ export default function Navigation() {
       justify="around"
       align="center"
       css={(theme) => ({
-        marginBottom: theme.space[4],
         padding: `${theme.space[3]} 0`,
       })}
     >

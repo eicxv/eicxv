@@ -7,29 +7,77 @@ import { markdownToHast } from '../../components/render-markdown/parse-markdown'
 import RenderHast from '../../components/render-markdown/render-hast';
 import { getPost, getAllPosts } from '../../lib/contentful-api';
 
-const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr min(65ch, 100%) 1fr;
-  padding: 0 4rem;
-  font-family: 'Cooper Hewitt', 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  & > * {
-    grid-column: 2;
-  }
-  & > .full-bleed {
-    grid-column: 1 / -1;
-  }
-  .math-display {
-    display: block;
-    height: auto;
-    padding-bottom: 12px;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-  code {
-    font-family: 'jetbrains mono', monospace;
-  }
-`;
+const Wrapper = styled.div({
+  display: 'grid',
+  gridTemplateColumns: '1fr min(65ch, 100%) 1fr',
+  padding: '0 4rem',
+  fontFamily:
+    "'Cooper Hewitt', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sansSerif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
+  '& > *': {
+    gridColumn: 2,
+  },
+  '& .fullBleed': {
+    gridColumn: 1 / -1,
+  },
+  '.mathDisplay': {
+    display: 'block',
+    height: 'auto',
+    paddingBottom: '12px',
+    overflowX: 'auto',
+    whiteSpace: 'nowrap',
+  },
+  pre: {
+    fontFamily: "'jetbrains mono', monospace",
+    overflowX: 'auto',
+    padding: '1rem',
+    backgroundColor: '#eeeeee',
+    code: {
+      '.hljs-comment,.hljs-quote': {
+        color: 'green',
+        fontStyle: 'italic',
+      },
+      '.hljs-doctag, .hljs-keyword, .hljs-formula': {
+        color: '#a626a4',
+      },
+      '.hljs-section, .hljs-name, .hljs-selector-tag, .hljs-deletion, .hljs-subst':
+        {
+          color: '#e45649',
+        },
+      '.hljs-literal': {
+        color: '#0184bb',
+      },
+      '.hljs-string,.hljs-regexp,.hljs-addition,.hljs-attribute,.hljs-meta .hljs-string':
+        {
+          color: '#50a14f',
+        },
+
+      '.hljs-attr, .hljs-variable, .hljs-template-variable, .hljs-type, .hljs-selector-class, .hljs-selector-attr, .hljs-selector-pseudo, .hljs-number':
+        {
+          color: '#986801',
+        },
+
+      '.hljs-symbol,.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-title':
+        {
+          color: '#4078f2',
+        },
+      '.hljs-built_in,.hljs-title.class_,.hljs-class .hljs-title': {
+        color: '#c18401',
+      },
+
+      '.hljs-emphasis': {
+        fontStyle: 'italic',
+      },
+
+      '.hljs-strong': {
+        fontWeight: 'bold',
+      },
+
+      '.hljs-link': {
+        textDecoration: 'underline',
+      },
+    },
+  },
+});
 
 export default function Post({ frontmatter, hast, preview }) {
   const router = useRouter();

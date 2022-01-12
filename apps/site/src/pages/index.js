@@ -1,9 +1,8 @@
 import { NextSeo } from 'next-seo';
 import { Box, Flex } from '@eicxv/ui';
-import styled from '@emotion/styled';
 
 import { ThemeProvider } from '@emotion/react';
-import { theme, darkTheme } from '../style/theme';
+import { darkTheme } from '../style/theme';
 import Waves from '../components/waves/waves';
 import Layout from '../components/layout';
 

@@ -45,11 +45,3 @@ const StyledButton = styled.button((props) => {
 });
 
 export const Button = StyledButton;
-
-// export const Button = forwardRef(({ children, ...props }, forwardedRef) => {
-//   return (
-//     <StyledButton {...props} ref={forwardedRef}>
-//       {children}
-//     </StyledButton>
-//   );
-// });

@@ -15,7 +15,7 @@ function Waves(props, ref) {
   };
   useEffect(() => {
     wavesRef.current = new CreateWaves(canvasRef.current, params);
-  });
+  }, []);
   useImperativeHandle(ref, () => ({
     setMultiplier: (value) => {
       wavesRef.current.setMultiplier(value);

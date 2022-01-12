@@ -23,6 +23,16 @@ const StyledSwitch = styled(SwitchPrimitive.Root)((props) => {
         },
       },
     },
+    '&::after': {
+      position: 'absolute',
+      content: '""',
+      borderRadius: '50%',
+      width: 48,
+      height: 48,
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+    },
   };
 });
 

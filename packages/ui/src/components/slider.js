@@ -43,14 +43,30 @@ const StyledThumb = styled(SliderPrimitive.Thumb)((props) => {
   return {
     all: 'unset',
     display: 'block',
-    '&[data-orientation="horizontal"]': { width: 10, height: 20 },
-    '&[data-orientation="vertical"]': { width: 20, height: 10 },
+    '&[data-orientation="horizontal"]': {
+      width: 10,
+      height: 20,
+    },
+    '&[data-orientation="vertical"]': {
+      width: 20,
+      height: 10,
+    },
     backgroundColor: theme.colors.text,
     border: `2px solid ${theme.colors.background}`,
     '&:hover': { backgroundColor: theme.colors.textFaded },
     '&:focus-visible': {
       outline: `4px solid ${theme.colors.text}`,
       borderWidth: '4px',
+    },
+    '&::after': {
+      position: 'absolute',
+      content: '""',
+      borderRadius: '50%',
+      width: 48,
+      height: 48,
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
     },
   };
 });
