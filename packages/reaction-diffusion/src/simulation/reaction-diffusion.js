@@ -29,7 +29,7 @@ const defaultUniforms = {
   u_deltaTime: 1,
   u_diffusion: [0.2097, 0.105],
   u_brushPosition: [0.0, 0.0],
-  u_brushConcentration: [0.0, 0.0],
+  u_brushConcentration: [0.0, 1.0],
   u_brushRadius: 10.0,
   u_visualizeV: true,
   u_fillConcentration: [1.0, 0.0],
