@@ -10,16 +10,16 @@ import { getPost, getAllPosts } from '../../lib/contentful-api';
 const Wrapper = styled.div({
   display: 'grid',
   gridTemplateColumns: '1fr min(65ch, 100%) 1fr',
-  padding: '0 4rem',
+  padding: '0 1rem',
   fontFamily:
-    "'Cooper Hewitt', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sansSerif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
+    "'Cooper Hewitt', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
   '& > *': {
     gridColumn: 2,
   },
-  '& .fullBleed': {
+  '& .full-bleed': {
     gridColumn: 1 / -1,
   },
-  '.mathDisplay': {
+  '.math-display': {
     display: 'block',
     height: 'auto',
     paddingBottom: '12px',
