@@ -17,10 +17,8 @@ export default function DraggableCircle({
   ...props
 }) {
   const [spring, api] = useSpring(() => ({ x: 1 }));
-  const transform = to(
-    [spring.x],
-    (s) => `translate(${bezier[index][0]} ${bezier[index][1]}) scale(${s})`
-  );
+  const transform = `translate(${bezier[index][0]} ${bezier[index][1]})`;
+  const scaleHandle = to([spring.x], (s) => `scale(${s})`);
 
   const bind = useDrag(
     ({ offset }) => {
@@ -45,16 +43,28 @@ export default function DraggableCircle({
   );
 
   return (
-    <animated.circle
-      {...bind()}
-      cx={0}
-      cy={0}
-      r={r}
-      style={{ cursor: 'grab', touchAction: 'none' }}
-      transform={transform}
-      onMouseEnter={() => api.start({ x: hoverScale })}
-      onMouseLeave={() => api.start({ x: 1 })}
-      {...props}
-    />
+    <g transform={transform}>
+      <animated.circle
+        style={{}}
+        cx={0}
+        cy={0}
+        r={r}
+        transform={scaleHandle}
+        {...props}
+      />
+      <line
+        {...bind()}
+        stroke="transparent"
+        strokeWidth="42px"
+        style={{
+          strokeLinecap: 'round',
+          vectorEffect: 'non-scaling-stroke',
+          cursor: 'grab',
+          touchAction: 'none',
+        }}
+        onMouseEnter={() => api.start({ x: hoverScale })}
+        onMouseLeave={() => api.start({ x: 1 })}
+      ></line>
+    </g>
   );
 }
