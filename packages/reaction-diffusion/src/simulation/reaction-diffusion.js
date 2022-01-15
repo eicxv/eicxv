@@ -3,7 +3,6 @@ import visualizeFrag from './shaders/visualize.frag';
 import initializeFrag from './shaders/initialize.frag';
 import defaultComputeVert from './shaders/default-compute.vert';
 import brushFrag from './shaders/brush.frag';
-
 import { clamp } from '@eicxv/utility/src/generic';
 import {
   getExtension,
@@ -26,7 +25,7 @@ const attributeData = new Float32Array([
 const defaultUniforms = {
   u_feed: 0.055,
   u_kill: 0.062,
-  u_deltaTime: 1,
+  u_deltaTime: 0.3,
   u_diffusion: [0.2097, 0.105],
   u_brushPosition: [0.0, 0.0],
   u_brushConcentration: [0.0, 1.0],
@@ -93,17 +92,17 @@ class Driver {
     return vao;
   }
 
-  _getColor() {
+  stableConcentration() {
     const feed = this.uniforms.u_feed;
     const kill = this.uniforms.u_kill;
-    const feedSqrt = Math.sqrt(feed);
-    let U = 1.0;
-    let V = 0.0;
-    if (kill < (feedSqrt - 2.0 * feed) / 2.0) {
-      const A = feedSqrt / (feed + kill);
-      U = (A - sqrt(A * A - 4.0)) / (2.0 * A);
+    const sqrtFeed = Math.sqrt(feed);
+    let U = 1;
+    let V = 0;
+    if (kill < (sqrtFeed - 2 * feed) / 2) {
+      let A = sqrtFeed / (feed + kill);
+      U = (A - Math.sqrt(A * A - 4)) / (2 * A);
       U = clamp(U);
-      V = (feedSqrt * (A + sqrt(A * A - 4.0))) / 2.0;
+      V = (sqrtFeed * (A + Math.sqrt(A * A - 4))) / 2;
       V = clamp(V);
     }
     return [U, V];
@@ -309,6 +308,14 @@ class Driver {
       this._concentrationVariable.getTexture();
     this._runVisualize();
     this._animateId = requestAnimationFrame(this.animate);
+  }
+
+  step() {
+    this.uniforms.u_concentrationTexture =
+      this._concentrationVariable.getTexture();
+    this._concentrationVariable.advance();
+    this.framebuffer = this._concentrationVariable.getFramebuffer();
+    this._runEvolve();
   }
 
   start() {

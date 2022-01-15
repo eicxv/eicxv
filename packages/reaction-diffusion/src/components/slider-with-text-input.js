@@ -9,7 +9,7 @@ export default function Control({ name, min, max, step, value, onValidValue }) {
   const prevValueRef = useRef(null);
   if (value !== prevValueRef.current) {
     if (value !== Number(inputString)) {
-      setInput(value);
+      setInput(value.toFixed(4));
     }
   }
   prevValueRef.current = value;
@@ -22,8 +22,8 @@ export default function Control({ name, min, max, step, value, onValidValue }) {
   };
 
   const handleSliderChange = (value) => {
-    setInput(value);
-    onValidValue(value);
+    setInput(value[0].toFixed(4));
+    onValidValue(value[0]);
   };
 
   const handleInputChange = (event) => {
@@ -43,17 +43,30 @@ export default function Control({ name, min, max, step, value, onValidValue }) {
   };
 
   return (
-    <Flex direction="row" align="center" gap={2}>
-      <Typography id={`${name}-input`}>{name}</Typography>
+    <Flex direction="row" align="center" justify="stretch" gap={2}>
+      <Typography
+        css={(theme) => ({
+          minWidth: '9ch',
+        })}
+        id={`${name}-input`}
+      >
+        {name}
+      </Typography>
       <Slider
+        css={(theme) => ({
+          flexGrow: 1,
+        })}
         min={min}
         max={max}
         step={step}
-        value={value}
+        value={[value]}
         onValueChange={handleSliderChange}
         aria-labelledby={`${name}-input`}
       ></Slider>
       <TextField
+        css={(theme) => ({
+          minWidth: '9ch',
+        })}
         aria-labelledby={`${name}-input`}
         onBlur={handleBlur}
         onChange={handleInputChange}
