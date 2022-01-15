@@ -12,9 +12,8 @@ const createTicks = {
       <line y2="6" stroke="currentColor" />
       <text
         key={value}
+        textAnchor="middle"
         style={{
-          fontSize: '10px',
-          textAnchor: 'middle',
           transform: `translateY(20px)`,
         }}
       >
@@ -27,10 +26,9 @@ const createTicks = {
       <line x2="-6" stroke="currentColor" />
       <text
         key={value}
+        textAnchor="end"
         dy="0.35em"
         style={{
-          fontSize: '10px',
-          textAnchor: 'end',
           transform: 'translateX(-10px)',
         }}
       >
