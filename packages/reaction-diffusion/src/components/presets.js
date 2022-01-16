@@ -1,13 +1,25 @@
 import { Button } from '@eicxv/ui';
-import { clamp } from '@eicxv/utility/src/generic';
 
 function ellipse(a, b, t) {
   return [a * Math.cos(t), b * Math.sin(t)];
 }
 
+function brush(rd, position, concentration, radius) {
+  rd.uniforms.u_brushRadius = radius;
+  rd.uniforms.u_brushConcentration = concentration;
+  rd.uniforms.u_brushPosition = position;
+  rd.brush();
+}
+
+function fill(rd, concentration, noise = false) {
+  rd.uniforms.u_noise = noise;
+  rd.uniforms.u_fillConcentration = concentration;
+  rd.initialize();
+}
+
 const presets = [
   {
-    name: 'Flickering Points',
+    name: 'Multiplying Dots',
     params: {
       u_feed: 0.0195,
       u_kill: 0.0568,
@@ -15,15 +27,14 @@ const presets = [
     init: (rd) => {
       const stepSizePixels = 5;
       const stepX = stepSizePixels / rd.width;
-      rd.uniforms.u_noise = false;
-      rd.uniforms.u_fillConcentration = [1, 0];
-      rd.initialize();
-      rd.uniforms.u_brushRadius = 2;
-      rd.uniforms.u_brushConcentration = [0, 1];
-      rd.uniforms.u_brushPosition = [0.5 + stepX, 0.5];
-      rd.brush();
-      rd.uniforms.u_brushPosition = [0.5 - stepX, 0.5];
-      rd.brush();
+      let concentration = [1, 0];
+      fill(rd, concentration);
+      concentration = [0, 1];
+      const radius = 2;
+      let position = [0.5 + stepX, 0.5];
+      brush(rd, position, concentration, radius);
+      position = [0.5 - stepX, 0.5];
+      brush(rd, position, concentration, radius);
     },
   },
   {
@@ -33,32 +44,95 @@ const presets = [
       u_kill: 0.033,
     },
     init(rd) {
-      const stepSizePixels = 20;
-      const stepX = stepSizePixels / rd.width;
-      const stepY = stepSizePixels / rd.height;
-      rd.uniforms.u_noise = false;
-      rd.uniforms.u_fillConcentration = rd.stableConcentration();
-      rd.initialize();
-      rd.uniforms.u_brushRadius = 4;
-      rd.uniforms.u_brushConcentration = [0, 1];
+      const circleRadius = 20;
+      const stepX = circleRadius / rd.width;
+      const stepY = circleRadius / rd.height;
+      const numberOfDots = 100;
+      const iterationsPerDot = 10;
+      let concentration = rd.stableConcentration();
+      fill(rd, concentration);
+      const radius = 4;
+      concentration = [0, 1];
       const n = 100;
-      for (let i = 0; i < n; i++) {
+      for (let i = 0; i < numberOfDots; i++) {
         let t = (2 * Math.PI * i) / n;
-        let p = ellipse(stepX, stepY, t);
-        p[0] += 0.5;
-        p[1] += 0.5;
-        rd.uniforms.u_brushPosition = p;
-        rd.brush();
-        for (let j = 0; j < 10; j++) {
+        let position = ellipse(stepX, stepY, t);
+        position[0] += 0.5;
+        position[1] += 0.5;
+        brush(rd, position, concentration, radius);
+        for (let j = 0; j < iterationsPerDot; j++) {
           rd.step();
         }
       }
-      // rd.uniforms.u_brushRadius = 2;
-      // rd.uniforms.u_brushConcentration = [0, 1];
-      // rd.uniforms.u_brushPosition = [0.5 + stepX, 0.5];
-      // rd.brush();
-      // rd.uniforms.u_brushPosition = [0.5 - stepX, 0.5];
-      // rd.brush();
+    },
+  },
+  {
+    name: 'Giraffe',
+    params: {
+      u_feed: 0.0978,
+      u_kill: 0.0555,
+    },
+    init(rd) {
+      const numberOfDots = 18;
+      let concentration = [1, 0];
+      fill(rd, concentration);
+      const radius = 3;
+      concentration = [0, 1];
+      for (let i = 0; i < numberOfDots; i++) {
+        let position = [Math.random(), Math.random()];
+        brush(rd, position, concentration, radius);
+      }
+    },
+  },
+  {
+    name: 'Giraffe Inverted',
+    params: {
+      u_feed: 0.1104,
+      u_kill: 0.0555,
+    },
+    init(rd) {
+      const numberOfDots = 18;
+      let concentration = [0, 1];
+      fill(rd, concentration);
+      const radius = 3;
+      concentration = [1, 0];
+      for (let i = 0; i < numberOfDots; i++) {
+        let position = [Math.random(), Math.random()];
+        brush(rd, position, concentration, radius);
+      }
+    },
+  },
+  {
+    name: 'Kelp Forest',
+    params: {
+      u_feed: 0.082,
+      u_kill: 0.06,
+    },
+    init(rd) {
+      let concentration = [0, 1];
+      fill(rd, concentration);
+      concentration = [1, 0];
+      const position = [0.5, 0.5];
+      const radius = 6;
+      brush(rd, position, concentration, radius);
+    },
+  },
+  {
+    name: 'Strings',
+    params: {
+      u_feed: 0.082,
+      u_kill: 0.06,
+    },
+    init(rd) {
+      const numberOfDots = 18;
+      let concentration = [1, 0];
+      fill(rd, concentration);
+      const radius = 3;
+      concentration = [0, 1];
+      for (let i = 0; i < numberOfDots; i++) {
+        let position = [Math.random(), Math.random()];
+        brush(rd, position, concentration, radius);
+      }
     },
   },
 ];
