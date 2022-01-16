@@ -4,12 +4,19 @@ import { clamp } from '@eicxv/utility/src/generic';
 
 import { TextField, Flex, Slider, Typography } from '@eicxv/ui';
 
-export default function Control({ name, min, max, step, value, onValidValue }) {
+export default function SliderWithInput({
+  name,
+  min,
+  max,
+  step,
+  value,
+  onValidValue,
+}) {
   const [inputString, setInput] = useState(value);
   const prevValueRef = useRef(null);
   if (value !== prevValueRef.current) {
     if (value !== Number(inputString)) {
-      setInput(value.toFixed(4));
+      setInput(Number(value.toFixed(4)));
     }
   }
   prevValueRef.current = value;
@@ -22,7 +29,7 @@ export default function Control({ name, min, max, step, value, onValidValue }) {
   };
 
   const handleSliderChange = (value) => {
-    setInput(value[0].toFixed(4));
+    setInput(Number(value[0].toFixed(4)));
     onValidValue(value[0]);
   };
 
