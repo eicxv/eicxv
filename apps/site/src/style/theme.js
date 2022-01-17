@@ -1,27 +1,16 @@
-const colors = {
-  gray50: '#fafafa',
-  gray100: '#f5f5f5',
-  gray200: '#eeeeee',
-  gray300: '#e0e0e0',
-  gray400: '#bdbdbd',
-  gray500: '#9e9e9e',
-  gray600: '#757575',
-  gray700: '#616161',
-  gray800: '#424242',
-  gray900: '#212121',
-  warning: '#ffd92f',
-};
+import { sand, sandDark, amber, amberDark } from '@radix-ui/colors';
 
 export const theme = {
   colors: {
-    text: colors.gray900,
-    background: colors.gray100,
-    primary: colors.gray100,
-    secondary: colors.gray900,
-    textFaded: colors.gray700,
-    textExtraFaded: colors.gray500,
-    backgroundFaded: colors.gray300,
-    warning: colors.warning,
+    ...sand,
+    text: sand.sand12,
+    background: sand.sand1,
+    primary: sand.sand1,
+    secondary: sand.sand12,
+    textFaded: sand.sand11,
+    textExtraFaded: sand.sand10,
+    backgroundFaded: sand.sand2,
+    warning: amber.amber8,
   },
   space: {
     0: '0rem',
@@ -73,13 +62,14 @@ export const theme = {
 export const darkTheme = {
   ...theme,
   colors: {
-    ...theme.colors,
-    text: colors.gray100,
-    background: colors.gray900,
-    primary: colors.gray900,
-    secondary: colors.gray100,
-    textFaded: colors.gray300,
-    textExtraFaded: colors.gray600,
-    backgroundFaded: colors.gray800,
+    ...sandDark,
+    text: sandDark.sand12,
+    background: sandDark.sand1,
+    primary: sandDark.sand1,
+    secondary: sandDark.sand12,
+    textFaded: sandDark.sand11,
+    textExtraFaded: sandDark.sand10,
+    backgroundFaded: sandDark.sand2,
+    warning: amberDark.amber8,
   },
 };
