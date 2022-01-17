@@ -1,16 +1,8 @@
 import React, { useState, useRef } from 'react';
-import {
-  Typography,
-  Slider,
-  TextField,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-} from '@mui/material';
-
 import Controls from './controls';
 
-import { clamp } from '@eicxv/utility/src/generic';
+import ParameterMapControl from './parameter-map-control';
+import Presets from './presets';
 
 const saveBlob = function (blob, fileName) {
   const a = document.createElement('a');
@@ -25,8 +17,8 @@ const initialSettings = {
   u_kill: 0.06,
   u_diffusion: [0.2, 0.1],
   u_brushRadius: 10,
-  u_brushConcentration: true,
-  u_visualizeV: true,
+  u_brushConcentration: 'U',
+  u_visualizeV: 'V',
   stepsPerFrame: 8,
 };
 
@@ -41,15 +33,20 @@ export default function RDControls({ RDRef }) {
   };
 
   const createUpdate = (unif) => {
-    return (event, value) => {
+    return (value) => {
       RDRef.current.setUniform(unif, value);
       setSettings({ ...settings, [unif]: value });
     };
   };
+  const setParams = (value) => {
+    RDRef.current.setUniform('u_feed', value.u_feed);
+    RDRef.current.setUniform('u_kill', value.u_kill);
+    setSettings(() => ({ ...settings, ...value }));
+  };
   const controlsConfig = [
     {
       type: 'folder',
-      name: 'general controls',
+      name: 'General',
       content: [
         {
           type: 'button',
@@ -71,8 +68,8 @@ export default function RDControls({ RDRef }) {
         },
         {
           id: 'stepsPerFrame',
-          name: 'steps per frame',
-          update: (e, value) => {
+          name: 'Steps per Frame',
+          update: (value) => {
             RDRef.current.stepsPerFrame = value;
             setSettings({ ...settings, stepsPerFrame: value });
           },
@@ -85,63 +82,74 @@ export default function RDControls({ RDRef }) {
         },
       ],
     },
+    // {
+    //   type: 'folder',
+    //   name: 'visulization controls',
+    //   content: [
+    //     {
+    //       type: 'toggleGroup',
+    //       id: 'u_visualizeV',
+    //       name: 'Compound to Visualize',
+    //       update: (value) => {
+    //         const valueBool = value == 'V';
+    //         RDRef.current.setUniform('u_visualizeV', valueBool);
+    //         setSettings({ ...settings, u_visualizeV: value });
+    //         RDRef.current._runVisualize();
+    //       },
+    //       props: {
+    //         type: 'single',
+    //       },
+    //       items: [
+    //         { name: 'U', props: { value: 'U' } },
+    //         { name: 'V', props: { value: 'V' } },
+    //       ],
+    //     },
+    //   ],
+    // },
     {
       type: 'folder',
-      name: 'visulization controls',
-      content: [
-        {
-          type: 'toggle',
-          id: 'u_visualizeV',
-          name: 'Compound to visualize',
-          update: (event, value) => {
-            RDRef.current.setUniform('u_visualizeV', value);
-            setSettings({ ...settings, u_visualizeV: value });
-            RDRef.current._runVisualize();
-          },
-          props: {
-            alternatives: [
-              { name: 'U', value: false },
-              { name: 'V', value: true },
-            ],
-          },
-        },
-      ],
-    },
-    {
-      type: 'folder',
-      name: 'reaction-diffusion controls',
+      name: 'Reaction-Diffusion',
       content: [
         {
           id: 'u_feed',
-          name: 'feed',
+          name: 'Feed',
           update: createUpdate('u_feed'),
           props: {
             min: 0,
-            max: 0.15,
+            max: 0.3,
             step: 0.0001,
           },
           type: 'slider',
         },
         {
           id: 'u_kill',
-          name: 'kill',
+          name: 'Kill',
           update: createUpdate('u_kill'),
           props: {
             min: 0,
-            max: 0.15,
+            max: 0.08,
             step: 0.0001,
           },
           type: 'slider',
+        },
+        {
+          name: 'parameter-map',
+          type: 'custom',
+          component: ParameterMapControl,
+          props: {
+            parameters: settings,
+            setParameters: setParams,
+          },
         },
       ],
     },
     {
       type: 'folder',
-      name: 'brush controls',
+      name: 'Brush',
       content: [
         {
           id: 'u_brushRadius',
-          name: 'brush size',
+          name: 'Brush Size',
           update: createUpdate('u_brushRadius'),
           props: {
             min: 1,
@@ -151,36 +159,82 @@ export default function RDControls({ RDRef }) {
           type: 'slider',
         },
         {
-          type: 'toggle',
+          type: 'toggleGroup',
           id: 'u_brushConcentration',
-          name: 'Compound to Brush',
-          update: (event, value) => {
-            let concentration = value ? [1, 0] : [0, 1];
+          name: 'Brush Colour',
+          update: (value) => {
+            const valueBool = value == 'V';
+            const concentration = valueBool ? [0, 1] : [1, 0];
             RDRef.current.setUniform('u_brushConcentration', concentration);
             setSettings({ ...settings, u_brushConcentration: value });
           },
           props: {
-            alternatives: [
-              { name: 'U', value: false },
-              { name: 'V', value: true },
-            ],
+            type: 'single',
           },
+          items: [
+            { name: 'U', props: { value: 'U' } },
+            { name: 'V', props: { value: 'V' } },
+          ],
         },
         {
-          type: 'toggle',
+          type: 'toggleGroup',
           id: 'u_brushConcentration',
-          name: 'Compound to Brush',
-          update: (event, value) => {
-            RDRef.current.setUniform('u_noise', value.noise);
-            RDRef.current.setUniform('u_fillConcentration', value.fill);
-            RDRef.current.initialize();
+          name: 'Clear Canvas',
+          update: (value) => {
+            const rd = RDRef.current;
+            rd.setUniform('u_noise', value === 'noise');
+            let fill = [1, 0];
+            switch (value) {
+              case 'fillU':
+                fill = [1, 0];
+                break;
+              case 'fillV':
+                fill = [0, 1];
+                break;
+              case 'stable':
+                fill = rd.stableConcentration();
+                break;
+            }
+            rd.setUniform('u_fillConcentration', fill);
+            rd.initialize();
           },
           props: {
-            alternatives: [
-              { name: 'Noise', value: { noise: true, fill: [0, 0] } },
-              { name: 'Fill U', value: { noise: false, fill: [1, 0] } },
-              { name: 'Fill V', value: { noise: false, fill: [0, 1] } },
-            ],
+            defaultValue: null,
+            type: 'single',
+          },
+          items: [
+            {
+              name: 'Noise',
+              props: { value: 'noise' },
+            },
+            {
+              name: 'Fill U',
+              props: { value: 'fillU' },
+            },
+            {
+              name: 'Fill V',
+              props: { value: 'fillV' },
+            },
+            {
+              name: 'Stable',
+              props: { value: 'stable' },
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'folder',
+      name: 'Presets',
+      content: [
+        {
+          name: 'presets',
+          type: 'custom',
+          component: Presets,
+          props: {
+            RDRef,
+            settings,
+            setSettings,
           },
         },
       ],

@@ -1,57 +1,73 @@
 import { NextSeo } from 'next-seo';
-import { Box, Typography, CssBaseline } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
+import { Box, Flex } from '@eicxv/ui';
 
-import Header from '../components/header';
+import { ThemeProvider } from '@emotion/react';
+import { darkTheme } from '../style/theme';
 import Waves from '../components/waves/waves';
 import Layout from '../components/layout';
-import { darkTheme } from '../style/theme';
 
 export default function Home({ preview }) {
   return (
-    <Layout preview={preview}>
-      <NextSeo
-        title="eicxv"
-        description="A journal on my art, architecture and programming projects."
-        openGraph={{
-          type: 'website',
-          locale: 'en_GB',
-          url: 'https://wwww.eicxv.com/',
-        }}
-      />
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <Header></Header>
-        <Box
-          sx={{
-            display: 'flex',
-            px: 4,
-            flexDirection: 'column',
-            maxWidth: '95ch',
-            mx: 'auto',
-            alignItems: 'center',
-          }}
-        >
-          <Box sx={{ maxWidth: '75ch' }}>
-            <Typography
-              sx={{ fontWeight: 600 }}
-              component="h1"
-              variant="h3"
-              color="secondary"
-            >
-              Hello, I&rsquo;m Einar
-            </Typography>
-            <Typography component="h2" variant="h4" color="secondary">
-              I&rsquo;m interested in art, architecture and programming. This is
-              a website for my thoughts and projects.
-            </Typography>
-          </Box>
-          <Waves
-            sx={{ maxWidth: '95ch', width: '100%', height: '60vh' }}
-          ></Waves>
-        </Box>
-      </ThemeProvider>
-    </Layout>
+    <ThemeProvider theme={darkTheme}>
+      <div
+        css={(theme) => ({
+          minHeight: '100vh',
+          width: '100vw',
+          position: 'absolute',
+          backgroundColor: theme.colors.background,
+        })}
+      >
+        <Layout preview={preview}>
+          <NextSeo
+            title="eicxv"
+            description="A journal on my art, architecture and programming projects."
+            openGraph={{
+              type: 'website',
+              locale: 'en_GB',
+              url: 'https://wwww.eicxv.com/',
+            }}
+          />
+          <Flex
+            direction="column"
+            align="center"
+            css={(theme) => ({
+              margin: `${theme.space[0]} auto`,
+            })}
+          >
+            <Box css={(theme) => ({ maxWidth: theme.sizes.textColumn })}>
+              <Box
+                as="h1"
+                css={(theme) => ({
+                  fontWeight: '600',
+                  fontSize: theme.fontSizes[7],
+                  color: theme.colors.text,
+                })}
+              >
+                Hello, I&rsquo;m Einar
+              </Box>
+              <Box
+                component="span"
+                css={(theme) => ({
+                  fontWeight: '400',
+                  fontSize: theme.fontSizes[5],
+                  color: theme.colors.text,
+                })}
+              >
+                I&rsquo;m interested in art, architecture and programming. This
+                is a website for my thoughts and projects.
+              </Box>
+            </Box>
+            <Waves
+              css={{
+                maxWidth: '95ch',
+                width: '100%',
+                height: '60vh',
+              }}
+            ></Waves>
+          </Flex>
+        </Layout>
+      </div>
+    </ThemeProvider>
   );
 }
 

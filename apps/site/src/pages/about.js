@@ -1,8 +1,7 @@
 import { NextSeo } from 'next-seo';
 import Image from 'next/image';
-import { Box, Typography, Stack } from '@mui/material';
 
-import Header from '../components/header';
+import { Box, Flex } from '@eicxv/ui';
 import Layout from '../components/layout';
 import { getMap } from '../lib/contentful-asset-map';
 
@@ -14,16 +13,18 @@ export default function About({ assets, preview }) {
         title="About"
         description="A journal on my art, architecture and programming projects."
       />
-      <Header />
-      <Stack
-        sx={{
-          maxWidth: '65ch',
-          m: 'auto',
-          px: 4,
-        }}
+      <Flex
+        direction="column"
+        css={(theme) => ({
+          maxWidth: theme.sizes.textColumn,
+          margin: 'auto',
+          padding: `0 ${theme.space[4]}`,
+        })}
       >
-        <Box
-          component="figure"
+        <Flex
+          as="figure"
+          justify="center"
+          css={(theme) => ({ maxWidth: '17ch', margin: 'auto' })}
           sx={{
             display: 'flex',
             justifyContent: 'center',
@@ -39,21 +40,20 @@ export default function About({ assets, preview }) {
             width={selfPortrait.width}
             height={selfPortrait.height}
           />
-        </Box>
-        <Typography variant="body1">
+        </Flex>
+        <Box as="p" css={(theme) => ({ margin: `0 0 ${theme.space[3]} 0` })}>
           I&rsquo;m Einar. I love sailing, I can spend all day in a museum and I
           make a really good pasta carbonara.
-        </Typography>
-        <br></br>
-        <Typography variant="body1">
+        </Box>
+        <Box as="p" css={{ margin: 0 }}>
           I have studied Architecture and Engineering at Chalmers University of
           Technology and I am a self-taught programmer. I have an interest in
           architecture and design informed by computation, formfinding and
           generative art. I sometimes create traditional art. This site is a
           journal for my interests, thoughts and projects. I&rsquo;m currently
           living in Gothenburg and always on the lookout for new challenges.
-        </Typography>
-      </Stack>
+        </Box>
+      </Flex>
     </Layout>
   );
 }

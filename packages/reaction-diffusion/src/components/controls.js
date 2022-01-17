@@ -1,68 +1,97 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
+
 import {
-  Typography,
   Button,
+  Box,
+  Flex,
+  Switch,
+  Slider,
+  ToggleGroup,
+  ToggleGroupItem,
   Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Select,
-} from '@mui/material';
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@eicxv/ui';
 
-import Toggle from './toggle-button-group';
 import SliderWithText from './slider-with-text-input';
-
-import { clamp } from '@eicxv/utility/src/generic';
+import Folder from './folder';
 
 export default function Controls({ controls, values }) {
-  const renderControl = (control) => {
-    switch (control.type) {
-      case 'toggle':
-        return (
-          <>
-            {values[control.id]}
-            <Toggle
-              {...control.props}
-              key={control.name}
-              name={control.name}
-              value={values[control.id]}
-              onChange={control.update}
-            />
-          </>
-        );
-      case 'slider':
-        return (
-          <SliderWithText
+  return (
+    <>
+      {controls.map((item) => (
+        <RenderControl key={item.name} control={item} values={values} />
+      ))}
+    </>
+  );
+}
+
+function RenderControl({ control, values }) {
+  switch (control.type) {
+    case 'toggleGroup':
+      return (
+        <div>
+          {control.name}
+          <ToggleGroup
             {...control.props}
             key={control.name}
             name={control.name}
             value={values[control.id]}
-            onValid={control.update}
-          />
-        );
-      case 'button':
-        return (
-          <Button
-            {...control.props}
-            key={control.name}
-            onClick={control.update}
+            onValueChange={control.update}
           >
-            {control.name}
-          </Button>
-        );
-      case 'folder':
-        return (
-          <Accordion key={control.name}>
-            <AccordionSummary>
-              <Typography>{control.name}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {control.content.map(renderControl)}
-            </AccordionDetails>
-          </Accordion>
-        );
-      default:
-        return null;
-    }
-  };
-  return <>{controls.map(renderControl)}</>;
+            {control.items.map((item) => (
+              <ToggleGroupItem {...item.props} key={item.name}>
+                {item.name}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </div>
+      );
+    case 'slider':
+      return (
+        <SliderWithText
+          {...control.props}
+          key={control.name}
+          name={control.name}
+          value={values[control.id]}
+          onValidValue={control.update}
+        />
+      );
+    case 'button':
+      return (
+        <Button {...control.props} key={control.name} onClick={control.update}>
+          {control.name}
+        </Button>
+      );
+    case 'folder':
+      return (
+        <Folder name={control.name}>
+          {control.content.map((item) => (
+            <RenderControl key={item.name} control={item} values={values} />
+          ))}
+        </Folder>
+      );
+    // case 'accordion':
+    //   return (
+    //     <Accordion key={control.name} type="multiple">
+    //       {control.items.map((item) => (
+    //         <AccordionItem key={item.name} value={item.name}>
+    //           <AccordionTrigger>{item.name}</AccordionTrigger>
+    //           <AccordionContent>
+    //             {item.content.map(RenderControl)}
+    //           </AccordionContent>
+    //         </AccordionItem>
+    //       ))}
+    //     </Accordion>
+    //   );
+    case 'custom':
+      const Component = control.component;
+      return <Component {...control.props} />;
+    default:
+      return null;
+  }
 }

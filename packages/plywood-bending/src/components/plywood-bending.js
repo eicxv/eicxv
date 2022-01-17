@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Schematic from './schematic';
 import InteractiveCurve from './interactive-bezier';
 import FittedPolyline from './fitted-polyline';
-import { Typography, Box, Slider } from '@mui/material';
+import { Box, Slider } from '@eicxv/ui';
 
 export default function PlywoodBending({ ...props }) {
   const [polyline, setPolyline] = useState([
@@ -43,15 +43,15 @@ export default function PlywoodBending({ ...props }) {
         setValidCurve={setValidCurve}
       />
       <Box>
-        <Typography id="segment-slider">Segments</Typography>
+        <Box id="segment-slider">Segments</Box>
         <Slider
           aria-labelledby="segment-slider"
           id="Segments"
           name="Segments"
-          value={segments}
+          value={[segments]}
           min={5}
           max={50}
-          onChange={(e, value) => setSegments(value)}
+          onValueChange={setSegments}
         />
         <span>{segments} segments</span>
       </Box>

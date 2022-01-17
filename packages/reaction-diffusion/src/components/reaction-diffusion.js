@@ -18,9 +18,7 @@ const initialUniforms = { u_feed: 0.082, u_kill: 0.06 };
 export default function ReactionDiffusion() {
   const canvasRef = useRef(null);
   const reactionDiffusionRef = useRef(null);
-
-  let canvasSize;
-  let canvasOrigin;
+  const elementRef = useRef({ origin: [0, 0], size: [0, 0] });
 
   useEffect(() => {
     const reactionDiffusion = new ReactionDiffusionSystem(
@@ -38,8 +36,8 @@ export default function ReactionDiffusion() {
         return;
       }
       // convert xy to canvas uv space
-      let coords = sub(xy, canvasOrigin);
-      coords = divElem(coords, canvasSize);
+      let coords = sub(xy, elementRef.current.origin);
+      coords = divElem(coords, elementRef.current.size);
       coords[1] = 1 - coords[1];
       reactionDiffusionRef.current.setUniform('u_brushPosition', coords);
       reactionDiffusionRef.current.brush();
@@ -48,18 +46,19 @@ export default function ReactionDiffusion() {
       from: () => {
         const { x, y, width, height } =
           canvasRef.current.getBoundingClientRect();
-        canvasOrigin = [x, y];
-        canvasSize = [width, height];
+        elementRef.current = {
+          origin: [x, y],
+          size: [width, height],
+        };
         return [0, 0];
       },
     }
   );
 
   return (
-    <main>
-      <div>Reaction-diffusion</div>
+    <>
       <Canvas ref={canvasRef} {...bind()}></Canvas>
       <Controls RDRef={reactionDiffusionRef} />
-    </main>
+    </>
   );
 }

@@ -1,11 +1,10 @@
 import { NextSeo } from 'next-seo';
 import { getAllPosts } from '../../lib/contentful-api';
 import { extractFrontmatter } from '../../components/render-markdown/parse-markdown';
-import { Typography, Box, Link, Container } from '@mui/material';
 
-import Header from '../../components/header';
 import Layout from '../../components/layout';
 import PostPreview from './../../components/post-prevew';
+import { Box } from '@eicxv/ui';
 
 export default function Journal({ postsMetadata, preview }) {
   return (
@@ -14,11 +13,23 @@ export default function Journal({ postsMetadata, preview }) {
         title="Journal"
         description="A list of blog posts on programming, art and architecture"
       />
-      <Header />
-      <Box component="main" sx={{ m: 'auto', maxWidth: '75ch', px: 4 }}>
-        <Typography variant="h3" component="h1">
+      <Box
+        component="main"
+        css={(theme) => ({
+          margin: 'auto',
+          maxWidth: theme.sizes.textColumn,
+          padding: `0 ${theme.space[4]}`,
+        })}
+      >
+        <Box
+          css={(theme) => ({
+            fontWeight: theme.fontWeights.bold,
+            fontSize: theme.fontSizes[7],
+          })}
+          as="h1"
+        >
           Journal
-        </Typography>
+        </Box>
         {postsMetadata.map((metadata) => (
           <PostPreview
             key={metadata.slug}

@@ -1,7 +1,5 @@
 import NextLink from 'next/link';
-import { Grid, Link } from '@mui/material';
-
-import Button from './button';
+import { Button, Flex } from '@eicxv/ui';
 
 export default function Navigation() {
   const links = [
@@ -11,21 +9,20 @@ export default function Navigation() {
   ];
 
   return (
-    <Grid
-      component="header"
-      container
+    <Flex
+      as="header"
       direction="row"
-      justifyContent="space-around"
-      alignItems="center"
-      sx={{ py: 3, mb: 3 }}
+      justify="around"
+      align="center"
+      css={(theme) => ({
+        padding: `${theme.space[3]} 0`,
+      })}
     >
       {links.map((link) => (
         <NextLink href={link.href} key={link.href} passHref>
-          <Button component={Link} sx={{ fontSize: 16, fontWeight: 400 }}>
-            {link.label}
-          </Button>
+          <Button as="a">{link.label}</Button>
         </NextLink>
       ))}
-    </Grid>
+    </Flex>
   );
 }
