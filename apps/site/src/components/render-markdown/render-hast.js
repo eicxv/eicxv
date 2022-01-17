@@ -5,6 +5,7 @@ import * as components from './components';
 
 const processor = unified().use(rehypeReact, {
   createElement: React.createElement,
+  Fragment: React.Fragment,
   components,
 });
 
