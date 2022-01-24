@@ -9,16 +9,26 @@ const StyledToggle = styled(TogglePrimitive.Root)((props) => ({
   display: 'flex',
   fontSize: props.theme.fontSizes[3],
   lineHeight: 1,
+  cursor: 'pointer',
   alignItems: 'center',
   justifyContent: 'center',
-  border: `2px solid ${props.theme.colors.textExtraFaded}`,
-  '&:hover': { backgroundColor: props.theme.colors.backgroundFaded },
+  border: `1px solid ${props.theme.colors.gray6}`,
+  borderRadius: props.theme.radiuses.medium,
+  '&:hover': {
+    backgroundColor: props.theme.colors.gray4,
+    borderColor: props.theme.colors.gray8,
+  },
   '&[data-state=on]': {
-    backgroundColor: props.theme.colors.backgroundFaded,
-    color: props.theme.colors.text,
+    backgroundColor: props.theme.colors.gray5,
+    color: props.theme.colors.gray12,
+    borderColor: props.theme.colors.gray7,
+    '&:hover': {
+      backgroundColor: props.theme.colors.gray6,
+      borderColor: props.theme.colors.gray9,
+    },
   },
   '&:focus-visible': {
-    outline: `2px solid ${props.theme.colors.text}`,
+    boxShadow: `0 0 0 2px ${props.theme.colors.gray12}`,
   },
 }));
 

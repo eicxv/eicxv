@@ -13,36 +13,49 @@ const slideUp = keyframes({
   to: { height: 0 },
 });
 
-const StyledCollapsible = styled(CollapsiblePrimitive.Root)((props) => ({
-  borderRadius: 6,
-  backgroundColor: props.theme.backgroundFaded,
-}));
+const StyledTrigger = styled(CollapsiblePrimitive.Trigger)((props) => {
+  const theme = props.theme;
+  return {
+    all: 'unset',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    cursor: 'pointer',
+    width: '100%',
+    padding: `${theme.space[2]} ${theme.space[3]}`,
+    lineHeight: 1,
+    color: theme.colors.gray12,
 
-const StyledTrigger = styled(CollapsiblePrimitive.Trigger)((props) => ({
-  all: 'unset',
-  boxSizing: 'border-box',
-  fontFamily: 'inherit',
-  backgroundColor: 'transparent',
-  padding: `${props.theme.space[2]} ${props.theme.space[3]}`,
-  flex: 1,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  fontSize: 15,
-  width: '100%',
-  lineHeight: 1,
-  color: props.theme.colors.text,
-  '&[data-state="closed"]': { backgroundColor: props.theme.colors.background },
-  '&[data-state="open"]': { backgroundColor: props.theme.colors.background },
-  '&:hover': { backgroundColor: props.theme.colors.backgroundFaded },
-}));
+    backgroundColor: theme.colors.gray3,
+    border: `1px solid ${theme.colors.gray6}`,
+    borderRadius: theme.radiuses.medium,
+    transition: 'border-radius 25ms ease 175ms',
+
+    '&[data-state="open"]': {
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+      transition: 'border-radius 25ms',
+    },
+    '&:hover': {
+      backgroundColor: theme.colors.gray5,
+      borderColor: theme.colors.gray8,
+    },
+  };
+});
+
+const StyledCollapsible = styled(CollapsiblePrimitive.Root)((props) => ({}));
 
 const StyledContent = styled(CollapsiblePrimitive.Content)((props) => ({
   overflow: 'hidden',
-  fontSize: 15,
-  color: props.theme.colors.text,
-  backgroundColor: props.theme.colors.backgroundFaded,
+  color: props.theme.colors.gray12,
+  backgroundColor: 'transparent',
   padding: `0 ${props.theme.space[3]}`,
+  borderBottomLeftRadius: props.theme.radiuses.medium,
+  borderBottomRightRadius: props.theme.radiuses.medium,
+  border: `1px solid ${props.theme.colors.gray6}`,
+  borderTop: 'none',
 
   '&[data-state="open"]': {
     animation: `${slideDown} 200ms ease-out`,

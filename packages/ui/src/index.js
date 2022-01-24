@@ -12,6 +12,7 @@ export { Slider } from './components/slider';
 export { Switch } from './components/switch';
 export { Toggle } from './components/toggle';
 export { ToggleGroup, ToggleGroupItem } from './components/toggle-group';
+export { ButtonGroup, ButtonGroupItem } from './components/button-group';
 export {
   Accordion,
   AccordionItem,

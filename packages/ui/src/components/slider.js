@@ -8,6 +8,7 @@ const StyledSlider = styled(SliderPrimitive.Root)((props) => ({
   alignItems: 'center',
   userSelect: 'none',
   touchAction: 'none',
+  cursor: 'pointer',
 
   '&[data-orientation="horizontal"]': {
     height: 20,
@@ -43,20 +44,17 @@ const StyledThumb = styled(SliderPrimitive.Thumb)((props) => {
   return {
     all: 'unset',
     display: 'block',
-    '&[data-orientation="horizontal"]': {
-      width: 10,
-      height: 20,
-    },
-    '&[data-orientation="vertical"]': {
-      width: 20,
-      height: 10,
-    },
-    backgroundColor: theme.colors.text,
+
+    cursor: 'pointer',
+    width: 18,
+    height: 18,
+    borderRadius: theme.radiuses.medium,
+    backgroundColor: theme.colors.gray12,
     border: `2px solid ${theme.colors.background}`,
-    '&:hover': { backgroundColor: theme.colors.textFaded },
+    '&:hover': { backgroundColor: theme.colors.gray11 },
     '&:focus-visible': {
-      outline: `4px solid ${theme.colors.text}`,
-      borderWidth: '4px',
+      outline: `2px solid ${theme.colors.gray12}`,
+      borderWidth: '2px',
     },
     '&::after': {
       position: 'absolute',

@@ -20,7 +20,15 @@ export default function Navigation() {
     >
       {links.map((link) => (
         <NextLink href={link.href} key={link.href} passHref>
-          <Button as="a">{link.label}</Button>
+          <Button
+            css={(theme) => ({
+              fontWeight: theme.fontWeights.heading,
+            })}
+            variant="text"
+            as="a"
+          >
+            {link.label}
+          </Button>
         </NextLink>
       ))}
     </Flex>
