@@ -3,14 +3,15 @@ import { Box } from '@eicxv/ui';
 import { useTheme } from '@emotion/react';
 
 import CreateWaves from './wavesProgram';
+import { hslToRgbComponents } from '@eicxv/utility/src/color';
 
 function Waves(props, ref) {
   const theme = useTheme();
   const canvasRef = useRef(null);
   const wavesRef = useRef(null);
   const params = {
-    lightColor: theme.colors.text,
-    shadowColor: theme.colors.background,
+    lightColor: hslToRgbComponents(theme.colors.gray12),
+    shadowColor: hslToRgbComponents(theme.colors.gray1),
     lightDirection: [0, 1, 3],
   };
   useEffect(() => {
