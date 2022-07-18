@@ -1,16 +1,15 @@
-import { clamp } from '@eicxv/utility/src/generic';
-import ComputeVariable from './compute-variable';
+import reactionDiffusionFrag from './shaders/shallow-water.frag';
+import visualizeFrag from './shaders/visualize.frag';
+import initializeFrag from './shaders/initialize.frag';
+import defaultComputeVert from './shaders/default-compute.vert';
+import brushFrag from './shaders/brush.frag';
 import {
+  getExtension,
+  createTexture,
   createFramebuffer,
   createProgram,
-  createTexture,
-  getExtension,
 } from './gl-utility';
-import brushFrag from './shaders/brush.frag';
-import defaultComputeVert from './shaders/default-compute.vert';
-import initializeFrag from './shaders/initialize.frag';
-import reactionDiffusionFrag from './shaders/reaction-diffusion.frag';
-import visualizeFrag from './shaders/visualize.frag';
+import ComputeVariable from './compute-variable';
 
 const attributeData = new Float32Array([
   -1.0, 1.0, 0.0, 1.0,
@@ -23,16 +22,7 @@ const attributeData = new Float32Array([
 ]);
 
 const defaultUniforms = {
-  u_feed: 0.055,
-  u_kill: 0.062,
-  u_deltaTime: 0.3,
-  u_diffusion: [0.2097, 0.105],
-  u_brushPosition: [0.0, 0.0],
-  u_brushConcentration: [0.0, 1.0],
-  u_brushRadius: 10.0,
-  u_visualizeV: true,
-  u_fillConcentration: [1.0, 0.0],
-  u_noise: true,
+  u_deltaTime: 0.1,
 };
 
 function getLocations(gl, program, uniformNames) {
@@ -54,16 +44,16 @@ class Driver {
     this.height = canvas.clientHeight;
     canvas.width = this.width;
     canvas.height = this.height;
-    this.stepsPerFrame = 8;
+    this.stepsPerFrame = 1;
 
     this._computeVao = this._createComputeVao();
-    this._concentrationVariable = this._createConcentrationVariable();
+    this._heightVariable = this._createHeightVariable();
     this._programs = this._createPrograms();
     this._locations = this._createLocations();
     this.uniforms = {
       ...defaultUniforms,
       ...uniforms,
-      u_concentrationTexture: this._concentrationVariable.getTexture(),
+      u_heightTexture: this._heightVariable.getTexture(),
     };
     gl.viewport(0, 0, this.width, this.height);
 
@@ -78,37 +68,21 @@ class Driver {
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, attributeData, gl.STATIC_DRAW);
     const attributes = {
-      a_position: 0,
-      a_textureCoord: 1,
+      a_pos: 0,
+      a_texCoord: 1,
     };
     const vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
 
-    gl.enableVertexAttribArray(attributes.a_position);
-    gl.vertexAttribPointer(attributes.a_position, 2, gl.FLOAT, null, 16, 0);
-    gl.enableVertexAttribArray(attributes.a_textureCoord);
-    gl.vertexAttribPointer(attributes.a_textureCoord, 2, gl.FLOAT, null, 16, 8);
+    gl.enableVertexAttribArray(attributes.a_pos);
+    gl.vertexAttribPointer(attributes.a_pos, 2, gl.FLOAT, null, 16, 0);
+    gl.enableVertexAttribArray(attributes.a_texCoord);
+    gl.vertexAttribPointer(attributes.a_texCoord, 2, gl.FLOAT, null, 16, 8);
     gl.bindVertexArray(null);
     return vao;
   }
 
-  stableConcentration() {
-    const feed = this.uniforms.u_feed;
-    const kill = this.uniforms.u_kill;
-    const sqrtFeed = Math.sqrt(feed);
-    let U = 1;
-    let V = 0;
-    if (kill < (sqrtFeed - 2 * feed) / 2) {
-      let A = sqrtFeed / (feed + kill);
-      U = (A - Math.sqrt(A * A - 4)) / (2 * A);
-      U = clamp(U);
-      V = (sqrtFeed * (A + Math.sqrt(A * A - 4))) / 2;
-      V = clamp(V);
-    }
-    return [U, V];
-  }
-
-  _createConcentrationVariable() {
+  _createHeightVariable() {
     const gl = this.gl;
     const textureData = [null, null];
     let internalFormat = gl.RG32F;
@@ -174,30 +148,21 @@ class Driver {
     const programs = this._programs;
     const locations = {};
     locations.evolve = getLocations(gl, programs.evolve, [
-      'u_feed',
-      'u_kill',
       'u_deltaTime',
-      'u_diffusion',
       'u_resolution',
-      'u_concentrationTexture',
+      'u_heightTexture',
+      // 'u_heightTexture2',
     ]);
     locations.visualize = getLocations(gl, programs.visualize, [
       'u_resolution',
-      'u_concentrationTexture',
-      'u_visualizeV',
+      'u_heightTexture',
     ]);
     locations.brush = getLocations(gl, programs.brush, [
-      'u_resolution',
-      'u_brushRadius',
       'u_brushPosition',
-      'u_brushConcentration',
-      'u_concentrationTexture',
+      'u_resolution',
     ]);
     locations.initialize = getLocations(gl, programs.initialize, [
       'u_resolution',
-      'u_seed',
-      'u_noise',
-      'u_fillConcentration',
     ]);
     return locations;
   }
@@ -212,14 +177,11 @@ class Driver {
     const uniforms = this.uniforms;
 
     gl.uniform2f(locations.u_resolution, this.width, this.height);
-    gl.uniform1f(locations.u_feed, uniforms.u_feed);
-    gl.uniform1f(locations.u_kill, uniforms.u_kill);
     gl.uniform1f(locations.u_deltaTime, uniforms.u_deltaTime);
-    gl.uniform2fv(locations.u_diffusion, uniforms.u_diffusion);
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, uniforms.u_concentrationTexture);
-    gl.uniform1i(locations.u_concentrationTexture, 0);
+    gl.bindTexture(gl.TEXTURE_2D, uniforms.u_heightTexture);
+    gl.uniform1i(locations.u_heightTexture1, 0);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
@@ -233,11 +195,11 @@ class Driver {
     const locations = this._locations.visualize;
     const uniforms = this.uniforms;
 
-    gl.uniform1i(locations.u_visualizeV, uniforms.u_visualizeV);
+    gl.uniform2f(locations.u_resolution, this.width, this.height);
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, uniforms.u_concentrationTexture);
-    gl.uniform1i(locations.u_concentrationTexture, 0);
+    gl.bindTexture(gl.TEXTURE_2D, uniforms.u_heightTexture);
+    gl.uniform1i(locations.u_heightTexture, 0);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
@@ -249,14 +211,7 @@ class Driver {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer);
     gl.bindVertexArray(this._computeVao);
     const locations = this._locations.initialize;
-    const uniforms = this.uniforms;
-
-    const rand = () => (Math.random() - 0.5) * 2;
     gl.uniform2f(locations.u_resolution, this.width, this.height);
-    gl.uniform1f(locations.u_seed, 1000 * rand());
-    gl.uniform2f(locations.u_resolution, this.width, this.height);
-    gl.uniform1i(locations.u_noise, uniforms.u_noise);
-    gl.uniform2fv(locations.u_fillConcentration, uniforms.u_fillConcentration);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
@@ -271,50 +226,41 @@ class Driver {
     const uniforms = this.uniforms;
 
     gl.uniform2f(locations.u_resolution, this.width, this.height);
-    gl.uniform1f(locations.u_brushRadius, uniforms.u_brushRadius);
     gl.uniform2fv(locations.u_brushPosition, uniforms.u_brushPosition);
-    gl.uniform2fv(
-      locations.u_brushConcentration,
-      uniforms.u_brushConcentration
-    );
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, uniforms.u_concentrationTexture);
-    gl.uniform1i(locations.u_concentrationTexture, 0);
+    gl.bindTexture(gl.TEXTURE_2D, uniforms.u_heightTexture);
+    gl.uniform1i(locations.u_heightTexture, 0);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
   brush() {
-    this.uniforms.u_concentrationTexture =
-      this._concentrationVariable.getTexture();
-    this._concentrationVariable.advance();
-    this.framebuffer = this._concentrationVariable.getFramebuffer();
+    this.uniforms.u_heightTexture = this._heightVariable.getTexture();
+    this._heightVariable.advance();
+    this.framebuffer = this._heightVariable.getFramebuffer();
     this._runBrush();
-    this.uniforms.u_concentrationTexture =
-      this._concentrationVariable.getTexture();
+
+    this.uniforms.u_heightTexture = this._heightVariable.getTexture();
     this._runVisualize();
   }
 
   animate() {
     for (let _ = 0; _ < this.stepsPerFrame; _++) {
-      this.uniforms.u_concentrationTexture =
-        this._concentrationVariable.getTexture();
-      this._concentrationVariable.advance();
-      this.framebuffer = this._concentrationVariable.getFramebuffer();
+      this.uniforms.u_heightTexture = this._heightVariable.getTexture();
+      this._heightVariable.advance();
+      this.framebuffer = this._heightVariable.getFramebuffer();
       this._runEvolve();
     }
-    this.uniforms.u_concentrationTexture =
-      this._concentrationVariable.getTexture();
+    this.uniforms.u_heightTexture = this._heightVariable.getTexture();
     this._runVisualize();
     this._animateId = requestAnimationFrame(this.animate);
   }
 
   step() {
-    this.uniforms.u_concentrationTexture =
-      this._concentrationVariable.getTexture();
-    this._concentrationVariable.advance();
-    this.framebuffer = this._concentrationVariable.getFramebuffer();
+    this.uniforms.u_heightTexture = this._heightVariable.getTexture();
+    this._heightVariable.advance();
+    this.framebuffer = this._heightVariable.getFramebuffer();
     this._runEvolve();
   }
 
@@ -335,9 +281,9 @@ class Driver {
   }
 
   initialize() {
-    this.framebuffer = this._concentrationVariable.getFramebuffer();
+    this.framebuffer = this._heightVariable.getFramebuffer();
     this._runInitialize();
-    this.texture = this._concentrationVariable.getTexture();
+    this.texture = this._heightVariable.getTexture();
     this._runVisualize();
   }
 

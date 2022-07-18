@@ -6,5 +6,8 @@
     "apps/*",
     "packages/*"
   ],
+  "scripts": {
+    "dev": "yarn workspace @eicxv/site run dev"
+  },
   "dependencies": {}
 }
