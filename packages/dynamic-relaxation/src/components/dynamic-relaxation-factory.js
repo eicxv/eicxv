@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
+import React, { useEffect, useRef } from 'react';
 
 const Canvas = styled.canvas`
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 `;
 
 export default function DynamicRelaxation({ render }) {
@@ -19,22 +19,3 @@ export default function DynamicRelaxation({ render }) {
     </main>
   );
 }
-
-// export default function DynamicRelaxationFactory(dr) {
-//   function DynamicRelaxation() {
-//     const canvasRef = useRef(null);
-
-//     useEffect(() => {
-//       if (typeof window !== 'undefined') {
-//         dr(canvasRef.current);
-//       }
-//     }, []);
-
-//     return (
-//       <main>
-//         <Canvas ref={canvasRef}></Canvas>
-//       </main>
-//     );
-//   }
-//   return DynamicRelaxation;
-// }
