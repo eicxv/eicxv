@@ -17,14 +17,15 @@ const Wrapper = styled.div({
     gridColumn: 2,
   },
   '& .full-bleed': {
-    gridColumn: 1 / -1,
+    gridColumn: '1 / -1',
   },
   '.math-display': {
     display: 'block',
     height: 'auto',
-    paddingBottom: '12px',
     overflowX: 'auto',
+    overflowY: 'hidden',
     whiteSpace: 'nowrap',
+    gridColumn: '1 / -1',
   },
   pre: {
     fontFamily: "'jetbrains mono', monospace",

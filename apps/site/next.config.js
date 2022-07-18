@@ -3,6 +3,7 @@ const withTranspileModules = require('next-transpile-modules')([
   '@eicxv/n-body-galaxy',
   '@eicxv/plywood-bending',
   '@eicxv/reaction-diffusion',
+  '@eicxv/shallow-water',
   '@eicxv/ui',
   '@eicxv/utility',
 ]);

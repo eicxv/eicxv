@@ -21,8 +21,8 @@ export default class Waves {
     this.APOTHEM = this.SIDE_LENGTH / (Math.sqrt(3) * 2);
     this.n = this.WIDTH * this.HEIGHT * 3;
     params = !params ? {} : params;
-    this.lightColor = hexToRGB(params.lightColor) || [0.9, 0.9, 0.9];
-    this.shadowColor = hexToRGB(params.shadowColor) || [0.2, 0.2, 0.2];
+    this.lightColor = params.lightColor || [0.9, 0.9, 0.9];
+    this.shadowColor = params.shadowColor || [0.2, 0.2, 0.2];
     this.lightDirection = params.lightDirection || [0, 1, 3];
     vec3.normalize(this.lightDirection, this.lightDirection);
     this.gl.clearColor(...this.shadowColor, 1);
@@ -324,26 +324,4 @@ function getUniformLocation(gl, program, name) {
     throw new Error(`Failed to find uniform: ${name}`);
   }
   return uniformLocation;
-}
-
-function hexToRGB(hex) {
-  let r = 0,
-    g = 0,
-    b = 0;
-
-  if (hex.length === 4) {
-    r = '0x' + hex[1] + hex[1];
-    g = '0x' + hex[2] + hex[2];
-    b = '0x' + hex[3] + hex[3];
-  } else if (hex.length === 7) {
-    r = '0x' + hex[1] + hex[2];
-    g = '0x' + hex[3] + hex[4];
-    b = '0x' + hex[5] + hex[6];
-  }
-
-  r = r / 255;
-  g = g / 255;
-  b = b / 255;
-
-  return [r, g, b];
 }

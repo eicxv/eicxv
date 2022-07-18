@@ -6,15 +6,6 @@ export function clamp(x, min = 0, max = 1) {
   return Math.max(min, Math.min(x, max));
 }
 
-export function toHex(rgb) {
-  let hex = rgb.map((v) =>
-    Math.round(clamp(v) * 255)
-      .toString(16)
-      .padStart(2, '0')
-  );
-  return `#${hex.join('')}`;
-}
-
 export function arrayMin(array) {
   return array.reduce((a, b) => Math.min(a, b), Infinity);
 }
