@@ -1,10 +1,10 @@
-import { useState, useRef, useMemo } from 'react';
-import { useDrag } from '@use-gesture/react';
-import styled from '@emotion/styled';
-import { sub, divElem, mulElem } from '@eicxv/utility/src/v2';
+import { Axis, GraphLabel, useChartDimensions } from '@eicxv/ui';
 import { clamp } from '@eicxv/utility/src/generic';
+import { divElem, mulElem, sub } from '@eicxv/utility/src/v2';
+import styled from '@emotion/styled';
+import { useDrag } from '@use-gesture/react';
 import { scaleLinear } from 'd3-scale';
-import { useChartDimensions, GraphLabel, Axis } from '@eicxv/ui';
+import { useMemo, useRef, useState } from 'react';
 
 const Svg = styled.svg({
   width: '100%',
@@ -162,9 +162,7 @@ export default function ParameterMapControl({
             />
             <rect
               style={{
-                vectorEffect: 'non-scaling-stroke',
-                stroke: 'black',
-                strokeWidth: '0.3',
+                stroke: 'none',
                 fill: 'transparent',
                 touchAction: 'none',
                 cursor: 'crosshair',
