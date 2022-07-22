@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 import { useDrag } from '@use-gesture/react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { sub, divElem } from '@eicxv/utility/src/v2';
+import { divElem, sub } from '@eicxv/utility/src/v2';
 import ReactionDiffusionSystem from '../simulation/reaction-diffusion';
+import { presets } from './presets';
 import Controls from './rd-controls';
+
+const preset = presets[0];
 
 const Canvas = styled.canvas`
   width: 100%;
@@ -28,6 +31,10 @@ export default function ReactionDiffusion() {
     reactionDiffusionRef.current = reactionDiffusion;
     reactionDiffusion.initialize();
     reactionDiffusion.start();
+
+    preset.init(reactionDiffusion);
+    reactionDiffusion.uniforms.u_feed = preset.params.u_feed;
+    reactionDiffusion.uniforms.u_kill = preset.params.u_kill;
   }, []);
 
   const bind = useDrag(
