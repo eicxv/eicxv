@@ -1,0 +1,22 @@
+{
+  "name": "@eicxv/soap-film",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "type": "module",
+  "private": true,
+  "sideEffects": false,
+  "devDependencies": {
+    "prettier": "^2"
+  },
+  "dependencies": {
+    "@eicxv/ui": "1.0.0",
+    "@eicxv/utility": "1.0.0",
+    "gl-matrix": "^3.3.0",
+    "theme-ui": "^0.14.7",
+    "twgl.js": "^4.24.0"
+  },
+  "peerDependencies": {
+    "react": "^17",
+    "react-dom": "^17"
+  }
+}

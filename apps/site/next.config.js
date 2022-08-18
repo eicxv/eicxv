@@ -4,6 +4,7 @@ const withTranspileModules = require('next-transpile-modules')([
   '@eicxv/plywood-bending',
   '@eicxv/reaction-diffusion',
   '@eicxv/shallow-water',
+  '@eicxv/soap-film',
   '@eicxv/ui',
   '@eicxv/utility',
 ]);
