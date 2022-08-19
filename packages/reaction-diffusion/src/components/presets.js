@@ -17,7 +17,7 @@ function fill(rd, concentration, noise = false) {
   rd.initialize();
 }
 
-const presets = [
+export const presets = [
   {
     name: 'Multiplying Dots',
     params: {
